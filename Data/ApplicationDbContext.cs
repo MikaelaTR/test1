@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using AdvancedProjectMVC.Models;
 
 namespace AdvancedProjectMVC.Data
 {
@@ -9,5 +10,6 @@ namespace AdvancedProjectMVC.Data
             : base(options)
         {
         }
+        public DbSet<AdvancedProjectMVC.Models.Course> Course { get; set; } = default!;
     }
 }
