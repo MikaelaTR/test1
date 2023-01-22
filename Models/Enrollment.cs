@@ -8,5 +8,6 @@
         public double? Grade { get; set; }
 
         public Course Course { get; set; }
+        public ApplicationUser User { get; set; }
     }
 }
