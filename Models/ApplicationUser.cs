@@ -2,7 +2,7 @@
 
 namespace AdvancedProjectMVC.Models
 {
-    public class User: IdentityUser
+    public class ApplicationUser: IdentityUser
     {
     }
 }

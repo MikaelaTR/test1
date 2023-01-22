@@ -4,7 +4,7 @@ using AdvancedProjectMVC.Models;
 
 namespace AdvancedProjectMVC.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<User>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
