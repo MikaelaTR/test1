@@ -15,10 +15,8 @@ namespace AdvancedProjectMVC.Models
         [PersonalData]
         public DateTime DOB { get; set; }
 
-        public int? StudentID { get; set; }
-
         public DateTime DateRegistered { get; set; }
         
-        public ICollection<Enrollment> Enrollments { get; set; }
+        
     }
 }

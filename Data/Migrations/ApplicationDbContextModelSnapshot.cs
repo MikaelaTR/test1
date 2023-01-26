@@ -40,6 +40,10 @@ namespace AdvancedProjectMVC.Data.Migrations
                     b.Property<DateTime>("DateRegistered")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -79,9 +83,6 @@ namespace AdvancedProjectMVC.Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("StudentID")
-                        .HasColumnType("int");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -100,6 +101,10 @@ namespace AdvancedProjectMVC.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("ApplicationUser");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("AdvancedProjectMVC.Models.Course", b =>
@@ -116,6 +121,13 @@ namespace AdvancedProjectMVC.Data.Migrations
 
                     b.Property<int>("Credits")
                         .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -143,17 +155,35 @@ namespace AdvancedProjectMVC.Data.Migrations
                     b.Property<int>("StudentID")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
+                    b.Property<string>("StudentId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ID");
 
                     b.HasIndex("CourseID");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("StudentId");
 
                     b.ToTable("Enrollment");
+                });
+
+            modelBuilder.Entity("AdvancedProjectMVC.Models.Instructor", b =>
+                {
+                    b.Property<int>("InstructorID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InstructorID"));
+
+                    b.Property<string>("Office")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Salary")
+                        .HasColumnType("float");
+
+                    b.HasKey("InstructorID");
+
+                    b.ToTable("Instructor");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -236,12 +266,10 @@ namespace AdvancedProjectMVC.Data.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -278,12 +306,10 @@ namespace AdvancedProjectMVC.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -291,6 +317,29 @@ namespace AdvancedProjectMVC.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("AdvancedProjectMVC.Models.Administrator", b =>
+                {
+                    b.HasBaseType("AdvancedProjectMVC.Models.ApplicationUser");
+
+                    b.Property<int>("AdminID")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Salary")
+                        .HasColumnType("float");
+
+                    b.HasDiscriminator().HasValue("Administrator");
+                });
+
+            modelBuilder.Entity("AdvancedProjectMVC.Models.Student", b =>
+                {
+                    b.HasBaseType("AdvancedProjectMVC.Models.ApplicationUser");
+
+                    b.Property<int>("StudentID")
+                        .HasColumnType("int");
+
+                    b.HasDiscriminator().HasValue("Student");
                 });
 
             modelBuilder.Entity("AdvancedProjectMVC.Models.Enrollment", b =>
@@ -301,15 +350,13 @@ namespace AdvancedProjectMVC.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AdvancedProjectMVC.Models.ApplicationUser", "User")
+                    b.HasOne("AdvancedProjectMVC.Models.Student", "Student")
                         .WithMany("Enrollments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StudentId");
 
                     b.Navigation("Course");
 
-                    b.Navigation("User");
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -363,12 +410,12 @@ namespace AdvancedProjectMVC.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("AdvancedProjectMVC.Models.ApplicationUser", b =>
+            modelBuilder.Entity("AdvancedProjectMVC.Models.Course", b =>
                 {
                     b.Navigation("Enrollments");
                 });
 
-            modelBuilder.Entity("AdvancedProjectMVC.Models.Course", b =>
+            modelBuilder.Entity("AdvancedProjectMVC.Models.Student", b =>
                 {
                     b.Navigation("Enrollments");
                 });
