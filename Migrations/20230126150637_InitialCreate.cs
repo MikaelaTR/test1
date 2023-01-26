@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace AdvancedProjectMVC.Data.Migrations
+namespace AdvancedProjectMVC.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -35,9 +35,7 @@ namespace AdvancedProjectMVC.Data.Migrations
                     DOB = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DateRegistered = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AdminID = table.Column<int>(type: "int", nullable: true),
-                    Salary = table.Column<double>(type: "float", nullable: true),
-                    StudentID = table.Column<int>(type: "int", nullable: true),
+                    Office = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -73,20 +71,6 @@ namespace AdvancedProjectMVC.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Course", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Instructor",
-                columns: table => new
-                {
-                    InstructorID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Salary = table.Column<double>(type: "float", nullable: false),
-                    Office = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Instructor", x => x.InstructorID);
                 });
 
             migrationBuilder.CreateTable(
@@ -202,7 +186,6 @@ namespace AdvancedProjectMVC.Data.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CourseID = table.Column<int>(type: "int", nullable: false),
-                    StudentID = table.Column<int>(type: "int", nullable: false),
                     Grade = table.Column<double>(type: "float", nullable: true),
                     StudentId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
@@ -216,6 +199,31 @@ namespace AdvancedProjectMVC.Data.Migrations
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Enrollment_Course_CourseID",
+                        column: x => x.CourseID,
+                        principalTable: "Course",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TeachingAssignment",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CourseID = table.Column<int>(type: "int", nullable: false),
+                    InstructorId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TeachingAssignment", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_TeachingAssignment_AspNetUsers_InstructorId",
+                        column: x => x.InstructorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TeachingAssignment_Course_CourseID",
                         column: x => x.CourseID,
                         principalTable: "Course",
                         principalColumn: "ID",
@@ -270,6 +278,16 @@ namespace AdvancedProjectMVC.Data.Migrations
                 name: "IX_Enrollment_StudentId",
                 table: "Enrollment",
                 column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeachingAssignment_CourseID",
+                table: "TeachingAssignment",
+                column: "CourseID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeachingAssignment_InstructorId",
+                table: "TeachingAssignment",
+                column: "InstructorId");
         }
 
         /// <inheritdoc />
@@ -294,7 +312,7 @@ namespace AdvancedProjectMVC.Data.Migrations
                 name: "Enrollment");
 
             migrationBuilder.DropTable(
-                name: "Instructor");
+                name: "TeachingAssignment");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
