@@ -9,9 +9,15 @@
     @{
         if (User.Identity.IsAuthenticated)
         {
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-                <button type="submit" class="nav-link btn btn-link text-dark">Click here to Logout</button>
-            </form>
+            <h2>Are you sure you want to log out?</h2>
+            <div class="text-center">
+                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                    <button type="submit" class="btn login_button">Yes</button>
+                </form>
+                <form class="form-inline" asp-area="Home" asp-page="/Home/Index" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                    <button type="submit" class="btn login_button">No</button>
+                </form>
+            </div>
         }
         else
         {
