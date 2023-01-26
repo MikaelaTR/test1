@@ -1,13 +1,11 @@
 ﻿namespace AdvancedProjectMVC.Models
 {
-    public class Enrollment
+    public class TeachingAssignment
     {
         public int ID { get; set; }
         public int CourseID { get; set; }
-        //public int StudentID { get; set; }
-        public double? Grade { get; set; }
 
         public Course Course { get; set; }
-        public Student? Student { get; set; }
+        public Instructor Instructor { get; set; }
     }
 }

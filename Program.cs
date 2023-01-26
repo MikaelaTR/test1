@@ -24,6 +24,23 @@ builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
+// Seed database with test data.
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    try
+    {
+        var context = services.GetRequiredService<ApplicationDbContext>();
+        DbInitializer.Initialize(context);
+    }
+    catch (Exception ex)
+    {
+        //var logger = services.GetRequiredService<ILogger>();
+        //logger.LogError(ex, "An error occurred when creating the DB.");
+    }
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
