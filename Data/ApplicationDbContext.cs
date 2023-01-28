@@ -15,5 +15,6 @@ namespace AdvancedProjectMVC.Data
         public DbSet<Instructor> Instructor { get; set; }
         public DbSet<Student> Student { get; set; }
         public DbSet<Enrollment> Enrollment { get; set; }
+        public DbSet<AdvancedProjectMVC.Models.TeachingAssignment> TeachingAssignment { get; set; } = default!;
     }
 }
