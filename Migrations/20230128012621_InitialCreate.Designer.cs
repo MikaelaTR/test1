@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AdvancedProjectMVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230126150637_InitialCreate")]
+    [Migration("20230128012621_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -327,12 +327,18 @@ namespace AdvancedProjectMVC.Migrations
                 {
                     b.HasBaseType("AdvancedProjectMVC.Models.ApplicationUser");
 
+                    b.Property<int>("AdminNumber")
+                        .HasColumnType("int");
+
                     b.HasDiscriminator().HasValue("Administrator");
                 });
 
             modelBuilder.Entity("AdvancedProjectMVC.Models.Instructor", b =>
                 {
                     b.HasBaseType("AdvancedProjectMVC.Models.ApplicationUser");
+
+                    b.Property<int>("InstructorNumber")
+                        .HasColumnType("int");
 
                     b.Property<string>("Office")
                         .HasColumnType("nvarchar(max)");
@@ -343,6 +349,9 @@ namespace AdvancedProjectMVC.Migrations
             modelBuilder.Entity("AdvancedProjectMVC.Models.Student", b =>
                 {
                     b.HasBaseType("AdvancedProjectMVC.Models.ApplicationUser");
+
+                    b.Property<int>("StudentNumber")
+                        .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue("Student");
                 });
