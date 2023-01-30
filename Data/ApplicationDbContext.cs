@@ -10,6 +10,11 @@ namespace AdvancedProjectMVC.Data
             : base(options)
         {
         }
-        public DbSet<AdvancedProjectMVC.Models.Course> Course { get; set; } = default!;
+        public DbSet<Course> Course { get; set; } = default!;
+        public DbSet<Administrator> Administrator { get; set; }
+        public DbSet<Instructor> Instructor { get; set; }
+        public DbSet<Student> Student { get; set; }
+        public DbSet<Enrollment> Enrollment { get; set; }
+        public DbSet<TeachingAssignment> TeachingAssignment { get; set; }
     }
 }
