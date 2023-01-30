@@ -10,5 +10,7 @@
         public int Credits { get; set; }
 
         public ICollection<Enrollment>? Enrollments { get; set; }
+        public ICollection<SchoolProgram>? Programs { get; set; }
+        public ICollection<Assignment>? Assignments { get; set; }
     }
 }

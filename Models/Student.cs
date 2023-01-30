@@ -4,5 +4,6 @@
     {
         public int StudentNumber { get; set; }
         public ICollection<Enrollment> Enrollments { get; set; }
+        public SchoolProgram Program { get; set; }
     }
 }
