@@ -107,6 +107,48 @@ namespace AdvancedProjectMVC.Migrations
                     b.UseTphMappingStrategy();
                 });
 
+            modelBuilder.Entity("AdvancedProjectMVC.Models.Assignment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CourseID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Feedback")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Grade")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Submitted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("SubmittedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseID");
+
+                    b.ToTable("Assignment");
+                });
+
             modelBuilder.Entity("AdvancedProjectMVC.Models.Course", b =>
                 {
                     b.Property<int>("ID")
@@ -123,7 +165,6 @@ namespace AdvancedProjectMVC.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Location")
@@ -135,7 +176,7 @@ namespace AdvancedProjectMVC.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Course");
+                    b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("AdvancedProjectMVC.Models.Enrollment", b =>
@@ -152,16 +193,50 @@ namespace AdvancedProjectMVC.Migrations
                     b.Property<double?>("Grade")
                         .HasColumnType("float");
 
-                    b.Property<string>("StudentId")
+                    b.Property<string>("StudentID")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ID");
 
                     b.HasIndex("CourseID");
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("StudentID");
 
-                    b.ToTable("Enrollment");
+                    b.ToTable("Enrollments");
+                });
+
+            modelBuilder.Entity("AdvancedProjectMVC.Models.SchoolProgram", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Coop")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("LengthInYears")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Semesters")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Tuition")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SchoolPrograms");
                 });
 
             modelBuilder.Entity("AdvancedProjectMVC.Models.TeachingAssignment", b =>
@@ -184,7 +259,22 @@ namespace AdvancedProjectMVC.Migrations
 
                     b.HasIndex("InstructorId");
 
-                    b.ToTable("TeachingAssignment");
+                    b.ToTable("TeachingAssignments");
+                });
+
+            modelBuilder.Entity("CourseSchoolProgram", b =>
+                {
+                    b.Property<int>("CoursesID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProgramsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CoursesID", "ProgramsId");
+
+                    b.HasIndex("ProgramsId");
+
+                    b.ToTable("CourseSchoolProgram");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -347,10 +437,26 @@ namespace AdvancedProjectMVC.Migrations
                 {
                     b.HasBaseType("AdvancedProjectMVC.Models.ApplicationUser");
 
+                    b.Property<int>("ProgramId")
+                        .HasColumnType("int");
+
                     b.Property<int>("StudentNumber")
                         .HasColumnType("int");
 
+                    b.HasIndex("ProgramId");
+
                     b.HasDiscriminator().HasValue("Student");
+                });
+
+            modelBuilder.Entity("AdvancedProjectMVC.Models.Assignment", b =>
+                {
+                    b.HasOne("AdvancedProjectMVC.Models.Course", "Course")
+                        .WithMany("Assignments")
+                        .HasForeignKey("CourseID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
                 });
 
             modelBuilder.Entity("AdvancedProjectMVC.Models.Enrollment", b =>
@@ -363,7 +469,9 @@ namespace AdvancedProjectMVC.Migrations
 
                     b.HasOne("AdvancedProjectMVC.Models.Student", "Student")
                         .WithMany("Enrollments")
-                        .HasForeignKey("StudentId");
+                        .HasForeignKey("StudentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Course");
 
@@ -385,6 +493,21 @@ namespace AdvancedProjectMVC.Migrations
                     b.Navigation("Course");
 
                     b.Navigation("Instructor");
+                });
+
+            modelBuilder.Entity("CourseSchoolProgram", b =>
+                {
+                    b.HasOne("AdvancedProjectMVC.Models.Course", null)
+                        .WithMany()
+                        .HasForeignKey("CoursesID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AdvancedProjectMVC.Models.SchoolProgram", null)
+                        .WithMany()
+                        .HasForeignKey("ProgramsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -438,9 +561,27 @@ namespace AdvancedProjectMVC.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("AdvancedProjectMVC.Models.Student", b =>
+                {
+                    b.HasOne("AdvancedProjectMVC.Models.SchoolProgram", "Program")
+                        .WithMany("Students")
+                        .HasForeignKey("ProgramId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Program");
+                });
+
             modelBuilder.Entity("AdvancedProjectMVC.Models.Course", b =>
                 {
+                    b.Navigation("Assignments");
+
                     b.Navigation("Enrollments");
+                });
+
+            modelBuilder.Entity("AdvancedProjectMVC.Models.SchoolProgram", b =>
+                {
+                    b.Navigation("Students");
                 });
 
             modelBuilder.Entity("AdvancedProjectMVC.Models.Instructor", b =>

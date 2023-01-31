@@ -16,7 +16,7 @@ namespace AdvancedProjectMVC.Models
         public DateTime DOB { get; set; }
 
         public DateTime DateRegistered { get; set; }
-        
+
         
     }
 }
