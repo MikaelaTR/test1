@@ -1,0 +1,48 @@
+﻿@model IEnumerable<AdvancedProjectMVC.Models.CalendarEvent>
+@using Newtonsoft.Json
+@using AdvancedProjectMVC.Models
+@using System.Web
+@{
+    ViewData["Title"] = "Calendar";
+
+    string JSONString = JsonConvert.SerializeObject(Model);
+}
+<script src="~/lib/fullcalendar/index.global.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            editable: true,
+            events: [
+                {
+                    title: 'Event Test',
+                    start: '2023-01-31',
+                    end: '2023-01-31'
+                }
+            ]
+        });
+
+        // TODO: Fix below so items are shown properly in the calendar
+        // Also, note: it seems like the C# stuff loads after JS?
+        /*
+        for(var i = 0; i < @(Model.Count()); i++) {
+            // TODO: Fix this so it is not hard coded
+            var item = {
+                title: '(at)(Model.ElementAt(0).Title)',
+                start: '(at)(DateOnly.FromDateTime(Model.ElementAt(0).DateStart))',
+                end: '(at)(DateOnly.FromDateTime(Model.ElementAt(0).DateEnd))'
+            };
+
+            calendar.addEvent(item);
+
+            console.log(item);
+        }
+        */
+    calendar.render();
+    }
+    );
+</script>
+<div id="calendar"></div>
+<a asp-action="Create">Add New Event</a>
+<p>@(JSONString)</p>
