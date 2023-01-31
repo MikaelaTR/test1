@@ -1,8 +1,10 @@
 x_ColorPallette {
 	color: #E6FAFC;
 	color: #9CFC97;
+	color: #7ACA67;
 	color: #6BA368;
 	color: #515B3A;
+	color: #1B8168;
 	color: #353D2F;
 }
 
@@ -29,6 +31,11 @@ html {
 	box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
+.btn-primary {
+	color: #E6FAFC;
+	background-color: #7ACA67
+}
+
 a {
 	color: white;
 }
@@ -36,7 +43,7 @@ a {
 body {
 	margin-bottom: 60px;
 	color: #E6FAFC;
-	background-color: #6BA368;
+	background-color: #1B8168;
 }
 
 .login_form {
@@ -58,7 +65,7 @@ body {
 
 .login_button {
 	width: 350px;
-	background-color: #9CFC97;
+	background-color: #1ADA75;
 	color: white;
 	font-weight: 600;
 	font-size: 26px;
@@ -92,7 +99,7 @@ body {
 }
 
 .icon_button {
-	background-color: #9CFC97;/* Blue background */
+	background-color: #6BA368;
 	border: none; /* Remove borders */
 	color: white; /* White text */
 	margin: 5%;

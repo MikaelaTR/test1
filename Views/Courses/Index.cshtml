@@ -1,47 +1,49 @@
 ﻿@model IEnumerable<AdvancedProjectMVC.Models.Course>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Course List";
 }
 
-<h1>Index</h1>
+<main class = "align-content-center">
+<h1 class = "">@ViewData["Title"]</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CourseCode)
+
+
+    <table class="table table-bordered table-active table-striped table-dark">
+        <thead>
+        <tr class = "">
+            <th class="d-table-cell">
+                Course Code
+                @* @Html.DisplayNameFor(model => model.CourseCode) *@
             </th>
-            <th>
+            <th class="d-table-cell">
                 @Html.DisplayNameFor(model => model.Title)
             </th>
-            <th>
+            <th class="d-table-cell">
                 @Html.DisplayNameFor(model => model.Credits)
             </th>
-            <th></th>
         </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CourseCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Credits)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Credits)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <a class="btn btn-primary" asp-action="Create">Create New Course</a>
+</main>

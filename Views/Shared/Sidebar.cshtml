@@ -7,9 +7,14 @@
     {
         @if (SignInManager.IsSignedIn(User)) //If logged in
         {
-            <a class="btn icon_button" asp-area="Home" asp-page="/Home/Index" title="Home"><i class="fa fa-home"></i></a>
+            <a class="btn icon_button" asp-area="" asp-controller="Home" asp-action="Index" title="Home"><i class="fa fa-home"></i></a>
             <a class="btn icon_button" asp-area="Identity" asp-page="/Account/Manage/Index" title="Profile"><i class="fa fa-bars"></i></a>
             <a class="btn icon_button" asp-area="Identity" asp-page="/Account/Logout" title="Log Out"><i class="fa fa-close"></i></a>
+            <a class="btn icon_button" asp-area="" asp-controller="Courses" asp-action="Index" title="Courses"><i class="fa fa-list"></i></a>
+            @*@if (User.IsInRole("Administrator"))
+            {
+                <a class="btn icon_button" asp-area="" asp-controller="Courses" asp-page="Index" title="Courses"><i class="fa fa-list"></i></a>
+            }*@
         }
     }
 </div>
