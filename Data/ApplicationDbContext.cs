@@ -17,6 +17,7 @@ namespace AdvancedProjectMVC.Data
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<TeachingAssignment> TeachingAssignments { get; set; }
         public DbSet<SchoolProgram> SchoolPrograms { get; set; }
+        public DbSet<AdvancedProjectMVC.Models.ChatMessage> ChatMessage { get; set; } = default!;
     }
 
 
