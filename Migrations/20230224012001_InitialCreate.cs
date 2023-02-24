@@ -144,8 +144,7 @@ namespace AdvancedProjectMVC.Migrations
                         name: "FK_AspNetUsers_SchoolPrograms_ProgramId",
                         column: x => x.ProgramId,
                         principalTable: "SchoolPrograms",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AdvancedProjectMVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230131174639_InitialCreate")]
+    [Migration("20230224012001_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -440,7 +440,7 @@ namespace AdvancedProjectMVC.Migrations
                 {
                     b.HasBaseType("AdvancedProjectMVC.Models.ApplicationUser");
 
-                    b.Property<int>("ProgramId")
+                    b.Property<int?>("ProgramId")
                         .HasColumnType("int");
 
                     b.Property<int>("StudentNumber")
@@ -568,9 +568,7 @@ namespace AdvancedProjectMVC.Migrations
                 {
                     b.HasOne("AdvancedProjectMVC.Models.SchoolProgram", "Program")
                         .WithMany("Students")
-                        .HasForeignKey("ProgramId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProgramId");
 
                     b.Navigation("Program");
                 });
