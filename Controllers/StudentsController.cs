@@ -40,27 +40,6 @@ namespace AdvancedProjectMVC.Controllers
             return View(student);
         }
 
-        // GET: StudentsController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: StudentsController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
         // GET: StudentsController/Edit/5
         public ActionResult Edit(int id)
         {

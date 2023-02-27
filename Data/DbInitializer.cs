@@ -1,5 +1,4 @@
 ﻿using AdvancedProjectMVC.Models;
-using AdvancedProjectMVC.Enums;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -21,7 +20,7 @@ namespace AdvancedProjectMVC.Data
         public static void Initialize(ApplicationDbContext context)
         {
             
-            // Look for any Admins.
+/*            // Look for any Admins.
             if (!context.Administrators.Any())
             {
                 var admin = new Administrator()
@@ -40,7 +39,7 @@ namespace AdvancedProjectMVC.Data
                 admin.PasswordHash = hashedPassword;
                 
                 context.SaveChanges();
-            }
+            }*/
 
             if (!context.Instructors.Any())
             {
