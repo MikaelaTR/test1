@@ -1,4 +1,5 @@
 ﻿using AdvancedProjectMVC.Models;
+using AdvancedProjectMVC.Enums;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -9,6 +10,14 @@ namespace AdvancedProjectMVC.Data
     public class DbInitializer
     {
         public readonly IPasswordHasher<IdentityUser> _passwordHasher;
+
+        public enum Roles
+        {
+            SuperAdmin,
+            Admin,
+            Instructor,
+            Student
+        }
         public static void Initialize(ApplicationDbContext context)
         {
             
@@ -106,6 +115,41 @@ namespace AdvancedProjectMVC.Data
                 context.Enrollments.Add(e);
             }
             context.SaveChanges();
+        }
+
+        public static async Task SeedRolesAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        {
+            await roleManager.CreateAsync(new IdentityRole(Roles.SuperAdmin.ToString()));
+            await roleManager.CreateAsync(new IdentityRole(Roles.Admin.ToString()));
+            await roleManager.CreateAsync(new IdentityRole(Roles.Instructor.ToString()));
+            await roleManager.CreateAsync(new IdentityRole(Roles.Student.ToString()));
+        }
+
+        public static async Task SeedSuperAdminAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        {
+            //Seed Default User
+            var defaultUser = new ApplicationUser
+            {
+                UserName = "ab@school.ca",
+                Email = "ab@school.ca",
+                FirstName = "Alex",
+                LastName = "Blom",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true
+            };
+            if (userManager.Users.All(u => u.Id != defaultUser.Id))
+            {
+                var user = await userManager.FindByEmailAsync(defaultUser.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultUser, "Test123$.");
+                    await userManager.AddToRoleAsync(defaultUser, Roles.SuperAdmin.ToString());
+                    await userManager.AddToRoleAsync(defaultUser, Roles.Admin.ToString());
+                    await userManager.AddToRoleAsync(defaultUser, Roles.Instructor.ToString());
+                    await userManager.AddToRoleAsync(defaultUser, Roles.Student.ToString());
+                }
+
+            }
         }
     }
 }

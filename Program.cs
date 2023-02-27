@@ -35,16 +35,20 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+    var loggerFactory = services.GetRequiredService<ILoggerFactory>();
 
     try
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
         DbInitializer.Initialize(context);
+        await DbInitializer.SeedRolesAsync(userManager, roleManager);
     }
     catch (Exception ex)
     {
-        //var logger = services.GetRequiredService<ILogger>();
-        //logger.LogError(ex, "An error occurred when creating the DB.");
+        var logger = loggerFactory.CreateLogger<Program>();
+        logger.LogError(ex, "An error occurred seeding the DB.");
     }
 }
 
