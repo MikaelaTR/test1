@@ -14,8 +14,6 @@
     <input class="btn btn-success" type="submit" value="Upload" />
 </form>
 
-@*@using (Html.BeginForm("UploadFile", "FileSharing")){
-    <input class="form-control" name="files" type="file" asp-for="TestFile" />
-    <input name="inputText" type="text" />
-    <input class="btn btn-success" type="submit" value="Upload" />
-}*@
+<form method="get" asp-controller="FileSharing" asp-action="GetAllFiles">
+    <input class="btn btn-success" type="submit" value="Console log" />
+</form>

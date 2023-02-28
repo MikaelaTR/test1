@@ -1,5 +1,7 @@
 ﻿using AdvancedProjectMVC.Models;
+using Azure;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdvancedProjectMVC.Controllers
@@ -16,11 +18,32 @@ namespace AdvancedProjectMVC.Controllers
         }
 
         [HttpGet("GetAllFiles")]
-        public async Task GetAllFiles(string path)
+        public async Task GetAllFiles()
         {
+            blobContainerClient = blobServiceClient.GetBlobContainerClient("filesharecontainer");
+            try
+            {
+                var resultSegment = blobContainerClient.GetBlobsAsync().AsPages();
 
+                await foreach (Page<BlobItem> blobPage in resultSegment)
+                {
+                    foreach (BlobItem blobItem in blobPage.Values)
+                    {
+                        Console.WriteLine("Blob name: {0}", blobItem.Name);
+                    }
+
+                    Console.WriteLine();
+                }
+            }
+            catch (RequestFailedException e)
+            {
+                Console.WriteLine(e.Message);
+                Console.ReadLine();
+                throw;
+            }
         }
 
+        //TODO: Archives
         [HttpPost("UploadFile")]
         public async Task UploadFile(IFormFile TestFile)
         {
@@ -35,7 +58,5 @@ namespace AdvancedProjectMVC.Controllers
             BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
             await blobClient.UploadAsync(filePath, true);           
         }
-
-
     }
 }
