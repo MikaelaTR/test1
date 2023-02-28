@@ -1,4 +1,5 @@
-﻿@*
+﻿@model AdvancedProjectMVC.Models.SharedFile
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
@@ -7,8 +8,14 @@
 
 <h1> Share File</h1>
 
-<form method="post" asp-controller="FileSharing" asp-action="UploadFile">
+<form method="post" asp-controller="FileSharing" asp-action="UploadFile" enctype="multipart/form-data">
     <p>Upload file</p>
-    <input class="form-control" name="files" type="file" />
+    <input class="form-control" type="file" asp-for="TestFile" />
     <input class="btn btn-success" type="submit" value="Upload" />
 </form>
+
+@*@using (Html.BeginForm("UploadFile", "FileSharing")){
+    <input class="form-control" name="files" type="file" asp-for="TestFile" />
+    <input name="inputText" type="text" />
+    <input class="btn btn-success" type="submit" value="Upload" />
+}*@

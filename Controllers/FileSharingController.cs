@@ -15,22 +15,27 @@ namespace AdvancedProjectMVC.Controllers
             return View();
         }
 
-        //[HttpGet("GetFile")]
-        //public async Task<IActionResult> GetFile(string path)
-        //{
-        //    BlobObject result = (BlobObject)await GetFile(path);
-        //    return File(result.Content, result.ContentType);
-        //}
+        [HttpGet("GetAllFiles")]
+        public async Task GetAllFiles(string path)
+        {
+
+        }
 
         [HttpPost("UploadFile")]
-        public async Task UploadFile(SharedFile file)
+        public async Task UploadFile(IFormFile TestFile)
         {
+            var filePath = Path.GetTempFileName();
+            using (var stream = System.IO.File.Create(filePath))
+            {
+                TestFile.CopyTo(stream);  
+            }
+
             blobContainerClient = blobServiceClient.GetBlobContainerClient("filesharecontainer");
-            string fileName = file.FileName;
-            string filePath = file.FilePath;
-            BlobClient blobClient = blobContainerClient.GetBlobClient("Test String");
-            Console.WriteLine("upload file gogogo ");
-            await blobClient.UploadAsync(BinaryData.FromString("test string uploaded"));           
+            string fileName = (TestFile.FileName);
+            BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
+            await blobClient.UploadAsync(filePath, true);           
         }
+
+
     }
 }
