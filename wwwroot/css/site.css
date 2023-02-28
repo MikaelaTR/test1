@@ -4,6 +4,12 @@
 	--color3: #04BF9D; /* #6BA368; */
 	--color4: #03A688; /* #515B3A; */
 	--color5: #104037; /* #353D2F; */
+
+	--primary: #0AFFAD;
+	--primary-hover: #027F54;
+	--secondary: #04C27F;
+	--secondary-hover: #028052;
+	--danger: #FF3B0A;
 }
 
 html {
@@ -12,11 +18,18 @@ html {
 	min-height: 100%;
 }
 
-.main{
+.header {
+	padding-top: 30px;
+	text-align: Center;
+	font-size: 30px;
+}
+
+.main {
 	display: flex;
 	flex-direction: column;
 	flex: 0.75;
 	height: 100vh;
+	margin-left: auto;
 }
 
 @media (min-width: 768px) {
@@ -37,6 +50,17 @@ body {
 	margin-bottom: 60px;
 	color: var(--color1);
 	background-color: var(--color3);
+	font-size: 16px;
+}
+@media screen and (min-width: 320px) {
+	body {
+		font-size: calc(16px + 6 * ((100vw - 320px) / 680));
+	}
+}
+@media screen and (min-width: 1000px) {
+	body {
+		font-size: 22px;
+	}
 }
 
 
@@ -121,7 +145,7 @@ nav {
 }
 /*If active, highlight with color*/
 .nav-pills .pill-1 .nav-link {
-	background-color: var(--color2);
+	background-color: var(--primary);
 } /*If not active, make transparent*/
 .nav-pills .pill-1 .nav-link:not(.active) {
 	background-color: transparent;
@@ -129,10 +153,41 @@ nav {
 
 
 /*BUTTONS*/
+.btn {
+	margin: 2pt;
+}
 .btn-primary {
-	background-color: #13F2F2;
+	background-color: var(--primary);
+	border: none;
 }
 .btn-primary:hover {
-	background-color: #14C5D9;
+	background-color: var(--primary-hover);
 }
 
+.btn-secondary {
+	background-color: var(--secondary);
+}
+.btn-secondary:hover {
+	background-color: var(--secondary-hover);
+}
+
+.btn-danger {
+	background-color: var(--danger);
+}
+
+@media screen and (min-width: 320px) {
+	.btn { font-size: calc(14px + 6 * ((100vw - 320px) / 680)); }
+}
+@media screen and (min-width: 1000px) {
+	.btn { font-size: 18px; }
+}
+
+
+/*TABLES*/
+table tr:nth-child(odd) {
+	background-color: var(--color4);
+}
+table tr:nth-child(even) {
+	background-color: #03997E; /*var(--color5);*/
+	
+}

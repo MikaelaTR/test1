@@ -5,10 +5,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Student List</h1>
+<div class="header">
+    <i class="fa fa-group"></i>
+    <h1 class="d-inline-flex">Student List</h1>
+</div>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Add New Student</a>
 </p>
 <table class="table table-hover">
     <thead>
