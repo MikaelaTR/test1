@@ -1,26 +1,26 @@
 ﻿@model IEnumerable<AdvancedProjectMVC.Models.Student>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Student List";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Student List</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
-<table class="table">
+<table class="table table-hover">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.StudentNumber)
+                Student Number @*@Html.DisplayNameFor(model => model.StudentNumber)*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+                First Name @*@Html.DisplayNameFor(model => model.FirstName)*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
+                Last Name @*@Html.DisplayNameFor(model => model.LastName)*@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Email)

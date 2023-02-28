@@ -1,20 +1,20 @@
 ﻿@model IEnumerable<AdvancedProjectMVC.Models.Course>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Courses";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Course List</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
-<table class="table">
+<table class="table table-hover">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CourseCode)
+                Course Code@*@Html.DisplayNameFor(model => model.CourseCode)*@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Title)
@@ -49,10 +49,10 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Credits)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+            <td>                
+                <a asp-action="Details" asp-route-id="@item.ID" class="btn btn-secondary">Details</a> |
+                <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-secondary">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-secondary">Delete</a>
             </td>
         </tr>
 }
