@@ -11,7 +11,7 @@
         public bool Coop { get; set; }
 
         public ICollection<Course> Courses { get; set; }
-        public ICollection<Student> Students { get; set; }
+        public ICollection<ApplicationUser> ApplicationUsers { get; set; }
         
     }
 }

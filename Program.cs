@@ -21,12 +21,12 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.S
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddAuthorization(options =>
+/*builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly", policy => policy.RequireClaim("AdminNumber"));
     options.AddPolicy("InstructorOnly", policy => policy.RequireClaim("InstructorNumber"));
     options.AddPolicy("StudentOnly", policy => policy.RequireClaim("StudentNumber"));
-});
+});*/
 
 builder.Services.AddRazorPages();
 builder.Services.AddSignalR();
