@@ -17,6 +17,8 @@ namespace AdvancedProjectMVC.Models
 
         public DateTime DateRegistered { get; set; }
 
-        
+        public ICollection<Enrollment> Enrollments { get; set; }
+        public ICollection<TeachingAssignment> TeachingAssignments { get; set; }
+        public ICollection<ChatMessage> ChatMessages { get; set; }
     }
 }
