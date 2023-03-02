@@ -56,7 +56,7 @@ namespace AdvancedProjectMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,StudentId,Content,DatePosted")] ChatMessage chatMessage)
+        public async Task<IActionResult> Create([Bind("Id,ApplicationUserId,Content,DatePosted")] ChatMessage chatMessage)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +88,7 @@ namespace AdvancedProjectMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,StudentId,Content,DatePosted")] ChatMessage chatMessage)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ApplicationUserId,Content,DatePosted")] ChatMessage chatMessage)
         {
             if (id != chatMessage.Id)
             {
