@@ -10,87 +10,87 @@ using AdvancedProjectMVC.Models;
 
 namespace AdvancedProjectMVC.Controllers
 {
-    public class CoursesController : Controller
+    public class ChatMessagesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public CoursesController(ApplicationDbContext context)
+        public ChatMessagesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Courses
+        // GET: ChatMessages
         public async Task<IActionResult> Index()
         {
-              return _context.Courses != null ? 
-                          View(await _context.Courses.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Courses'  is null.");
+              return _context.ChatMessage != null ? 
+                          View(await _context.ChatMessage.ToListAsync()) :
+                          Problem("Entity set 'ApplicationDbContext.ChatMessage'  is null.");
         }
 
-        // GET: Courses/Details/5
+        // GET: ChatMessages/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Courses == null)
+            if (id == null || _context.ChatMessage == null)
             {
                 return NotFound();
             }
 
-            var course = await _context.Courses
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (course == null)
+            var chatMessage = await _context.ChatMessage
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (chatMessage == null)
             {
                 return NotFound();
             }
 
-            return View(course);
+            return View(chatMessage);
         }
 
-        // GET: Courses/Create
+        // GET: ChatMessages/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Courses/Create
+        // POST: ChatMessages/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,CourseCode,Title,Description,Location,Credits")] Course course)
+        public async Task<IActionResult> Create([Bind("Id,ApplicationUserId,Content,DatePosted")] ChatMessage chatMessage)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(course);
+                _context.Add(chatMessage);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(course);
+            return View(chatMessage);
         }
 
-        // GET: Courses/Edit/5
+        // GET: ChatMessages/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Courses == null)
+            if (id == null || _context.ChatMessage == null)
             {
                 return NotFound();
             }
 
-            var course = await _context.Courses.FindAsync(id);
-            if (course == null)
+            var chatMessage = await _context.ChatMessage.FindAsync(id);
+            if (chatMessage == null)
             {
                 return NotFound();
             }
-            return View(course);
+            return View(chatMessage);
         }
 
-        // POST: Courses/Edit/5
+        // POST: ChatMessages/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,CourseCode,Title,Description,Location,Credits")] Course course)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ApplicationUserId,Content,DatePosted")] ChatMessage chatMessage)
         {
-            if (id != course.ID)
+            if (id != chatMessage.Id)
             {
                 return NotFound();
             }
@@ -99,12 +99,12 @@ namespace AdvancedProjectMVC.Controllers
             {
                 try
                 {
-                    _context.Update(course);
+                    _context.Update(chatMessage);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CourseExists(course.ID))
+                    if (!ChatMessageExists(chatMessage.Id))
                     {
                         return NotFound();
                     }
@@ -115,49 +115,49 @@ namespace AdvancedProjectMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(course);
+            return View(chatMessage);
         }
 
-        // GET: Courses/Delete/5
+        // GET: ChatMessages/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Courses == null)
+            if (id == null || _context.ChatMessage == null)
             {
                 return NotFound();
             }
 
-            var course = await _context.Courses
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (course == null)
+            var chatMessage = await _context.ChatMessage
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (chatMessage == null)
             {
                 return NotFound();
             }
 
-            return View(course);
+            return View(chatMessage);
         }
 
-        // POST: Courses/Delete/5
+        // POST: ChatMessages/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Courses == null)
+            if (_context.ChatMessage == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Courses'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.ChatMessage'  is null.");
             }
-            var course = await _context.Courses.FindAsync(id);
-            if (course != null)
+            var chatMessage = await _context.ChatMessage.FindAsync(id);
+            if (chatMessage != null)
             {
-                _context.Courses.Remove(course);
+                _context.ChatMessage.Remove(chatMessage);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CourseExists(int id)
+        private bool ChatMessageExists(int id)
         {
-          return (_context.Courses?.Any(e => e.ID == id)).GetValueOrDefault();
+          return (_context.ChatMessage?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

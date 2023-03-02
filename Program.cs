@@ -2,6 +2,7 @@ using AdvancedProjectMVC.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using AdvancedProjectMVC.Models;
+using AdvancedProjectMVC.Hubs;
 using Azure.Storage.Blobs;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,14 +25,15 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.S
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddAuthorization(options =>
+/*builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly", policy => policy.RequireClaim("AdminNumber"));
     options.AddPolicy("InstructorOnly", policy => policy.RequireClaim("InstructorNumber"));
     options.AddPolicy("StudentOnly", policy => policy.RequireClaim("StudentNumber"));
-});
+});*/
 
 builder.Services.AddRazorPages();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -39,16 +41,22 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+    var loggerFactory = services.GetRequiredService<ILoggerFactory>();
 
     try
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+        
+        await DbInitializer.SeedRolesAsync(userManager, roleManager);
+        await DbInitializer.SeedSuperAdminAsync(userManager, roleManager);
         DbInitializer.Initialize(context);
     }
     catch (Exception ex)
     {
-        //var logger = services.GetRequiredService<ILogger>();
-        //logger.LogError(ex, "An error occurred when creating the DB.");
+        var logger = loggerFactory.CreateLogger<Program>();
+        logger.LogError(ex, "An error occurred seeding the DB.");
     }
 }
 
@@ -78,5 +86,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapRazorPages();
+app.MapHub<ChatHub>("/chathub");
 
 app.Run();
