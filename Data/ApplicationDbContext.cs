@@ -15,10 +15,10 @@ namespace AdvancedProjectMVC.Data
         public DbSet<TeachingAssignment> TeachingAssignments { get; set; }
         public DbSet<SchoolProgram> SchoolPrograms { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
-        public DbSet<ChatMessage> ChatMessages { get; set; } = default!;
+        public DbSet<ChatMessage> ChatMessages { get; set; }
         public DbSet<Server> Servers { get; set; }
         public DbSet<Channel> Channels { get; set; }
-        public DbSet<AdvancedProjectMVC.Models.ServerMember> ServerMember { get; set; } = default!;
+        public DbSet<ServerMember> ServerMembers { get; set; }
     }
 
 
