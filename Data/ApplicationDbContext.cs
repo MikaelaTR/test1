@@ -15,7 +15,9 @@ namespace AdvancedProjectMVC.Data
         public DbSet<TeachingAssignment> TeachingAssignments { get; set; }
         public DbSet<SchoolProgram> SchoolPrograms { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
-        public DbSet<ChatMessage> ChatMessage { get; set; } = default!;
+        public DbSet<ChatMessage> ChatMessages { get; set; } = default!;
+        public DbSet<Server> Servers { get; set; }
+        public DbSet<Channel> Channels { get; set; }
     }
 
 

@@ -22,20 +22,20 @@ namespace AdvancedProjectMVC.Controllers
         // GET: ChatMessages
         public async Task<IActionResult> Index()
         {
-              return _context.ChatMessage != null ? 
-                          View(await _context.ChatMessage.ToListAsync()) :
+              return _context.ChatMessages != null ? 
+                          View(await _context.ChatMessages.ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.ChatMessage'  is null.");
         }
 
         // GET: ChatMessages/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.ChatMessage == null)
+            if (id == null || _context.ChatMessages == null)
             {
                 return NotFound();
             }
 
-            var chatMessage = await _context.ChatMessage
+            var chatMessage = await _context.ChatMessages
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (chatMessage == null)
             {
@@ -70,12 +70,12 @@ namespace AdvancedProjectMVC.Controllers
         // GET: ChatMessages/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.ChatMessage == null)
+            if (id == null || _context.ChatMessages == null)
             {
                 return NotFound();
             }
 
-            var chatMessage = await _context.ChatMessage.FindAsync(id);
+            var chatMessage = await _context.ChatMessages.FindAsync(id);
             if (chatMessage == null)
             {
                 return NotFound();
@@ -121,12 +121,12 @@ namespace AdvancedProjectMVC.Controllers
         // GET: ChatMessages/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.ChatMessage == null)
+            if (id == null || _context.ChatMessages == null)
             {
                 return NotFound();
             }
 
-            var chatMessage = await _context.ChatMessage
+            var chatMessage = await _context.ChatMessages
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (chatMessage == null)
             {
@@ -141,14 +141,14 @@ namespace AdvancedProjectMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.ChatMessage == null)
+            if (_context.ChatMessages == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.ChatMessage'  is null.");
             }
-            var chatMessage = await _context.ChatMessage.FindAsync(id);
+            var chatMessage = await _context.ChatMessages.FindAsync(id);
             if (chatMessage != null)
             {
-                _context.ChatMessage.Remove(chatMessage);
+                _context.ChatMessages.Remove(chatMessage);
             }
             
             await _context.SaveChangesAsync();
@@ -157,7 +157,7 @@ namespace AdvancedProjectMVC.Controllers
 
         private bool ChatMessageExists(int id)
         {
-          return (_context.ChatMessage?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.ChatMessages?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
