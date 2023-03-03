@@ -4,7 +4,7 @@ namespace AdvancedProjectMVC.Models
 {
     public class Server
     {
-        public int ServerId { get; set; }
+        public int Id { get; set; }
         [Required]
         public string ServerName { get; set; }
 

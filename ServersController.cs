@@ -36,7 +36,7 @@ namespace AdvancedProjectMVC
             }
 
             var server = await _context.Servers
-                .FirstOrDefaultAsync(m => m.ServerId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (server == null)
             {
                 return NotFound();
@@ -90,7 +90,7 @@ namespace AdvancedProjectMVC
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ServerId,ServerName")] Server server)
         {
-            if (id != server.ServerId)
+            if (id != server.Id)
             {
                 return NotFound();
             }
@@ -104,7 +104,7 @@ namespace AdvancedProjectMVC
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ServerExists(server.ServerId))
+                    if (!ServerExists(server.Id))
                     {
                         return NotFound();
                     }
@@ -127,7 +127,7 @@ namespace AdvancedProjectMVC
             }
 
             var server = await _context.Servers
-                .FirstOrDefaultAsync(m => m.ServerId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (server == null)
             {
                 return NotFound();
@@ -157,7 +157,7 @@ namespace AdvancedProjectMVC
 
         private bool ServerExists(int id)
         {
-          return (_context.Servers?.Any(e => e.ServerId == id)).GetValueOrDefault();
+          return (_context.Servers?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
