@@ -10,87 +10,87 @@ using AdvancedProjectMVC.Models;
 
 namespace AdvancedProjectMVC.Controllers
 {
-    public class ChatMessagesController : Controller
+    public class ServersController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ChatMessagesController(ApplicationDbContext context)
+        public ServersController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: ChatMessages
+        // GET: Servers
         public async Task<IActionResult> Index()
         {
-              return _context.ChatMessages != null ? 
-                          View(await _context.ChatMessages.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.ChatMessage'  is null.");
+            return _context.Servers != null ?
+                        View(await _context.Servers.ToListAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.Servers'  is null.");
         }
 
-        // GET: ChatMessages/Details/5
+        // GET: Servers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.ChatMessages == null)
+            if (id == null || _context.Servers == null)
             {
                 return NotFound();
             }
 
-            var chatMessage = await _context.ChatMessages
+            var server = await _context.Servers
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (chatMessage == null)
+            if (server == null)
             {
                 return NotFound();
             }
 
-            return View(chatMessage);
+            return View(server);
         }
 
-        // GET: ChatMessages/Create
+        // GET: Servers/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: ChatMessages/Create
+        // POST: Servers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ApplicationUserId,Content,DatePosted")] ChatMessage chatMessage)
+        public async Task<IActionResult> Create([Bind("ServerId,ServerName")] Server server)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(chatMessage);
+                _context.Add(server);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(chatMessage);
+            return View(server);
         }
 
-        // GET: ChatMessages/Edit/5
+        // GET: Servers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.ChatMessages == null)
+            if (id == null || _context.Servers == null)
             {
                 return NotFound();
             }
 
-            var chatMessage = await _context.ChatMessages.FindAsync(id);
-            if (chatMessage == null)
+            var server = await _context.Servers.FindAsync(id);
+            if (server == null)
             {
                 return NotFound();
             }
-            return View(chatMessage);
+            return View(server);
         }
 
-        // POST: ChatMessages/Edit/5
+        // POST: Servers/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ApplicationUserId,Content,DatePosted")] ChatMessage chatMessage)
+        public async Task<IActionResult> Edit(int id, [Bind("ServerId,ServerName")] Server server)
         {
-            if (id != chatMessage.Id)
+            if (id != server.Id)
             {
                 return NotFound();
             }
@@ -99,12 +99,12 @@ namespace AdvancedProjectMVC.Controllers
             {
                 try
                 {
-                    _context.Update(chatMessage);
+                    _context.Update(server);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ChatMessageExists(chatMessage.Id))
+                    if (!ServerExists(server.Id))
                     {
                         return NotFound();
                     }
@@ -115,49 +115,49 @@ namespace AdvancedProjectMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(chatMessage);
+            return View(server);
         }
 
-        // GET: ChatMessages/Delete/5
+        // GET: Servers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.ChatMessages == null)
+            if (id == null || _context.Servers == null)
             {
                 return NotFound();
             }
 
-            var chatMessage = await _context.ChatMessages
+            var server = await _context.Servers
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (chatMessage == null)
+            if (server == null)
             {
                 return NotFound();
             }
 
-            return View(chatMessage);
+            return View(server);
         }
 
-        // POST: ChatMessages/Delete/5
+        // POST: Servers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.ChatMessages == null)
+            if (_context.Servers == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.ChatMessage'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Servers'  is null.");
             }
-            var chatMessage = await _context.ChatMessages.FindAsync(id);
-            if (chatMessage != null)
+            var server = await _context.Servers.FindAsync(id);
+            if (server != null)
             {
-                _context.ChatMessages.Remove(chatMessage);
+                _context.Servers.Remove(server);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ChatMessageExists(int id)
+        private bool ServerExists(int id)
         {
-          return (_context.ChatMessages?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Servers?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
