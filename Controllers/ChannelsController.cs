@@ -8,89 +8,92 @@ using Microsoft.EntityFrameworkCore;
 using AdvancedProjectMVC.Data;
 using AdvancedProjectMVC.Models;
 
-namespace AdvancedProjectMVC
+namespace AdvancedProjectMVC.Controllers
 {
-    public class ServersController : Controller
+    public class ChannelsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ServersController(ApplicationDbContext context)
+        public ChannelsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Servers
+        // GET: Channels
         public async Task<IActionResult> Index()
         {
-              return _context.Servers != null ? 
-                          View(await _context.Servers.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Servers'  is null.");
+            var applicationDbContext = _context.Channels.Include(c => c.Server);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Servers/Details/5
+        // GET: Channels/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Servers == null)
+            if (id == null || _context.Channels == null)
             {
                 return NotFound();
             }
 
-            var server = await _context.Servers
+            var channel = await _context.Channels
+                .Include(c => c.Server)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (server == null)
+            if (channel == null)
             {
                 return NotFound();
             }
 
-            return View(server);
+            return View(channel);
         }
 
-        // GET: Servers/Create
+        // GET: Channels/Create
         public IActionResult Create()
         {
+            ViewData["ServerId"] = new SelectList(_context.Servers, "ServerId", "ServerId");
             return View();
         }
 
-        // POST: Servers/Create
+        // POST: Channels/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ServerId,ServerName")] Server server)
+        public async Task<IActionResult> Create([Bind("Id,ChannelName,ServerId")] Channel channel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(server);
+                _context.Add(channel);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(server);
+            ViewData["ServerId"] = new SelectList(_context.Servers, "ServerId", "ServerId", channel.ServerId);
+            return View(channel);
         }
 
-        // GET: Servers/Edit/5
+        // GET: Channels/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Servers == null)
+            if (id == null || _context.Channels == null)
             {
                 return NotFound();
             }
 
-            var server = await _context.Servers.FindAsync(id);
-            if (server == null)
+            var channel = await _context.Channels.FindAsync(id);
+            if (channel == null)
             {
                 return NotFound();
             }
-            return View(server);
+            ViewData["ServerId"] = new SelectList(_context.Servers, "ServerId", "ServerId", channel.ServerId);
+            return View(channel);
         }
 
-        // POST: Servers/Edit/5
+        // POST: Channels/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ServerId,ServerName")] Server server)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ChannelName,ServerId")] Channel channel)
         {
-            if (id != server.Id)
+            if (id != channel.Id)
             {
                 return NotFound();
             }
@@ -99,12 +102,12 @@ namespace AdvancedProjectMVC
             {
                 try
                 {
-                    _context.Update(server);
+                    _context.Update(channel);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ServerExists(server.Id))
+                    if (!ChannelExists(channel.Id))
                     {
                         return NotFound();
                     }
@@ -115,49 +118,51 @@ namespace AdvancedProjectMVC
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(server);
+            ViewData["ServerId"] = new SelectList(_context.Servers, "ServerId", "ServerId", channel.ServerId);
+            return View(channel);
         }
 
-        // GET: Servers/Delete/5
+        // GET: Channels/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Servers == null)
+            if (id == null || _context.Channels == null)
             {
                 return NotFound();
             }
 
-            var server = await _context.Servers
+            var channel = await _context.Channels
+                .Include(c => c.Server)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (server == null)
+            if (channel == null)
             {
                 return NotFound();
             }
 
-            return View(server);
+            return View(channel);
         }
 
-        // POST: Servers/Delete/5
+        // POST: Channels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Servers == null)
+            if (_context.Channels == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Servers'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Channels'  is null.");
             }
-            var server = await _context.Servers.FindAsync(id);
-            if (server != null)
+            var channel = await _context.Channels.FindAsync(id);
+            if (channel != null)
             {
-                _context.Servers.Remove(server);
+                _context.Channels.Remove(channel);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ServerExists(int id)
+        private bool ChannelExists(int id)
         {
-          return (_context.Servers?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Channels?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
