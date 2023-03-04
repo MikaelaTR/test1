@@ -10,87 +10,90 @@ using AdvancedProjectMVC.Models;
 
 namespace AdvancedProjectMVC.Controllers
 {
-    public class ChatMessagesController : Controller
+    public class ChannelsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ChatMessagesController(ApplicationDbContext context)
+        public ChannelsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: ChatMessages
+        // GET: Channels
         public async Task<IActionResult> Index()
         {
-              return _context.ChatMessages != null ? 
-                          View(await _context.ChatMessages.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.ChatMessage'  is null.");
+            var applicationDbContext = _context.Channels.Include(c => c.Server);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: ChatMessages/Details/5
+        // GET: Channels/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.ChatMessages == null)
+            if (id == null || _context.Channels == null)
             {
                 return NotFound();
             }
 
-            var chatMessage = await _context.ChatMessages
+            var channel = await _context.Channels
+                .Include(c => c.Server)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (chatMessage == null)
+            if (channel == null)
             {
                 return NotFound();
             }
 
-            return View(chatMessage);
+            return View(channel);
         }
 
-        // GET: ChatMessages/Create
+        // GET: Channels/Create
         public IActionResult Create()
         {
+            ViewData["ServerId"] = new SelectList(_context.Servers, "ServerId", "ServerId");
             return View();
         }
 
-        // POST: ChatMessages/Create
+        // POST: Channels/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ApplicationUserId,Content,DatePosted")] ChatMessage chatMessage)
+        public async Task<IActionResult> Create([Bind("Id,ChannelName,ServerId")] Channel channel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(chatMessage);
+                _context.Add(channel);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(chatMessage);
+            ViewData["ServerId"] = new SelectList(_context.Servers, "ServerId", "ServerId", channel.ServerId);
+            return View(channel);
         }
 
-        // GET: ChatMessages/Edit/5
+        // GET: Channels/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.ChatMessages == null)
+            if (id == null || _context.Channels == null)
             {
                 return NotFound();
             }
 
-            var chatMessage = await _context.ChatMessages.FindAsync(id);
-            if (chatMessage == null)
+            var channel = await _context.Channels.FindAsync(id);
+            if (channel == null)
             {
                 return NotFound();
             }
-            return View(chatMessage);
+            ViewData["ServerId"] = new SelectList(_context.Servers, "ServerId", "ServerId", channel.ServerId);
+            return View(channel);
         }
 
-        // POST: ChatMessages/Edit/5
+        // POST: Channels/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ApplicationUserId,Content,DatePosted")] ChatMessage chatMessage)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ChannelName,ServerId")] Channel channel)
         {
-            if (id != chatMessage.Id)
+            if (id != channel.Id)
             {
                 return NotFound();
             }
@@ -99,12 +102,12 @@ namespace AdvancedProjectMVC.Controllers
             {
                 try
                 {
-                    _context.Update(chatMessage);
+                    _context.Update(channel);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ChatMessageExists(chatMessage.Id))
+                    if (!ChannelExists(channel.Id))
                     {
                         return NotFound();
                     }
@@ -115,49 +118,51 @@ namespace AdvancedProjectMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(chatMessage);
+            ViewData["ServerId"] = new SelectList(_context.Servers, "ServerId", "ServerId", channel.ServerId);
+            return View(channel);
         }
 
-        // GET: ChatMessages/Delete/5
+        // GET: Channels/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.ChatMessages == null)
+            if (id == null || _context.Channels == null)
             {
                 return NotFound();
             }
 
-            var chatMessage = await _context.ChatMessages
+            var channel = await _context.Channels
+                .Include(c => c.Server)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (chatMessage == null)
+            if (channel == null)
             {
                 return NotFound();
             }
 
-            return View(chatMessage);
+            return View(channel);
         }
 
-        // POST: ChatMessages/Delete/5
+        // POST: Channels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.ChatMessages == null)
+            if (_context.Channels == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.ChatMessage'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Channels'  is null.");
             }
-            var chatMessage = await _context.ChatMessages.FindAsync(id);
-            if (chatMessage != null)
+            var channel = await _context.Channels.FindAsync(id);
+            if (channel != null)
             {
-                _context.ChatMessages.Remove(chatMessage);
+                _context.Channels.Remove(channel);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ChatMessageExists(int id)
+        private bool ChannelExists(int id)
         {
-          return (_context.ChatMessages?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Channels?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

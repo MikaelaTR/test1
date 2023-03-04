@@ -20,5 +20,6 @@ namespace AdvancedProjectMVC.Models
         public ICollection<Enrollment> Enrollments { get; set; }
         public ICollection<TeachingAssignment> TeachingAssignments { get; set; }
         public ICollection<ChatMessage> ChatMessages { get; set; }
+        public ICollection<Server> Servers { get; set; }
     }
 }
