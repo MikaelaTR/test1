@@ -22,19 +22,19 @@ namespace AdvancedProjectMVC.Controllers
         // GET: ServerMembers
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.ServerMember.Include(s => s.ApplicationUser).Include(s => s.Server);
+            var applicationDbContext = _context.ServerMembers.Include(s => s.ApplicationUser).Include(s => s.Server);
             return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: ServerMembers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.ServerMember == null)
+            if (id == null || _context.ServerMembers == null)
             {
                 return NotFound();
             }
 
-            var serverMember = await _context.ServerMember
+            var serverMember = await _context.ServerMembers
                 .Include(s => s.ApplicationUser)
                 .Include(s => s.Server)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -75,12 +75,12 @@ namespace AdvancedProjectMVC.Controllers
         // GET: ServerMembers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.ServerMember == null)
+            if (id == null || _context.ServerMembers == null)
             {
                 return NotFound();
             }
 
-            var serverMember = await _context.ServerMember.FindAsync(id);
+            var serverMember = await _context.ServerMembers.FindAsync(id);
             if (serverMember == null)
             {
                 return NotFound();
@@ -130,12 +130,12 @@ namespace AdvancedProjectMVC.Controllers
         // GET: ServerMembers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.ServerMember == null)
+            if (id == null || _context.ServerMembers == null)
             {
                 return NotFound();
             }
 
-            var serverMember = await _context.ServerMember
+            var serverMember = await _context.ServerMembers
                 .Include(s => s.ApplicationUser)
                 .Include(s => s.Server)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -152,14 +152,14 @@ namespace AdvancedProjectMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.ServerMember == null)
+            if (_context.ServerMembers == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.ServerMember'  is null.");
             }
-            var serverMember = await _context.ServerMember.FindAsync(id);
+            var serverMember = await _context.ServerMembers.FindAsync(id);
             if (serverMember != null)
             {
-                _context.ServerMember.Remove(serverMember);
+                _context.ServerMembers.Remove(serverMember);
             }
 
             await _context.SaveChangesAsync();
@@ -168,7 +168,7 @@ namespace AdvancedProjectMVC.Controllers
 
         private bool ServerMemberExists(int id)
         {
-            return (_context.ServerMember?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.ServerMembers?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
