@@ -123,7 +123,7 @@ namespace AdvancedProjectMVC.Controllers
         // GET: CalendarController/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Enrollment == null)
+            if (id == null || _context.CalendarEvent == null)
             {
                 return NotFound();
             }
@@ -142,16 +142,20 @@ namespace AdvancedProjectMVC.Controllers
         // POST: CalendarController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> Delete(int id)
         {
-            try
+            if (_context.CalendarEvent == null)
             {
-                return RedirectToAction(nameof(Index));
+                return Problem("Entity set 'ApplicationDbContext.CalendarEvent'  is null.");
             }
-            catch
+            var calEvent = await _context.CalendarEvent.FindAsync(id);
+            if (calEvent != null)
             {
-                return View();
+                _context.CalendarEvent.Remove(calEvent);
             }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         private bool CalendarEventExists(int id)
