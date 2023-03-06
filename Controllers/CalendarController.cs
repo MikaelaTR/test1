@@ -121,9 +121,22 @@ namespace AdvancedProjectMVC.Controllers
         }
 
         // GET: CalendarController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int? id)
         {
-            return View();
+            if (id == null || _context.Enrollment == null)
+            {
+                return NotFound();
+            }
+
+            var calEvent = await _context.CalendarEvent
+                .FirstOrDefaultAsync(m => m.ID == id);
+
+            if (calEvent == null)
+            {
+                return NotFound();
+            }
+
+            return View(calEvent);
         }
 
         // POST: CalendarController/Delete/5
