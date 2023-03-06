@@ -88,7 +88,8 @@ namespace AdvancedProjectMVC.Controllers
             var calEventCheck = await _context.CalendarEvent.FindAsync(id);
 
             // Check if the UserID from the form is the same as the one in the database
-            if (calEvent.UserID.Equals(calEventCheck.UserID))
+            // TODO: Make it more obvious to users why their edit save failed(?)
+            if (calEvent.UserID.Equals(calEventCheck.UserID) && calEventCheck.UserID.Equals(User.Identity?.Name))
             {
                 // Detach the variable from the context
                 _context.Entry(calEventCheck).State = EntityState.Detached;
