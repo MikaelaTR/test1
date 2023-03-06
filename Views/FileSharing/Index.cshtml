@@ -6,14 +6,14 @@
     ViewData["Title"] = "File Sharing";
 }
 
-<h1> Share File</h1>
+<h1> Shared Files</h1>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                FileName
+                File Name
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -27,3 +27,7 @@
         }
     </tbody>
 </table>
+
+<p>
+    <a asp-action="Upload"> Upload New File</a> 
+</p>

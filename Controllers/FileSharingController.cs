@@ -53,9 +53,15 @@ namespace AdvancedProjectMVC.Controllers
             return files;
         }
 
+
+        public IActionResult Upload() { 
+            return View();
+        }
+
+
         //TODO: Archives
         [HttpPost("UploadFile")]
-        public async Task UploadFile(IFormFile TestFile, string containerName)
+        public async Task<IActionResult> UploadFile(IFormFile TestFile, string containerName)
         {
             containerName = "filesharecontainer";
             var filePath = Path.GetTempFileName();
@@ -69,6 +75,7 @@ namespace AdvancedProjectMVC.Controllers
             BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
             await blobClient.UploadAsync(filePath, true);
             blobContainerClient = null;
+            return View();
         }
 
         public async Task<BlobObject> DownloadFile(string containerName, string fileName)
@@ -79,9 +86,8 @@ namespace AdvancedProjectMVC.Controllers
             
             blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
             BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
-
            
-            //var downloadPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+            //downloadPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
 
             try
             {
@@ -92,10 +98,10 @@ namespace AdvancedProjectMVC.Controllers
 
                 //FileStreamResult fsr =  File(blobObject.BlobContent, "text/plain", fileName);
 
-                using (var resultStream = System.IO.File.Create(downloadPath + fileName))
-                {
-                    blobObject.BlobContent.CopyTo(resultStream);
-                }
+                //using (var resultStream = System.IO.File.Create(downloadPath + fileName))
+                //{
+                //    blobObject.BlobContent.CopyTo(resultStream);
+                //}
 
                 blobContainerClient = null;
                 return blobObject;

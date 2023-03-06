@@ -6,15 +6,14 @@
     ViewData["Title"] = "File Sharing";
 }
 
-<h1> Share File</h1>
+<h1> Upload </h1>
 
 <form method="post" asp-controller="FileSharing" asp-action="UploadFile" enctype="multipart/form-data">
     <p>Upload file</p>
     <input class="form-control" type="file" asp-for="TestFile" />
     <input class="btn btn-success" type="submit" value="Upload" />
 </form>
-
-
+<!-- 
 <form method="get" asp-controller="FileSharing" asp-action="DownloadFile">
     <input class="btn btn-success" type="submit" value="Download" />
-</form>
+</form>-->
