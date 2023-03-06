@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AdvancedProjectMVC.Data;
 using AdvancedProjectMVC.Models;
+using Microsoft.CodeAnalysis.Differencing;
 
 
 namespace AdvancedProjectMVC.Controllers
@@ -64,9 +65,23 @@ namespace AdvancedProjectMVC.Controllers
         }
 
         // GET: CalendarController/Edit/5
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int? id)
         {
-            return View();
+            Console.WriteLine("---------------------------------GOT HERE----------------------------------");
+            if (id == null || _context.CalendarEvent == null)
+            {
+                return NotFound();
+            }
+
+            // TODO: Make sure this is only available if userID is same as calendarEvent's userID
+            var calendarEvent = await _context.CalendarEvent.FindAsync(id);
+            if (calendarEvent == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["EventID"] = new SelectList(_context.CalendarEvent, "ID", "ID", calendarEvent.ID);
+            return View("Edit", calendarEvent);
         }
 
         // POST: CalendarController/Edit/5

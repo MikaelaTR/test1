@@ -10,7 +10,13 @@
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth'
+            initialView: 'dayGridMonth',
+            eventClick: function (info) {
+                info.jsEvent.preventDefault();
+
+                let url = '@Url.Action("Edit", "Calendar", new { id = "__id__" })';
+                location.href = url.replace("__id__", info.event.id);;
+            }
         });
 
         // Let the model become a JavaScript variable
@@ -19,6 +25,7 @@
         for(let i = 0; i < calendarEvents.length; i++) {
             // Create new event
             let newEvent = {
+                id: calendarEvents[i]["ID"],
                 title: calendarEvents[i]["Title"],
                 start: calendarEvents[i]["DateStart"],
                 end: calendarEvents[i]["DateEnd"]
