@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using AdvancedProjectMVC.Models;
 using AdvancedProjectMVC.Hubs;
+using Azure.Storage.Blobs;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var blobServiceClient = new BlobServiceClient(builder.Configuration.GetConnectionString("AzureBlobConnectionString"));
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -18,6 +21,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.S
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultUI()
     .AddDefaultTokenProviders();
+
 
 builder.Services.AddControllersWithViews();
 
