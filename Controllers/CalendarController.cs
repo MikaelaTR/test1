@@ -8,10 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using AdvancedProjectMVC.Data;
 using AdvancedProjectMVC.Models;
 using Microsoft.CodeAnalysis.Differencing;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace AdvancedProjectMVC.Controllers
 {
+    [Authorize]
     public class CalendarController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -23,9 +24,20 @@ namespace AdvancedProjectMVC.Controllers
         // GET: CalendarController
         public async Task<IActionResult> Index()
         {
-            return _context.Course != null ?
-                          View(await _context.CalendarEvent.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.CalendarEvent'  is null.");
+            // Get current user
+            var user = User.Identity.Name;
+
+            // If not null
+            if (user != null)
+            {
+                // Return only the list of events that the user has access to
+                return _context.CalendarEvent != null ?
+                              View(await _context.CalendarEvent.Where(m => m.UserID == user).ToListAsync()) :
+                              Problem("Entity set 'ApplicationDbContext.CalendarEvent'  is null.");
+            }
+
+            // Go to login page otherwise
+            return View("Login");
         }
 
         // GET: CalendarController/Details/5
