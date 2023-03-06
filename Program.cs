@@ -51,6 +51,7 @@ using (var scope = app.Services.CreateScope())
         
         await DbInitializer.SeedRolesAsync(userManager, roleManager);
         await DbInitializer.SeedSuperAdminAsync(userManager, roleManager);
+        await DbInitializer.SeedStudentsAsync(userManager, roleManager);
         DbInitializer.Initialize(context);
     }
     catch (Exception ex)
