@@ -2,8 +2,8 @@
 {
     public class BlobObject
     {
-        public Stream Content { get; set; }
-        public string ContentType { get; set; }
+        public Stream BlobContent { get; set; }
+        public string BlobName { get; set; }
              
     }
 }
