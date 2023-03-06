@@ -75,7 +75,8 @@ namespace AdvancedProjectMVC.Controllers
             BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
             await blobClient.UploadAsync(filePath, true);
             blobContainerClient = null;
-            return View();
+            
+            return RedirectToAction("Index");
         }
 
         public async Task<BlobObject> DownloadFile(string containerName, string fileName)
