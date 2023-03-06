@@ -43,60 +43,80 @@ namespace AdvancedProjectMVC.Controllers
         // POST: CalendarController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID, UserID, Title, DateStart, DateEnd")] CalendarEvent CalEvent)
+        public async Task<IActionResult> Create([Bind("ID, UserID, Title, DateStart, DateEnd")] CalendarEvent calEvent)
         {
             if (ModelState.IsValid) {
-                _context.Add(CalEvent);
+                calEvent.UserID = User.Identity?.Name;
+                _context.Add(calEvent);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(CalEvent);
-            /*
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-            */
+            return View(calEvent);
         }
 
         // GET: CalendarController/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            Console.WriteLine("---------------------------------GOT HERE----------------------------------");
             if (id == null || _context.CalendarEvent == null)
             {
                 return NotFound();
             }
 
             // TODO: Make sure this is only available if userID is same as calendarEvent's userID
-            var calendarEvent = await _context.CalendarEvent.FindAsync(id);
-            if (calendarEvent == null)
+            var calEvent = await _context.CalendarEvent.FindAsync(id);
+            if (calEvent == null)
             {
                 return NotFound();
             }
 
-            ViewData["EventID"] = new SelectList(_context.CalendarEvent, "ID", "ID", calendarEvent.ID);
-            return View("Edit", calendarEvent);
+            return View("Edit", calEvent);
         }
 
         // POST: CalendarController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, [Bind("ID, UserID, Title, DateStart, DateEnd")] CalendarEvent calEvent)
         {
-            try
+            // Check if the calendar event ID is the same as before the redirect
+            if (id != calEvent.ID)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            catch
+
+            // Get calendar event by id
+            var calEventCheck = await _context.CalendarEvent.FindAsync(id);
+
+            // Check if the UserID from the form is the same as the one in the database
+            if (calEvent.UserID.Equals(calEventCheck.UserID))
             {
-                return View();
+                // Detach the variable from the context
+                _context.Entry(calEventCheck).State = EntityState.Detached;
+
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        _context.Update(calEvent);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!CalendarEventExists(calEvent.ID))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+
+                    return RedirectToAction(nameof(Index));
+                }
             }
+
+            return View(calEvent);
         }
 
         // GET: CalendarController/Delete/5
@@ -118,6 +138,11 @@ namespace AdvancedProjectMVC.Controllers
             {
                 return View();
             }
+        }
+
+        private bool CalendarEventExists(int id)
+        {
+            return _context.CalendarEvent.Any(e => e.ID == id);
         }
     }
 }
