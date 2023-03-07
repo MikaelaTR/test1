@@ -3,6 +3,7 @@ using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGeneration;
 using System;
 
@@ -113,6 +114,22 @@ namespace AdvancedProjectMVC.Controllers
                 blobContainerClient= null;
                 return null;
             }            
+        }
+        public async Task<IActionResult> Delete(string containerName, string fileName)
+        {
+            return View();
+        }
+
+        [HttpPost("DeleteFile")]
+        public async Task<IActionResult> DeleteFile(string containerName, string fileName)
+        {
+            Console.WriteLine("Delete activated ", fileName);
+            containerName = "filesharecontainer";
+            blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
+            var blobToDelete = blobContainerClient.GetBlobClient(fileName);
+            await blobToDelete.DeleteIfExistsAsync(); 
+
+            return RedirectToAction("Index");
         }
     }
 }

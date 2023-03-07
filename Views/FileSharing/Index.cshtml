@@ -23,6 +23,9 @@
                 <td>
                     @item.ToString()
                 </td>
+                <td>
+                    <a asp-action="DeleteFile" name = "fileName" value="@item.ToString()">Delete</a>
+                </td>
             </tr>
         }
     </tbody>
