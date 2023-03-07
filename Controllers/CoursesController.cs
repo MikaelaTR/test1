@@ -22,20 +22,20 @@ namespace AdvancedProjectMVC.Controllers
         // GET: Courses
         public async Task<IActionResult> Index()
         {
-              return _context.Course != null ? 
-                          View(await _context.Course.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Course'  is null.");
+              return _context.Courses != null ? 
+                          View(await _context.Courses.ToListAsync()) :
+                          Problem("Entity set 'ApplicationDbContext.Courses'  is null.");
         }
 
         // GET: Courses/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Course == null)
+            if (id == null || _context.Courses == null)
             {
                 return NotFound();
             }
 
-            var course = await _context.Course
+            var course = await _context.Courses
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (course == null)
             {
@@ -56,7 +56,7 @@ namespace AdvancedProjectMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,CourseCode,Title,Credits")] Course course)
+        public async Task<IActionResult> Create([Bind("ID,CourseCode,Title,Description,Location,Credits")] Course course)
         {
             if (ModelState.IsValid)
             {
@@ -70,12 +70,12 @@ namespace AdvancedProjectMVC.Controllers
         // GET: Courses/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Course == null)
+            if (id == null || _context.Courses == null)
             {
                 return NotFound();
             }
 
-            var course = await _context.Course.FindAsync(id);
+            var course = await _context.Courses.FindAsync(id);
             if (course == null)
             {
                 return NotFound();
@@ -88,7 +88,7 @@ namespace AdvancedProjectMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,CourseCode,Title,Credits")] Course course)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,CourseCode,Title,Description,Location,Credits")] Course course)
         {
             if (id != course.ID)
             {
@@ -121,12 +121,12 @@ namespace AdvancedProjectMVC.Controllers
         // GET: Courses/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Course == null)
+            if (id == null || _context.Courses == null)
             {
                 return NotFound();
             }
 
-            var course = await _context.Course
+            var course = await _context.Courses
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (course == null)
             {
@@ -141,14 +141,14 @@ namespace AdvancedProjectMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Course == null)
+            if (_context.Courses == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Course'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Courses'  is null.");
             }
-            var course = await _context.Course.FindAsync(id);
+            var course = await _context.Courses.FindAsync(id);
             if (course != null)
             {
-                _context.Course.Remove(course);
+                _context.Courses.Remove(course);
             }
             
             await _context.SaveChangesAsync();
@@ -157,7 +157,7 @@ namespace AdvancedProjectMVC.Controllers
 
         private bool CourseExists(int id)
         {
-          return (_context.Course?.Any(e => e.ID == id)).GetValueOrDefault();
+          return (_context.Courses?.Any(e => e.ID == id)).GetValueOrDefault();
         }
     }
 }

@@ -10,12 +10,17 @@ namespace AdvancedProjectMVC.Data
             : base(options)
         {
         }
-        public DbSet<Course> Course { get; set; } = default!;
-        public DbSet<Administrator> Administrator { get; set; }
-        public DbSet<Instructor> Instructor { get; set; }
-        public DbSet<Student> Student { get; set; }
-        public DbSet<Enrollment> Enrollment { get; set; }
-        public DbSet<TeachingAssignment> TeachingAssignment { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Enrollment> Enrollments { get; set; }
+        public DbSet<TeachingAssignment> TeachingAssignments { get; set; }
+        public DbSet<SchoolProgram> SchoolPrograms { get; set; }
+        public DbSet<Assignment> Assignments { get; set; }
+        public DbSet<ChatMessage> ChatMessages { get; set; }
+        public DbSet<Server> Servers { get; set; }
+        public DbSet<Channel> Channels { get; set; }
+        public DbSet<ServerMember> ServerMembers { get; set; }
         public DbSet<CalendarEvent> CalendarEvent { get; set; }
     }
+
+
 }
