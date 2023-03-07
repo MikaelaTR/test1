@@ -22,7 +22,10 @@ namespace AdvancedProjectMVC.Controllers
         // GET: ChatMessages
         public async Task<IActionResult> Index()
         {
-            var messages = await _context.ChatMessages.Include(x => x.ApplicationUser).ToListAsync();
+            var messages = await _context.ChatMessages
+                .Include(x => x.ApplicationUser)
+                .Include(c => c.Channel)
+                .ToListAsync();
 
               return _context.ChatMessages != null ? 
                           View(messages) :

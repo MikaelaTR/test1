@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AdvancedProjectMVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230305055717_InitialCreate")]
+    [Migration("20230307054018_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -183,7 +183,7 @@ namespace AdvancedProjectMVC.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("ChannelId")
+                    b.Property<int>("ChannelId")
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
@@ -557,11 +557,15 @@ namespace AdvancedProjectMVC.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AdvancedProjectMVC.Models.Channel", null)
+                    b.HasOne("AdvancedProjectMVC.Models.Channel", "Channel")
                         .WithMany("ChatMessages")
-                        .HasForeignKey("ChannelId");
+                        .HasForeignKey("ChannelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ApplicationUser");
+
+                    b.Navigation("Channel");
                 });
 
             modelBuilder.Entity("AdvancedProjectMVC.Models.Enrollment", b =>
