@@ -23,7 +23,7 @@ namespace AdvancedProjectMVC.Controllers
         {
             return View(await GetAllFiles("serverName"));
         }
-
+        //container is named after the server (or its hash or whatever else)
         [HttpGet("GetAllFiles")]
         public async Task<List<SharedFile>> GetAllFiles(string containerName)
         {
@@ -82,16 +82,14 @@ namespace AdvancedProjectMVC.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<BlobObject> DownloadFile(string containerName, string fileName)
+        public async Task DownloadFile(string containerName, string fileName)
         {
             
             containerName = "filesharecontainer";
-            fileName = "testShare.txt";
+            fileName = "empty.txt";
             
             blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
             BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
-           
-            //downloadPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
 
             try
             {
@@ -100,37 +98,33 @@ namespace AdvancedProjectMVC.Controllers
 
                 BlobObject blobObject = new BlobObject { BlobContent = downloadData, BlobName = fileName };
 
-                //FileStreamResult fsr =  File(blobObject.BlobContent, "text/plain", fileName);
-
-                //using (var resultStream = System.IO.File.Create(downloadPath + fileName))
-                //{
-                //    blobObject.BlobContent.CopyTo(resultStream);
-                //}
+                using (var resultStream = System.IO.File.OpenWrite(downloadPath + "\\" + fileName))
+                {
+                    blobObject.BlobContent.CopyTo(resultStream);
+                }
 
                 blobContainerClient = null;
-                return blobObject;
             }
             catch(Exception e)
             {
                 Console.WriteLine($"Error: {e.Message}");
                 blobContainerClient= null;
-                return null;
             }            
         }
-        public async Task<IActionResult> Delete(string containerName, string fileName)
+        public async Task<IActionResult> Delete()
         {
             return View();
         }
 
         [HttpPost("DeleteFile")]
-        public async Task<IActionResult> DeleteFile(string containerName, string fileName)
+        public async Task<IActionResult> DeleteFile(string fileName)
         {
-            Console.WriteLine("Delete activated ", fileName);
-            containerName = "filesharecontainer";
+            var containerName = "filesharecontainer";
             blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
             var blobToDelete = blobContainerClient.GetBlobClient(fileName);
             await blobToDelete.DeleteIfExistsAsync(); 
 
+            
             return RedirectToAction("Index");
         }
     }

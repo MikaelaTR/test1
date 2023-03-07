@@ -1,4 +1,4 @@
-﻿@model List<SharedFile>
+﻿@model IEnumerable<AdvancedProjectMVC.Models.SharedFile>
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -24,7 +24,8 @@
                     @item.FileName
                 </td>
                 <td>
-                    <a asp-action="DeleteFile" name = "fileName" value="@item.FileName">Delete</a>
+                    <a asp-action="DeleteFile" name="fileName" value="@item.FileName" >Delete</a>
+                    
                 </td>
             </tr>
         }
