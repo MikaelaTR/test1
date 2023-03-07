@@ -57,8 +57,7 @@ namespace AdvancedProjectMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID, UserID, Title, DateStart, DateEnd")] CalendarEvent calEvent)
         {
-            if (ModelState.IsValid) {
-                calEvent.UserID = User.Identity?.Name;
+            if (calEvent.UserID == User.Identity?.Name && ModelState.IsValid) {
                 _context.Add(calEvent);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
