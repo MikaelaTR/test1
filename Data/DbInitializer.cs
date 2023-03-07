@@ -45,6 +45,10 @@ namespace AdvancedProjectMVC.Data
             {
                 var server = new Server { ServerName = "Test Server" };
                 context.Servers.Add(server);
+
+                var channel = new Channel { ChannelName = "General", Server = server };
+                context.Channels.Add(channel);
+
                 context.SaveChanges();
             }
         }

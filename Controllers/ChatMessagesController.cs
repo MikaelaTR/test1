@@ -22,9 +22,11 @@ namespace AdvancedProjectMVC.Controllers
         // GET: ChatMessages
         public async Task<IActionResult> Index()
         {
+            var messages = await _context.ChatMessages.Include(x => x.ApplicationUser).ToListAsync();
+
               return _context.ChatMessages != null ? 
-                          View(await _context.ChatMessages.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.ChatMessage'  is null.");
+                          View(messages) :
+                          Problem("Entity set 'ApplicationDbContext.ChatMessages'  is null.");
         }
 
         // GET: ChatMessages/Details/5
