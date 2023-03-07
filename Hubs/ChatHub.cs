@@ -31,5 +31,34 @@ namespace AdvancedProjectMVC.Hubs
             _context.Add(chatMessage);
             _context.SaveChanges();
         }
+
+        public async Task SendMessageToGroup(string username, string groupName, string message)
+        {
+            await Clients.Group(groupName).SendAsync("ReceiveMessage", username, message);
+            var user = await _userManager.FindByNameAsync(username);
+
+            var chatMessage = new ChatMessage
+            {
+                ApplicationUserId = user.Id,
+                Content = message,
+                DatePosted = DateTime.Now,
+            };
+
+            _context.Add(chatMessage);
+            _context.SaveChanges();
+        }
+
+        public async Task AddToGroup(string groupName)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+
+            await Clients.Group(groupName).SendAsync("Send", $"{Context.ConnectionId} has joined the group {groupName}.");
+
+        }
+
+        public string GetConnectionId()
+        {
+            return Context.ConnectionId;
+        }
     }
 }

@@ -394,9 +394,9 @@ namespace AdvancedProjectMVC.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ChannelId = table.Column<int>(type: "int", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DatePosted = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ChannelId = table.Column<int>(type: "int", nullable: true)
+                    DatePosted = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -411,7 +411,8 @@ namespace AdvancedProjectMVC.Migrations
                         name: "FK_ChatMessages_Channels_ChannelId",
                         column: x => x.ChannelId,
                         principalTable: "Channels",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
