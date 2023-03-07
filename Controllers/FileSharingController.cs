@@ -25,9 +25,9 @@ namespace AdvancedProjectMVC.Controllers
         }
 
         [HttpGet("GetAllFiles")]
-        public async Task<List<string>> GetAllFiles(string containerName)
+        public async Task<List<SharedFile>> GetAllFiles(string containerName)
         {
-            List<string> files = new List<string>();
+            List<SharedFile> files = new List<SharedFile>();
             containerName = "filesharecontainer";
             blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
             try
@@ -38,8 +38,10 @@ namespace AdvancedProjectMVC.Controllers
                 {
                     foreach (BlobItem blobItem in blobPage.Values)
                     {
+                        SharedFile file = new SharedFile();
+                        file.FileName = blobItem.Name;
                         Console.WriteLine("Blob name: {0}", blobItem.Name);
-                        files.Add(blobItem.Name);
+                        files.Add(file);
                     }
                     Console.WriteLine();
                 }
@@ -54,8 +56,8 @@ namespace AdvancedProjectMVC.Controllers
             return files;
         }
 
-
-        public IActionResult Upload() { 
+        public IActionResult Upload()
+        {
             return View();
         }
 
