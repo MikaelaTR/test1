@@ -1,0 +1,42 @@
+﻿@model IEnumerable<AdvancedProjectMVC.Models.CalendarEvent>
+@using Newtonsoft.Json
+@{
+    ViewData["Title"] = "Calendar";
+
+    string JSONString = JsonConvert.SerializeObject(Model);
+}
+<script src="~/lib/fullcalendar/index.global.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            eventClick: function (info) {
+                info.jsEvent.preventDefault();
+
+                let url = '@Url.Action("Edit", "Calendar", new { id = "__id__" })';
+                location.href = url.replace("__id__", info.event.id);;
+            }
+        });
+
+        // Let the model become a JavaScript variable
+        let calendarEvents = @Html.Raw(JSONString);
+
+        for(let i = 0; i < calendarEvents.length; i++) {
+            // Create new event
+            let newEvent = {
+                id: calendarEvents[i]["ID"],
+                title: calendarEvents[i]["Title"],
+                start: calendarEvents[i]["DateStart"],
+                end: calendarEvents[i]["DateEnd"]
+            };
+            // Add event to calendar
+            calendar.addEvent(newEvent);
+        }
+
+    calendar.render();
+    }
+    );
+</script>
+<div id="calendar"></div>
+<a asp-action="Create">Add New Event</a>
