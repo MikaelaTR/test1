@@ -9,6 +9,11 @@
         "dist/browser/signalr.js",
         "dist/browser/signalr.min.js"
       ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "fullcalendar@6.0.3",
+      "destination": "wwwroot/lib/fullcalendar/"
     }
   ]
 }

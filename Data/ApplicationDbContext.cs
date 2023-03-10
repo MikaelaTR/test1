@@ -19,6 +19,7 @@ namespace AdvancedProjectMVC.Data
         public DbSet<Server> Servers { get; set; }
         public DbSet<Channel> Channels { get; set; }
         public DbSet<ServerMember> ServerMembers { get; set; }
+        public DbSet<CalendarEvent> CalendarEvent { get; set; }
     }
 
 

@@ -4,6 +4,7 @@ using AdvancedProjectMVC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,13 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AdvancedProjectMVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230130071748_AddCalendarEvent")]
+    partial class AddCalendarEvent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.3")
+                .HasAnnotation("ProductVersion", "7.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -39,6 +42,10 @@ namespace AdvancedProjectMVC.Migrations
 
                     b.Property<DateTime>("DateRegistered")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -76,9 +83,6 @@ namespace AdvancedProjectMVC.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("SchoolProgramId")
-                        .HasColumnType("int");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -99,104 +103,11 @@ namespace AdvancedProjectMVC.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("SchoolProgramId");
-
                     b.ToTable("AspNetUsers", (string)null);
-                });
 
-            modelBuilder.Entity("AdvancedProjectMVC.Models.Assignment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("ApplicationUser");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DueDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Feedback")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("Grade")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Submitted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("SubmittedDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("Assignments");
-                });
-
-            modelBuilder.Entity("AdvancedProjectMVC.Models.Channel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ChannelName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ServerId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ServerId");
-
-                    b.ToTable("Channels");
-                });
-
-            modelBuilder.Entity("AdvancedProjectMVC.Models.ChatMessage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("ChannelId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DatePosted")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("ChannelId");
-
-                    b.ToTable("ChatMessages");
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("AdvancedProjectMVC.Models.CalendarEvent", b =>
@@ -242,6 +153,7 @@ namespace AdvancedProjectMVC.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Location")
@@ -253,162 +165,56 @@ namespace AdvancedProjectMVC.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Courses");
+                    b.ToTable("Course");
                 });
 
             modelBuilder.Entity("AdvancedProjectMVC.Models.Enrollment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("CourseId")
+                    b.Property<int>("CourseID")
                         .HasColumnType("int");
 
                     b.Property<double?>("Grade")
                         .HasColumnType("float");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("Enrollments");
-                });
-
-            modelBuilder.Entity("AdvancedProjectMVC.Models.SchoolProgram", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Coop")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("LengthInYears")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Semesters")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Tuition")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SchoolPrograms");
-                });
-
-            modelBuilder.Entity("AdvancedProjectMVC.Models.Server", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ServerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Servers");
-                });
-
-            modelBuilder.Entity("AdvancedProjectMVC.Models.ServerMember", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
+                    b.Property<string>("StudentId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("ServerId")
-                        .HasColumnType("int");
+                    b.HasKey("ID");
 
-                    b.HasKey("Id");
+                    b.HasIndex("CourseID");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("StudentId");
 
-                    b.HasIndex("ServerId");
-
-                    b.ToTable("ServerMembers");
+                    b.ToTable("Enrollment");
                 });
 
             modelBuilder.Entity("AdvancedProjectMVC.Models.TeachingAssignment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
+                    b.Property<int>("CourseID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("InstructorId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
+                    b.HasKey("ID");
 
-                    b.HasKey("Id");
+                    b.HasIndex("CourseID");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("InstructorId");
 
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("TeachingAssignments");
-                });
-
-            modelBuilder.Entity("ApplicationUserServer", b =>
-                {
-                    b.Property<string>("ApplicationUsersId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("ServersId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ApplicationUsersId", "ServersId");
-
-                    b.HasIndex("ServersId");
-
-                    b.ToTable("ApplicationUserServer");
-                });
-
-            modelBuilder.Entity("CourseSchoolProgram", b =>
-                {
-                    b.Property<int>("CoursesID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProgramsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CoursesID", "ProgramsId");
-
-                    b.HasIndex("ProgramsId");
-
-                    b.ToTable("CourseSchoolProgram");
+                    b.ToTable("TeachingAssignment");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -544,135 +350,71 @@ namespace AdvancedProjectMVC.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("AdvancedProjectMVC.Models.ApplicationUser", b =>
+            modelBuilder.Entity("AdvancedProjectMVC.Models.Administrator", b =>
                 {
-                    b.HasOne("AdvancedProjectMVC.Models.SchoolProgram", null)
-                        .WithMany("ApplicationUsers")
-                        .HasForeignKey("SchoolProgramId");
+                    b.HasBaseType("AdvancedProjectMVC.Models.ApplicationUser");
+
+                    b.Property<int>("AdminNumber")
+                        .HasColumnType("int");
+
+                    b.HasDiscriminator().HasValue("Administrator");
                 });
 
-            modelBuilder.Entity("AdvancedProjectMVC.Models.Assignment", b =>
+            modelBuilder.Entity("AdvancedProjectMVC.Models.Instructor", b =>
                 {
-                    b.HasOne("AdvancedProjectMVC.Models.Course", "Course")
-                        .WithMany("Assignments")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasBaseType("AdvancedProjectMVC.Models.ApplicationUser");
 
-                    b.Navigation("Course");
+                    b.Property<int>("InstructorNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Office")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue("Instructor");
                 });
 
-            modelBuilder.Entity("AdvancedProjectMVC.Models.Channel", b =>
+            modelBuilder.Entity("AdvancedProjectMVC.Models.Student", b =>
                 {
-                    b.HasOne("AdvancedProjectMVC.Models.Server", "Server")
-                        .WithMany("Channels")
-                        .HasForeignKey("ServerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasBaseType("AdvancedProjectMVC.Models.ApplicationUser");
 
-                    b.Navigation("Server");
-                });
+                    b.Property<int>("StudentNumber")
+                        .HasColumnType("int");
 
-            modelBuilder.Entity("AdvancedProjectMVC.Models.ChatMessage", b =>
-                {
-                    b.HasOne("AdvancedProjectMVC.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("ChatMessages")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AdvancedProjectMVC.Models.Channel", null)
-                        .WithMany("ChatMessages")
-                        .HasForeignKey("ChannelId");
-
-                    b.Navigation("ApplicationUser");
+                    b.HasDiscriminator().HasValue("Student");
                 });
 
             modelBuilder.Entity("AdvancedProjectMVC.Models.Enrollment", b =>
                 {
-                    b.HasOne("AdvancedProjectMVC.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("AdvancedProjectMVC.Models.Course", "Course")
                         .WithMany("Enrollments")
-                        .HasForeignKey("CourseId")
+                        .HasForeignKey("CourseID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
+                    b.HasOne("AdvancedProjectMVC.Models.Student", "Student")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("StudentId");
 
                     b.Navigation("Course");
-                });
 
-            modelBuilder.Entity("AdvancedProjectMVC.Models.ServerMember", b =>
-                {
-                    b.HasOne("AdvancedProjectMVC.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AdvancedProjectMVC.Models.Server", "Server")
-                        .WithMany()
-                        .HasForeignKey("ServerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("Server");
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("AdvancedProjectMVC.Models.TeachingAssignment", b =>
                 {
-                    b.HasOne("AdvancedProjectMVC.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("TeachingAssignments")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("AdvancedProjectMVC.Models.Course", "Course")
                         .WithMany()
-                        .HasForeignKey("CourseId")
+                        .HasForeignKey("CourseID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
+                    b.HasOne("AdvancedProjectMVC.Models.Instructor", "Instructor")
+                        .WithMany("TeachingAssignments")
+                        .HasForeignKey("InstructorId");
 
                     b.Navigation("Course");
-                });
 
-            modelBuilder.Entity("ApplicationUserServer", b =>
-                {
-                    b.HasOne("AdvancedProjectMVC.Models.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("ApplicationUsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AdvancedProjectMVC.Models.Server", null)
-                        .WithMany()
-                        .HasForeignKey("ServersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("CourseSchoolProgram", b =>
-                {
-                    b.HasOne("AdvancedProjectMVC.Models.Course", null)
-                        .WithMany()
-                        .HasForeignKey("CoursesID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AdvancedProjectMVC.Models.SchoolProgram", null)
-                        .WithMany()
-                        .HasForeignKey("ProgramsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Instructor");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -726,35 +468,19 @@ namespace AdvancedProjectMVC.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("AdvancedProjectMVC.Models.ApplicationUser", b =>
+            modelBuilder.Entity("AdvancedProjectMVC.Models.Course", b =>
                 {
-                    b.Navigation("ChatMessages");
-
                     b.Navigation("Enrollments");
+                });
 
+            modelBuilder.Entity("AdvancedProjectMVC.Models.Instructor", b =>
+                {
                     b.Navigation("TeachingAssignments");
                 });
 
-            modelBuilder.Entity("AdvancedProjectMVC.Models.Channel", b =>
+            modelBuilder.Entity("AdvancedProjectMVC.Models.Student", b =>
                 {
-                    b.Navigation("ChatMessages");
-                });
-
-            modelBuilder.Entity("AdvancedProjectMVC.Models.Course", b =>
-                {
-                    b.Navigation("Assignments");
-
                     b.Navigation("Enrollments");
-                });
-
-            modelBuilder.Entity("AdvancedProjectMVC.Models.SchoolProgram", b =>
-                {
-                    b.Navigation("ApplicationUsers");
-                });
-
-            modelBuilder.Entity("AdvancedProjectMVC.Models.Server", b =>
-                {
-                    b.Navigation("Channels");
                 });
 #pragma warning restore 612, 618
         }

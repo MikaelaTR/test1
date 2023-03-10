@@ -23,6 +23,8 @@
     </PackageReference>
 
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="jQuery.Fullcalendar" Version="3.9.0" />
   </ItemGroup>
 
   <ItemGroup>
