@@ -82,11 +82,10 @@ namespace AdvancedProjectMVC.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task DownloadFile(string containerName, string fileName)
+        public async Task<IActionResult> DownloadFile(string containerName, string fileName)
         {
-            
             containerName = "filesharecontainer";
-            fileName = "empty.txt";
+            //fileName = "empty.txt";
             
             blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
             BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
@@ -109,7 +108,9 @@ namespace AdvancedProjectMVC.Controllers
             {
                 Console.WriteLine($"Error: {e.Message}");
                 blobContainerClient= null;
-            }            
+            } 
+
+            return RedirectToAction("Index");
         }
         public async Task<IActionResult> Delete()
         {
@@ -117,9 +118,9 @@ namespace AdvancedProjectMVC.Controllers
         }
 
         [HttpPost("DeleteFile")]
-        public async Task<IActionResult> DeleteFile(string fileName)
+        public async Task<IActionResult> DeleteFile(string containerName, string fileName)
         {
-            var containerName = "filesharecontainer";
+            containerName = "filesharecontainer";
             blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
             var blobToDelete = blobContainerClient.GetBlobClient(fileName);
             await blobToDelete.DeleteIfExistsAsync(); 
