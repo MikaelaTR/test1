@@ -104,6 +104,7 @@
             connection.invoke("SendMessage", username, message).then(function() {
                 document.getElementById("message").value = "";
             }).catch(function(err) {
+                document.getElementById("message").value = "";
                 return console.error(err.toString());
             });
             event.preventDefault();
