@@ -22,8 +22,8 @@ namespace AdvancedProjectMVC.Controllers
         // GET: Channels
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Channels.Include(c => c.Server);
-            return View(await applicationDbContext.ToListAsync());
+            var applicationDbContext = await _context.Channels.Include(c => c.Server).ToListAsync();
+            return View(applicationDbContext);
         }
 
         // GET: Channels/Details/5

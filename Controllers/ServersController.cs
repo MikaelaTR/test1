@@ -36,6 +36,7 @@ namespace AdvancedProjectMVC.Controllers
             }
 
             var server = await _context.Servers
+                .Include(x => x.Channels)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (server == null)
             {
