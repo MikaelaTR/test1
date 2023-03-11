@@ -24,7 +24,6 @@
                     @item.FileName
                 </td>
                 <td>
-                    <!--<a asp-action="DeleteFile" name="fileName" value="@item.FileName" >Delete</a>-->
                     <form method="get" asp-controller="FileSharing" asp-action="DownloadFile">
                         <input type="hidden" name="fileName" value="@item.FileName">
                         <input class="btn btn-success" type="submit" value="Download" />
@@ -33,7 +32,7 @@
                 <td>
                     <form method="post" asp-controller="FileSharing" asp-action="DeleteFile">
                         <input type="hidden" name="fileName" value="@item.FileName">
-                        <input class="btn btn-success" type="submit" value="Delete" />
+                        <input class="btn btn-danger" type="submit" value="Delete" />
                     </form>
                 </td>
             </tr>

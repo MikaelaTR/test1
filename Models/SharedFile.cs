@@ -8,6 +8,6 @@
         public int ChannelID { get; set; }
         public string ServerName { get; set; }
         public string ChannelName { get; set; }
-        public string TestFile { get; set; }
+        public string TempFile { get; set; }
     }
 }

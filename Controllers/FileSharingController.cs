@@ -40,6 +40,7 @@ namespace AdvancedProjectMVC.Controllers
                     {
                         SharedFile file = new SharedFile();
                         file.FileName = blobItem.Name;
+
                         Console.WriteLine("Blob name: {0}", blobItem.Name);
                         files.Add(file);
                     }
@@ -64,17 +65,17 @@ namespace AdvancedProjectMVC.Controllers
 
         //TODO: Archives
         [HttpPost("UploadFile")]
-        public async Task<IActionResult> UploadFile(IFormFile TestFile, string containerName)
+        public async Task<IActionResult> UploadFile(IFormFile TempFile, string containerName)
         {
             containerName = "filesharecontainer";
             var filePath = Path.GetTempFileName();
             using (var stream = System.IO.File.Create(filePath))
             {
-                TestFile.CopyTo(stream);  
+                TempFile.CopyTo(stream);  
             }
 
             blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
-            string fileName = (TestFile.FileName);
+            string fileName = (TempFile.FileName);
             BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
             await blobClient.UploadAsync(filePath, true);
             blobContainerClient = null;
