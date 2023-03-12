@@ -40,11 +40,9 @@
                         @foreach(var item in Model.ChatMessages)
                         {
                             <li class="chat-message">
-                                @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
-                                <p>
-                                    <text> says: </text>
-                                </p>
-                                @Html.DisplayFor(modelItem => item.Content)
+                                    @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+                                     says:  
+                                    @Html.DisplayFor(modelItem => item.Content)
                             </li>
                         }
                     </ul>
