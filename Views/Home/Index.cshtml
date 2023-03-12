@@ -7,8 +7,8 @@
 }
 
 <div class="login text-center">
-    <h1 class="display-1" style="font-family:Georgia, serif;">Student Connect</h1>
-    <img src="https://i.imgur.com/OWJN7JN.png" width="25%" alt="The Lakehead University Logo" />
+    <h1 class="display-1 login_title" style="font-family: Georgia, serif;">Student Connect</h1>
+    <img src="https://i.imgur.com/OWJN7JN.png" width="25%" alt="The Lakehead University Logo"/>
     @if (SignInManager.IsSignedIn(User)) //If logged in
     {
         <h3>Hello @User.Identity?.Name!</h3>
