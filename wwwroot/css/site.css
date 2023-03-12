@@ -1,15 +1,14 @@
 :root {
-	--color1: #E6FAFC;
-	--color2: #04D99D; /* #2EA69A */
-	--color3: #04BF9D; /* #6BA368; */
-	--color4: #03A688; /* #515B3A; */
-	--color5: #104037; /* #353D2F; */
-
-	--primary: #0AFFAD;
-	--primary-hover: #027F54;
-	--secondary: #04C27F;
-	--secondary-hover: #028052;
-	--danger: #FF3B0A;
+	--color1: #F5F5F5;
+	--color2: #269FBC;
+	--color3: #2E8B57;
+	--color4: #1E6E87;
+	--color5: #0B3C5D;
+	--primary: #1CB5E0;
+	--primary-hover: #137799;
+	--secondary: #2F9E44;
+	--secondary-hover: #208537;
+	--danger: #F44336;
 }
 
 html {
@@ -48,7 +47,7 @@ a {
 
 body {
 	color: var(--color1);
-	background-color: var(--color3);
+	background-color: var(--color5);
 	font-size: 16px;
 }
 @media screen and (min-width: 320px) {
