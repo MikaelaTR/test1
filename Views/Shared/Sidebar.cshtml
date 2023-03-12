@@ -6,7 +6,7 @@
     <a class="btn icon_button" asp-controller="Home" asp-action="Index" title="Home"><i class="fa fa-home"></i></a>
     @if (SignInManager.IsSignedIn(User)) //If logged in
     {
-        <a class="btn icon_button" asp-controller="ChatMessages" asp-action="Index" title="Chat"><i class="fa fa-comments"></i></a>
+        <a class="btn icon_button" asp-controller="Servers" asp-action="Index" title="Chat Servers"><i class="fa fa-comments"></i></a>
         <a class="btn icon_button" asp-controller="Courses" asp-action="Index" title="Courses"><i class="fa fa-book"></i></a>
         @*<a class="btn icon_button" asp-controller="Students" asp-action="Index"  title="Students"><i class="fa fa-users"></i></a>*@
         <a class="btn icon_button" asp-controller="Enrollments" asp-action="Index" title="Enrollments"><i class="fa fa-university"></i></a>

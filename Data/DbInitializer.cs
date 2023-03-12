@@ -39,7 +39,21 @@ namespace AdvancedProjectMVC.Data
                 }
                 context.SaveChanges();
             }
+
+            //Add test server
+            if (!context.Servers.Any())
+            {
+                var server = new Server { ServerName = "Test Server" };
+                context.Servers.Add(server);
+
+                var channel = new Channel { ChannelName = "General", Server = server };
+                context.Channels.Add(channel);
+
+                context.SaveChanges();
+            }
         }
+
+
 
         // Seed DB with default roles.
         public static async Task SeedRolesAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
@@ -56,7 +70,7 @@ namespace AdvancedProjectMVC.Data
             //Seed Default User.
             var defaultUser = new ApplicationUser
             {
-                UserName = "ab@school.ca",
+                UserName = "ab",
                 Email = "ab@school.ca",
                 FirstName = "Alex",
                 LastName = "Blom",
@@ -74,7 +88,28 @@ namespace AdvancedProjectMVC.Data
                     await userManager.AddToRoleAsync(defaultUser, Roles.Instructor.ToString());
                     await userManager.AddToRoleAsync(defaultUser, Roles.Student.ToString());
                 }
+            }
+        }
 
+        public static async Task SeedStudentsAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        {
+            var student = new ApplicationUser
+            {
+                UserName = "rm",
+                Email = "rm@school.ca",
+                FirstName = "Ryan",
+                LastName = "McGill",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+            };
+            if (userManager.Users.All(u => u.Id != student.Id))
+            {
+                var user = await userManager.FindByEmailAsync(student.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(student, "Test123$.");
+                    await userManager.AddToRoleAsync(student, Roles.Student.ToString());
+                }
             }
         }
     }

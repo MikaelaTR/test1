@@ -6,13 +6,12 @@
 
 <body>
     <h1>Chat</h1>
-    <!--
 
-    <p>
+@*    <p>
         <a asp-action="Create">Create New</a>
-    </p>
+    </p>*@
     <table class="table">
-        <thead>
+ @*       <thead>
             <tr>
                 <th>
     @Html.DisplayNameFor(model => model.ApplicationUserId)
@@ -25,30 +24,31 @@
                 </th>
                 <th></th>
             </tr>
-        </thead>
+        </thead>*@
         <tbody>
     @foreach (var item in Model)
     {
                 <tr>
                     <td>
-                @Html.DisplayFor(modelItem => item.ApplicationUserId)
+                        @Html.DisplayFor(modelItem => item.DatePosted)
                     </td>
                     <td>
-                @Html.DisplayFor(modelItem => item.Content)
+                        @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
                     </td>
                     <td>
-                @Html.DisplayFor(modelItem => item.DatePosted)
+                        @Html.DisplayFor(modelItem => item.Content)
                     </td>
+
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+@*                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                         <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
                     </td>
                 </tr>
     }
         </tbody>
     </table>
-    -->
+
     <div class="container chat-area">
         <div id="messagearea" class="row">
             <div><p>Joined as: <b id="username">@User.Identity?.Name</b></p></div>
@@ -104,6 +104,7 @@
             connection.invoke("SendMessage", username, message).then(function() {
                 document.getElementById("message").value = "";
             }).catch(function(err) {
+                document.getElementById("message").value = "";
                 return console.error(err.toString());
             });
             event.preventDefault();
