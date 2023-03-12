@@ -11,16 +11,16 @@
     <h4>Channel</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3 col-md-2">
             @Html.DisplayNameFor(model => model.ChannelName)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-9 col-md-10">
             @Html.DisplayFor(model => model.ChannelName)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3 col-md-2">
             @Html.DisplayNameFor(model => model.Server.ServerName)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-9 col-md-10">
             @Html.DisplayFor(model => model.Server.ServerName)
         </dd>
     </dl>
@@ -35,7 +35,7 @@
         <div><p>Joined as: <b id="username">@User.Identity?.Name</b></p></div>
         <hr />
             <div class="row">
-                <div class="col-6 message-list">
+                <div class="col-md-6 message-list">
                     <ul id="messageList" class="message-list">
                         @foreach(var item in Model.ChatMessages)
                         {
@@ -50,8 +50,12 @@
             </div>
         <hr />
         <div class="row chatbox">
-            <textarea type="text" id="message" autocomplete="off" onkeypress="enterKeySendMessage(event)" class="chatbox-textarea"></textarea>
-            <input type="button" id="sendButton" value="Send" onclick="sendMessage(event)" class="chatbox-sendbutton" />
+            <div class="col-md-6">
+                <textarea type="text" id="message" autocomplete="off" onkeypress="enterKeySendMessage(event)" class="chatbox-textarea"></textarea>
+            </div>
+            <div class="col-md-6">
+                <input type="button" id="sendButton" value="Send" onclick="sendMessage(event)" class="chatbox-sendbutton" />
+            </div>
         </div>
     </div>
 </div>
