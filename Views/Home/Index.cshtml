@@ -7,10 +7,8 @@
 }
 
 <div class="login text-center">
-    <h1 class="display-4">Welcome to AdvancedProjectMVC</h1>
-    <div class="login_logo text-white">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/No-logo.svg/1200px-No-logo.svg.png" alt="" />
-    </div>
+    <h1 class="display-1" style="font-family:Georgia, serif;">Student Connect</h1>
+    <img src="https://i.imgur.com/OWJN7JN.png" width="25%" alt="The Lakehead University Logo" />
     @if (SignInManager.IsSignedIn(User)) //If logged in
     {
         <h3>Hello @User.Identity?.Name!</h3>
