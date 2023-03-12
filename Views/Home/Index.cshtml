@@ -9,12 +9,13 @@
 @if (!SignInManager.IsSignedIn(User))
 {
     <div class="lakehead-logo-div">
-        <a >
+        <a href="https://www.lakeheadu.ca/">
             <img src="~/images/LakeheadLogoNB.png" id="lakehead-logo" />
         </a>
     </div>
 }
-<div class="login text-center login-test">
+<div class="login text-center">
+    <div>
     <h1 class="display-4">Welcome to</h1>
     <div class="login_logo text-white logo-div">
         <img src="~/images/logo.png" alt="LakeChat Logo" id="logo" />
@@ -30,5 +31,6 @@
             <a class="btn login_button" asp-area="Identity" asp-page="/Account/Register">Register Account</a>
         </div>
     }
+    </div>
 
 </div>

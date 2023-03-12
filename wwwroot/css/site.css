@@ -1,4 +1,4 @@
-:root {
+/*:root {
 	--color1: #F5F5F5;
 	--color2: #269FBC;
 	--color3: #2E8B57;
@@ -9,7 +9,21 @@
 	--secondary: #2F9E44;
 	--secondary-hover: #208537;
 	--danger: #F44336;
+}*/
+
+:root {
+	--color1: #000000;
+	--color2: #EAEAEA;
+	--color3: #FFFFFF;
+	--color4: #269FBC;
+	--color5: #1A6076;
+	--primary: #063156;
+	--primary-hover: #00427A;
+	--secondary: #04C27F;
+	--secondary-hover: #028052;
+	--danger: #F44336;
 }
+
 
 html {
 	font-size: 14px;
@@ -42,12 +56,12 @@ html {
 }
 
 a {
-	color: white;
+	color: var(--color5);
 }
 
 body {
 	color: var(--color1);
-	background-color: var(--color5);
+	background-color: var(--color3);
 	font-size: 16px;
 	margin: auto;
 }
@@ -127,7 +141,7 @@ body {
 /*FORM*/
 .form-control {
 	color: var(--color1);
-	background-color: var(--color5);
+	background-color: var(--color3);
 }
 .form-label {
 	color: var(--color1);
@@ -144,13 +158,13 @@ body {
 	z-index: 1; /* Stay on top */
 	top: 0; /* Stay at the top */
 	left: 0; 
-	background-color: var(--color5);
+	background-color: var(--primary);
 	overflow-x: hidden; /* Disable horizontal scroll */
 	padding-top: 10pt;
 }
 
 .icon_button {
-	background-color: var(--primary); /* Blue background */
+	background-color: var(--color4); /* Blue background */
 	border: none; /* Remove borders */
 	color: white; /* White text */
 	width: 85%;
@@ -160,7 +174,7 @@ body {
 	cursor: pointer; /* Mouse pointer on hover */
 }
 .icon_button:hover {
-	background-color: var(--primary-hover);
+	background-color: var(--color5);
 }
 
 
