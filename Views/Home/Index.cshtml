@@ -6,9 +6,19 @@
     ViewData["Title"] = "Home";
 }
 
-<div class="login text-center">
-    <h1 class="display-1 login_title" style="font-family: Georgia, serif;">Student Connect</h1>
-    <img src="https://i.imgur.com/OWJN7JN.png" width="25%" alt="The Lakehead University Logo"/>
+@if (!SignInManager.IsSignedIn(User))
+{
+    <div class="lakehead-logo-div">
+        <a >
+            <img src="~/images/LakeheadLogoNB.png" id="lakehead-logo" />
+        </a>
+    </div>
+}
+<div class="login text-center login-test">
+    <h1 class="display-4">Welcome to</h1>
+    <div class="login_logo text-white logo-div">
+        <img src="~/images/logo.png" alt="LakeChat Logo" id="logo" />
+    </div>
     @if (SignInManager.IsSignedIn(User)) //If logged in
     {
         <h3>Hello @User.Identity?.Name!</h3>
@@ -16,8 +26,8 @@
     else
     {
         <div class="login_buttons" className="login_buttons" id="loginbutton">
-            <a class="btn login_button" asp-area="Identity" asp-page="/Account/Login">Login</a>
-            <a class="btn login_button" asp-area="Identity" asp-page="/Account/Register">Sign Up</a>
+            <a class="btn login_button" asp-area="Identity" asp-page="/Account/Login"   >Login</a>
+            <a class="btn login_button" asp-area="Identity" asp-page="/Account/Register">Register Account</a>
         </div>
     }
 

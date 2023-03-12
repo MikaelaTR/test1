@@ -62,8 +62,35 @@ body {
 	}
 }
 
-.dark_bg {
-	background-color: var(--color5);
+/*Homepage Not Logged In*/
+.login-test {
+	background-color: var(--color2);
+}
+
+.lakehead-logo-div {
+	position: relative;
+	height: 1%; /* This, along with height: 1000% is... not ideal, but works */
+	width: auto;
+}
+
+#lakehead-logo {
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 1000%;
+	width: auto;
+}
+
+.logo-div {
+	position: relative;
+	height: 70%;
+	width: auto;
+	padding-bottom: 0;
+}
+
+#logo {
+	height: 100%;
+	width: auto;
 }
 
 
@@ -85,7 +112,7 @@ body {
 
 .login_button {
 	width: 350px;
-	background-color: var(--color2);
+	background-color: var(--primary);
 	color: white;
 	font-weight: 600;
 	font-size: 26px;
@@ -93,7 +120,7 @@ body {
 	border-radius: 10px;
 }
 .login_button:hover {
-	background-color: var(--color4);
+	background-color: var(--primary-hover);
 	color: #c6c9cc;
 }
 
@@ -123,7 +150,7 @@ body {
 }
 
 .icon_button {
-	background-color: var(--color2); /* Blue background */
+	background-color: var(--primary); /* Blue background */
 	border: none; /* Remove borders */
 	color: white; /* White text */
 	width: 85%;
@@ -133,7 +160,7 @@ body {
 	cursor: pointer; /* Mouse pointer on hover */
 }
 .icon_button:hover {
-	background-color: var(--color4);
+	background-color: var(--primary-hover);
 }
 
 
