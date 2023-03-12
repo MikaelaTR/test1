@@ -1,16 +1,29 @@
-:root {
-	--color1: #E6FAFC;
-	--color2: #04D99D; /* #2EA69A */
-	--color3: #04BF9D; /* #6BA368; */
-	--color4: #03A688; /* #515B3A; */
-	--color5: #104037; /* #353D2F; */
+/*:root {
+	--color1: #F5F5F5;
+	--color2: #269FBC;
+	--color3: #2E8B57;
+	--color4: #1E6E87;
+	--color5: #0B3C5D;
+	--primary: #1CB5E0;
+	--primary-hover: #137799;
+	--secondary: #2F9E44;
+	--secondary-hover: #208537;
+	--danger: #F44336;
+}*/
 
-	--primary: #0AFFAD;
-	--primary-hover: #027F54;
+:root {
+	--color1: #000000;
+	--color2: #EAEAEA;
+	--color3: #FFFFFF;
+	--color4: #269FBC;
+	--color5: #1A6076;
+	--primary: #063156;
+	--primary-hover: #00427A;
 	--secondary: #04C27F;
 	--secondary-hover: #028052;
-	--danger: #FF3B0A;
+	--danger: #F44336;
 }
+
 
 html {
 	font-size: 14px;
@@ -43,14 +56,14 @@ html {
 }
 
 a {
-	color: white;
+	color: var(--color5);
 }
 
 body {
-	margin-bottom: 60px;
 	color: var(--color1);
 	background-color: var(--color3);
 	font-size: 16px;
+	margin: auto;
 }
 @media screen and (min-width: 320px) {
 	body {
@@ -63,6 +76,37 @@ body {
 	}
 }
 
+/*Homepage Not Logged In*/
+.login-test {
+	background-color: var(--color2);
+}
+
+.lakehead-logo-div {
+	position: relative;
+	height: 1%; /* This, along with height: 1000% is... not ideal, but works */
+	width: auto;
+}
+
+#lakehead-logo {
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 1000%;
+	width: auto;
+}
+
+.logo-div {
+	position: relative;
+	height: 70%;
+	width: auto;
+	padding-bottom: 0;
+}
+
+#logo {
+	height: 100%;
+	width: auto;
+}
+
 
 /*LOGIN*/
 .login_form {
@@ -72,16 +116,17 @@ body {
 .login {
 	display: grid;
 	place-items: center;
-	height: 100vh;
-	width: 100%;
+	height: 98vh;
+	/* width: 100%; */
 }
-.login > div > img {
-	object-fit: contain;
-	height: 150px;
+.login_title {
+	font-size: 130px;
+	text-shadow: -2px 3px 0 #000,2px 3px 0 #000;
 }
+
 .login_button {
 	width: 350px;
-	background-color: var(--color2);
+	background-color: var(--primary);
 	color: white;
 	font-weight: 600;
 	font-size: 26px;
@@ -89,14 +134,14 @@ body {
 	border-radius: 10px;
 }
 .login_button:hover {
-	background-color: var(--color4);
+	background-color: var(--primary-hover);
 	color: #c6c9cc;
 }
 
 /*FORM*/
 .form-control {
 	color: var(--color1);
-	background-color: var(--color5);
+	background-color: var(--color3);
 }
 .form-label {
 	color: var(--color1);
@@ -113,13 +158,13 @@ body {
 	z-index: 1; /* Stay on top */
 	top: 0; /* Stay at the top */
 	left: 0; 
-	background-color: var(--color5);
+	background-color: var(--primary);
 	overflow-x: hidden; /* Disable horizontal scroll */
 	padding-top: 10pt;
 }
 
 .icon_button {
-	background-color: var(--color2); /* Blue background */
+	background-color: var(--color4); /* Blue background */
 	border: none; /* Remove borders */
 	color: white; /* White text */
 	width: 85%;
@@ -129,7 +174,7 @@ body {
 	cursor: pointer; /* Mouse pointer on hover */
 }
 .icon_button:hover {
-	background-color: var(--color4);
+	background-color: var(--color5);
 }
 
 
@@ -194,6 +239,35 @@ table tr:nth-child(even) {
 	background-color: #03997E; /*var(--color5);*/
 	
 }
+
+/*Toolbar*/
+.toolbar {
+	margin: auto;
+	padding: 10pt;
+	padding-top: 10pt;
+	height: 100vh; /* Full-height: remove this if you want "auto" height */
+	width: 12.5%; /* Set the width of the sidebar */
+	/* display: table-column; */
+	text-align: center;
+	position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+	/* z-index: 1; /* Stay on top !1! */
+	float: none;
+	top: 0; /* Stay at the top */
+	left: 45pt;
+	background-color: var(--color4);
+	overflow-x: hidden; /* Disable horizontal scroll */
+}
+.toolbar_header {
+	top: 0;
+}
+.toolbar_buttons {
+}
+.toolbar_button {
+	width: 100%;
+}
+
+
+
 
 /*CHAT VIEW*/
 .chat-area {
