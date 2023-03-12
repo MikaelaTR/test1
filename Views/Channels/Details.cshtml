@@ -52,9 +52,11 @@
 </footer>
 
 <script>
-    var connection = new signalR.HubConnectionBuilder().withUrl("/chathub").build();
+    "use strict";
+    const connection = new signalR.HubConnectionBuilder().withUrl("/chathub").configureLogging(signalR.LogLevel.Trace).build();
     var username = document.getElementById("username").innerHTML;
-    var channelId = "@Model.Id";
+    var channelId = @Model.Id;
+    var groupName = "@Model.ChannelName";
 
     //Disable send button until connection is established
     document.getElementById("sendButton").disabled = true;
@@ -75,17 +77,17 @@
 
     connection.start().then(function () {
         document.getElementById("sendButton").disabled = false;
-        addToGroup(channelId);
-        console.log("Connection: " + connection.invoke("GetConnectionId").toString() + "\n")
+        addToGroup(groupName);
+        //console.log("Connection: " + connection.invoke("GetConnectionId").toString() + "\n")
         console.log("Username: " + username + "\n");
         console.log("Channel: " + channelId + "\n");
     }).catch(function (err) {
         return console.error(err.toString());
     });
 
-    function addToGroup(channel) {
-        connection.invoke("AddToGroup", channel).then(function () {
-            console.log(username + " has joined " + channel + ".");
+    function addToGroup(groupName) {
+        connection.invoke("AddToGroup", groupName).then(function () {
+            console.log(username + " has joined " + groupName + ".");
         }).catch(function (err) {
             return console.error(err.toString());
         });
@@ -94,9 +96,10 @@
     function sendMessage(e) {
         var message = document.getElementById("message").value;
         if (message && message !== "\n") { //Don't send empty message
-            connection.invoke("SendMessageToGroup", username, channelId, message).then(function () {
+            connection.invoke("SendMessageToGroup", username, message, groupName, channelId).then(function () {
                 document.getElementById("message").value = "";
             }).catch(function (err) {
+                document.getElementById("message").value = "";
                 return console.error(err.toString());
             });
             event.preventDefault();
