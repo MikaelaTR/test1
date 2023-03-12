@@ -49,6 +49,7 @@ body {
 	color: var(--color1);
 	background-color: var(--color5);
 	font-size: 16px;
+	margin: auto;
 }
 @media screen and (min-width: 320px) {
 	body {
@@ -198,21 +199,33 @@ table tr:nth-child(even) {
 	
 }
 
-
-/*SERVER LIST*/
-.server_list_sidebar {
+/*Toolbar*/
+.toolbar {
 	margin: auto;
+	padding: 10pt;
+	padding-top: 10pt;
 	height: 100vh; /* Full-height: remove this if you want "auto" height */
-	width: 100pt; /* Set the width of the sidebar */
-	display: table-column;
+	width: 12.5%; /* Set the width of the sidebar */
+	/* display: table-column; */
+	text-align: center;
 	position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-	z-index: 1; /* Stay on top */
+	/* z-index: 1; /* Stay on top !1! */
+	float: none;
 	top: 0; /* Stay at the top */
 	left: 45pt;
 	background-color: var(--color4);
 	overflow-x: hidden; /* Disable horizontal scroll */
-	padding-top: 10pt;
 }
+.toolbar_header {
+	top: 0;
+}
+.toolbar_buttons {
+}
+.toolbar_button {
+	width: 100%;
+}
+
+
 
 
 /*CHAT VIEW*/

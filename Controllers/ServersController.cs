@@ -28,12 +28,12 @@ namespace AdvancedProjectMVC.Controllers
                         Problem("Entity set 'ApplicationDbContext.Servers'  is null.");
         }
 
-        public async Task<IActionResult> _ServerListSidebar()
+        /*public async Task<IActionResult> _ServerListSidebar()
         {
             return _context.Servers != null
                 ? PartialView(await _context.Servers.ToListAsync())
                 : Problem("Entity set 'ApplicationDbContext.Servers'  is null.");
-        }
+        }*/
 
         // GET: Servers/Details/5
         public async Task<IActionResult> Details(int? id)

@@ -5,8 +5,45 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<main>
+    <h1>Index</h1>
 
-<div class="server_list_sidebar">
-    <partial name="_ServerListSidebar" />
-</div>
+    @* <div class="server_list_sidebar"> *@
+    @*     <partial name="_ServerListSidebar" /> *@
+    @* </div> *@
+    <div class = "toolbar">
+        <div class="toolbar_header">
+            <h1>ToolBar</h1>
+        </div>
+        <div class="toolbar_buttons">
+            <a class="btn btn-primary toolbar_button rounded-lg" asp-action="Create">Create Server</a>
+        </div>
+    </div>
+
+    <div class = "">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ServerName)
+                </th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model) {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ServerName)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</main>
