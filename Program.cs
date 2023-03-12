@@ -7,7 +7,7 @@ using Azure.Storage.Blobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var blobServiceClient = new BlobServiceClient(builder.Configuration.GetConnectionString("AzureBlobConnectionString"));
+var blobServiceClient = new BlobServiceClient(builder.Configuration.GetConnectionString("AzureBlobConnection"));
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
