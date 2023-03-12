@@ -27,8 +27,18 @@ namespace AdvancedProjectMVC.Controllers
         [HttpGet("GetAllFiles")]
         public async Task<List<SharedFile>> GetAllFiles(string containerName)
         {
+            try
+            {
+                var containers = blobServiceClient.GetBlobContainersAsync().AsPages();
+                await foreach(Azure.Page<BlobContainerItem> containerPage in containers)
+                {
+
+                }
+            }
+             catch (Exception ex) { 
+                Console.WriteLine("Exception " + ex);
+            }
             List<SharedFile> files = new List<SharedFile>();
-            containerName = "filesharecontainer";
             blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
             try
             {
