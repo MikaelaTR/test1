@@ -18,10 +18,10 @@
             @Html.DisplayFor(model => model.ChannelName)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Server)
+            @Html.DisplayNameFor(model => model.Server.ServerName)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Server.Id)
+            @Html.DisplayFor(model => model.Server.ServerName)
         </dd>
     </dl>
 </div>
@@ -34,11 +34,22 @@
     <div id="messagearea" class="row">
         <div><p>Joined as: <b id="username">@User.Identity?.Name</b></p></div>
         <hr />
-        <div class="row">
-            <div class="col-6 message-list">
-                <ul id="messageList" class="message-list"></ul>
+            <div class="row">
+                <div class="col-6 message-list">
+                    <ul id="messageList" class="message-list">
+                        @foreach(var item in Model.ChatMessages)
+                        {
+                            <li class="chat-message">
+                                @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+                                <p>
+                                    <text> says: </text>
+                                </p>
+                                @Html.DisplayFor(modelItem => item.Content)
+                            </li>
+                        }
+                    </ul>
+                </div>
             </div>
-        </div>
         <hr />
         <div class="row chatbox">
             <textarea type="text" id="message" autocomplete="off" onkeypress="enterKeySendMessage(event)" class="chatbox-textarea"></textarea>

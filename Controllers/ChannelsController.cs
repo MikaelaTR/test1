@@ -35,8 +35,9 @@ namespace AdvancedProjectMVC.Controllers
             }
 
             var channel = await _context.Channels
-                .Include(c => c.Server)
-                .Include(c => c.ChatMessages)
+                .Include(channel => channel.Server)
+                .Include(channel => channel.ChatMessages)
+                .ThenInclude(message => message.ApplicationUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (channel == null)
             {
