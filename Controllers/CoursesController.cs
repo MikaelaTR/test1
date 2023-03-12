@@ -62,6 +62,10 @@ namespace AdvancedProjectMVC.Controllers
             {
                 _context.Add(course);
                 await _context.SaveChangesAsync();
+
+                Server server = new Server();
+                server.ServerName = course.Title;
+                await new ServersController(_context).Create(server);
                 return RedirectToAction(nameof(Index));
             }
             return View(course);

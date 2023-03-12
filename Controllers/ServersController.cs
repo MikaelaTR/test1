@@ -36,6 +36,7 @@ namespace AdvancedProjectMVC.Controllers
             }
 
             var server = await _context.Servers
+                .Include(x => x.Channels)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (server == null)
             {
@@ -62,6 +63,13 @@ namespace AdvancedProjectMVC.Controllers
             {
                 _context.Add(server);
                 await _context.SaveChangesAsync();
+
+                Channel channel = new Channel();
+                channel.ChannelName = "General";
+                channel.ServerId = server.Id;
+
+                await new ChannelsController(_context).Create(channel);
+
                 return RedirectToAction(nameof(Index));
             }
             return View(server);

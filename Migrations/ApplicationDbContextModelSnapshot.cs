@@ -146,6 +146,33 @@ namespace AdvancedProjectMVC.Migrations
                     b.ToTable("Assignments");
                 });
 
+            modelBuilder.Entity("AdvancedProjectMVC.Models.CalendarEvent", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<DateTime>("DateEnd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateStart")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("CalendarEvent");
+                });
+
             modelBuilder.Entity("AdvancedProjectMVC.Models.Channel", b =>
                 {
                     b.Property<int>("Id")
@@ -180,7 +207,7 @@ namespace AdvancedProjectMVC.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("ChannelId")
+                    b.Property<int>("ChannelId")
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
@@ -554,11 +581,15 @@ namespace AdvancedProjectMVC.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AdvancedProjectMVC.Models.Channel", null)
+                    b.HasOne("AdvancedProjectMVC.Models.Channel", "Channel")
                         .WithMany("ChatMessages")
-                        .HasForeignKey("ChannelId");
+                        .HasForeignKey("ChannelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ApplicationUser");
+
+                    b.Navigation("Channel");
                 });
 
             modelBuilder.Entity("AdvancedProjectMVC.Models.Enrollment", b =>
