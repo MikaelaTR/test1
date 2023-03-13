@@ -32,6 +32,7 @@
                 <td>
                     <form method="post" asp-controller="FileSharing" asp-action="DeleteFile">
                         <input type="hidden" name="fileName" value="@item.FileName">
+                        <input type="hidden" name="containerName" value="@ViewBag.ContainerName">
                         <input class="btn btn-danger" type="submit" value="Delete" />
                     </form>
                 </td>

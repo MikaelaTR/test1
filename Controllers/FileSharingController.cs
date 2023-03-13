@@ -149,13 +149,12 @@ namespace AdvancedProjectMVC.Controllers
         [HttpPost("DeleteFile")]
         public async Task<IActionResult> DeleteFile(string containerName, string fileName)
         {
-            containerName = "filesharecontainer";
             blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
             var blobToDelete = blobContainerClient.GetBlobClient(fileName);
             await blobToDelete.DeleteIfExistsAsync(); 
 
             
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { serverName = containerName});
         }
     }
 }
