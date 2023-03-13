@@ -16,7 +16,8 @@
                 <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="Channels" asp-action="Details" asp-route-id="@item.Id">@item.ChannelName</a>
             }
 
-            <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="FileSharing" asp-action="Index">File Sharing</a>
+            <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="FileSharing" asp-action="Index" asp-route-serverName="@Model.ServerName">File Sharing</a>
+
             <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="Calendar" asp-action="Index">Calendar</a>
         </div>
     </div>
@@ -34,6 +35,4 @@
             </div>
         </div>
     </div>
-</div><div>
-    <a asp-controller="FileSharing" asp-action="Index" asp-route-serverName="@Model.ServerName">View Shared Files</a>
 </div>

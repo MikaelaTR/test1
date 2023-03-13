@@ -23,7 +23,8 @@ namespace AdvancedProjectMVC.Controllers
         {
             string formattedName = String.Concat(serverName.Where(c => !Char.IsWhiteSpace(c)));
             formattedName = formattedName.ToLower();
-
+            ViewBag.ServerName = serverName;
+            ViewBag.ContainerName = formattedName;
             return View(await GetAllFiles(formattedName));
         }
         //container is named after the server (or its hash or whatever else)
@@ -85,24 +86,24 @@ namespace AdvancedProjectMVC.Controllers
             }
         }
 
-        public IActionResult Upload()
+        public IActionResult Upload(string containerName)
         {
+            ViewBag.ContainerName = containerName;
             return View();
         }
 
 
         //TODO: Archives
         [HttpPost("UploadFile")]
-        public async Task<IActionResult> UploadFile(IFormFile TempFile, string containerName)
+        public async Task<IActionResult> UploadFile(IFormFile TempFile, string containerName, string serverName)
         {
-            containerName = "filesharecontainer";
             var filePath = Path.GetTempFileName();
             using (var stream = System.IO.File.Create(filePath))
             {
                 TempFile.CopyTo(stream);  
             }
 
-            blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
+            blobContainerClient = blobServiceClient.GetBlobContainerClient(serverName);
             string fileName = (TempFile.FileName);
             BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
             await blobClient.UploadAsync(filePath, true);
@@ -114,7 +115,6 @@ namespace AdvancedProjectMVC.Controllers
         public async Task<IActionResult> DownloadFile(string containerName, string fileName)
         {
             containerName = "filesharecontainer";
-            //fileName = "empty.txt";
             
             blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
             BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
