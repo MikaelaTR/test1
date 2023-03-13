@@ -35,12 +35,12 @@ header {
 	border-bottom: 1px solid var(--color6);
 }
 
-.main {
-	display: flex;
-	flex-direction: column;
-	flex: 0.75;
-	height: 100vh;
+main {
 	margin-left: auto;
+}
+
+.main-content {
+	left: 245pt;
 }
 
 @media (min-width: 768px) {
@@ -72,6 +72,15 @@ body {
 	body {
 		font-size: 22px;
 	}
+}
+
+.flex-parent {
+	display: flex;
+	/* width: 50%; */
+}
+.flex-child {
+	flex: 1;
+	margin: auto;
 }
 
 /*Homepage Not Logged In*/
@@ -244,19 +253,19 @@ table tr:nth-child(even) {
 	color: var(--color3);
 	background-color: var(--color5);
 	border-right: 2px solid var(--color6);
-	margin: auto;
+	display: flex;
+	flex-flow: column;
+	/* margin: auto; */
 	padding: 10pt;
 	padding-top: 10pt;
 	height: 100vh; /* Full-height: remove this if you want "auto" height */
-	width: 13.5%; /* Set the width of the sidebar */
+	width: 200pt; /* Set the width of the sidebar */
 	/* display: table-column; */
 	text-align: center;
 	position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-	/* z-index: 1; /* Stay on top !1! */
-	float: none;
 	top: 0; /* Stay at the top */
 	left: 45pt;
-	overflow-x: hidden; /* Disable horizontal scroll */
+	/*overflow-x: hidden; /* Disable horizontal scroll !1!*/
 }
 .toolbar_header {
 	top: 0;
