@@ -61,7 +61,7 @@ header {
 }
 
 a {
-	color: var(--color4);
+	color: var(--primary);
 }
 
 body {
@@ -160,7 +160,6 @@ body {
 .form-label {
 	color: black;
 }
-
 
 /*SIDE NAV*/
 .sidenav {
