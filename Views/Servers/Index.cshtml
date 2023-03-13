@@ -16,7 +16,7 @@
     @* </div> *@
     <div class="toolbar">
         <div class="toolbar_header">
-            <h3>ToolBar</h3>
+            <h3>@User.Identity?.Name</h3>
         </div>
         <div class="toolbar_buttons">
             <a asp-action="Create"  class="btn btn-primary toolbar_button rounded-lg">Create Server</a>

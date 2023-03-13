@@ -11,11 +11,6 @@
             <h3>ToolBar</h3>
         </div>
         <div class="toolbar_buttons">
-            @foreach (var item in Model.Channels)
-            {
-                <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="Channels" asp-action="Details" asp-route-id="@item.Id">@item.ChannelName</a>
-            }
-
             <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="FileSharing" asp-action="Index">File Sharing</a>
             <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="Calendar" asp-action="Index">Calendar</a>
         </div>
@@ -28,8 +23,11 @@
         <div class="container">
             <a asp-action="Index" title="Back to server list"><i class="btn btn-secondary btn-sm border-0 fa fa-long-arrow-left"></i></a>
             <h4 class="text-center">Welcome to @Html.DisplayFor(model => model.ServerName)</h4>
-            <hr/>
             <div>
+                @foreach (var item in Model.Channels)
+                {
+                    <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="Channels" asp-action="Details" asp-route-id="@item.Id">@item.ChannelName</a>
+                }
                 <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
             </div>
         </div>

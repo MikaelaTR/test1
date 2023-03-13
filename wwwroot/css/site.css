@@ -175,7 +175,7 @@ body {
 	background-color: var(--color6);
 	overflow-x: hidden; /* Disable horizontal scroll */
 	padding-top: 10pt;
-	border-right: 1px solid var(--color1);
+	/*border-right: 1px solid var(--color1);*/
 }
 
 .icon_button {
@@ -264,7 +264,7 @@ table tr:nth-child(even) {
 .toolbar {
 	color: var(--color3);
 	background-color: var(--color5);
-	border-right: 1px solid var(--color1);
+	/*border-right: 1px solid var(--color1);*/
 	display: flex;
 	flex-flow: column;
 	/* margin: auto; */
@@ -320,12 +320,22 @@ table tr:nth-child(even) {
 }
 
 /*CHAT VIEW*/
+.channel-header {
+	border-bottom: 1px solid var(--color1);
+	display: flex;
+	flex-flow: row;
+	padding: 10pt;
+	padding-top: 10pt;
+	position: relative;
+	
+
+}
 .chat-area {
 	color: var(--color3);
 	display: flex;
 	flex-flow: column;
 	flex: 0 1 auto;
-	background-color: var(--color4);
+	background-color: var(--color6);
 	height: 100%;
 	border-radius: 5px;
 }
@@ -352,9 +362,8 @@ table tr:nth-child(even) {
 }
 
 .chatbox-sendbutton {
-	display: flex;
-	flex: 0 0;
-	width: 100px;
+	color: var(--color3);
+	background-color: var(--color5);
 	height: 50px;
 	align-self: end;
 	text-align: center;
