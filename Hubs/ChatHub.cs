@@ -54,16 +54,18 @@ namespace AdvancedProjectMVC.Hubs
             var channel = await _context.Channels.FindAsync(channelId);
 
             //If user does not already exist as a ServerMember, create ServerMember and add to DB.
-            if (channel.Server.ServerMembers.Where(s => s.ApplicationUserId == user.Id) == null)
+            //var member = channel.Server.ServerMembers.Where(s => s.ApplicationUser == user).FirstOrDefault();
+            var server = await _context.Servers.FindAsync(channel.ServerId);
+            var member = server.ServerMembers.Where(s => s.ApplicationUserId== user.Id).FirstOrDefault();
+
+            if (member == null)
             {
-                var member = new ServerMember
+                var newMember = new ServerMember
                 {
-                    Server = channel.Server,
                     ServerId = channel.ServerId,
-                    ApplicationUser = user,
                     ApplicationUserId = user.Id
                 };
-                _context.ServerMembers.Add(member);
+                _context.Add(newMember);
                 _context.SaveChanges();
             }
         }
