@@ -67,8 +67,8 @@ namespace AdvancedProjectMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ServerId,ServerName")] Server server)
         {
-            if (ModelState.IsValid)
-            {
+           // if (ModelState.IsValid)
+            //{
                 _context.Add(server);
                 await _context.SaveChangesAsync();
 
@@ -79,8 +79,8 @@ namespace AdvancedProjectMVC.Controllers
                 await new ChannelsController(_context).Create(channel);
 
                 return RedirectToAction(nameof(Index));
-            }
-            return View(server);
+            //}
+            //return View(server);
         }
 
         // GET: Servers/Edit/5
