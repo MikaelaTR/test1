@@ -34,7 +34,7 @@
     <div id="messagearea" class="row">
         <div><p>Joined as: <b id="username">@User.Identity?.Name</b></p></div>
         <hr />
-            <div class="row">
+        <div class="row message-list-container">
                 <div class="col-md-6 message-list">
                     <ul id="messageList" class="message-list">
                         @foreach (var item in Model.ChatMessages)
@@ -50,10 +50,10 @@
             </div>
         <hr />
         <div class="row chatbox">
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <textarea type="text" id="message" autocomplete="off" onkeypress="enterKeySendMessage(event)" class="chatbox-textarea"></textarea>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <input type="button" id="sendButton" value="Send" onclick="sendMessage(event)" class="chatbox-sendbutton" />
             </div>
         </div>
