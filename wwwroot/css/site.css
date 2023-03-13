@@ -1,22 +1,33 @@
-:root {
-	--color1: #000000;
-	--color2: #EAEAEA;
-	--color3: #FFFFFF;
-	--color4: #269FBC;
-	--color5: #1A6076;
-	--color6: #0B3C5D;
-	--primary: #1CB5E0;
+:root, :root.light {
+	--color1: #000000; /*Black*/
+	--color2: #EAEAEA; /*Off White*/
+	--color3: #FFFFFF; /*White*/
+	--color4: #269FBC; /*Light Blue*/
+	--color5: #1A6076; /*Light Blue/darker than 4*/
+	--color6: #0B3C5D; /*Dark Blue/Green*/
+	--white: #FFFFFF;
+	--bg-color: --primary: #FFFFFF; /*White*/
 	--primary-hover: #137799;
 	--secondary: #063156;
 	--secondary-hover: #00427A;
 	--danger: #F44336;
-
-	/*--secondary: #04C27F;
-	--secondary-hover: #028052;*/
-	/*--secondary: #2F9E44;
-	--secondary-hover: #208537;*/
 }
-
+:root,
+:root.dark {
+	--color1: #F5F5F5; /*White*/
+	--color2: #269FBC; /*Light Blue*/
+	--color3: #FFFFFF; /*Light Green*/
+	--color4: #1E6E87; /*Light Blue/darker than 2*/
+	--color5: #0B3C5D; /*Dark Blue/Green*/
+	--color6: #0d3575; /*Dark Blue*/
+	--white: #FFFFFF;
+	--bg-color: #0d3575; /*Dark Blue/Green*/
+	--primary: #1CB5E0; /*Cyan*/
+	--primary-hover: #137799; /*Light Blue/darker than 2*/
+	--secondary: #2F9E44; /*Green*/
+	--secondary-hover: #208537; /*Dark Green*/
+	--danger: #F44336; /*Red*/
+}
 
 html {
 	font-size: 14px;
@@ -32,15 +43,11 @@ header {
 	font-size: 20px;
 	color: var(--color3);
 	background-color: var(--color5);
-	border-bottom: 1px solid var(--color6);
+	border-bottom: 1px solid var(--color1);
 }
 
-.main {
-	display: flex;
-	flex-direction: column;
-	flex: 0.75;
-	height: 100vh;
-	margin-left: auto;
+.main-content {
+	left: 245pt;
 }
 
 @media (min-width: 768px) {
@@ -54,12 +61,12 @@ header {
 }
 
 a {
-	color: var(--color5);
+	color: var(--color4);
 }
 
 body {
 	color: var(--color1);
-	background-color: var(--color3);
+	background-color: var(--bg-color);
 	font-size: 16px;
 	margin: auto;
 }
@@ -72,6 +79,15 @@ body {
 	body {
 		font-size: 22px;
 	}
+}
+
+.flex-parent {
+	display: flex;
+	/* width: 50%; */
+}
+.flex-child {
+	flex: 1;
+	margin: auto;
 }
 
 /*Homepage Not Logged In*/
@@ -138,11 +154,11 @@ body {
 
 /*FORM*/
 .form-control {
-	color: var(--color1);
+	color: black;
 	background-color: var(--color3);
 }
 .form-label {
-	color: var(--color1);
+	color: black;
 }
 
 
@@ -159,7 +175,7 @@ body {
 	background-color: var(--color6);
 	overflow-x: hidden; /* Disable horizontal scroll */
 	padding-top: 10pt;
-	border-right: 1px solid var(--color4);
+	border-right: 1px solid var(--color1);
 }
 
 .icon_button {
@@ -176,6 +192,11 @@ body {
 	background-color: var(--color5);
 }
 
+#dark-mode-toggle {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
 
 /*NAVs*/
 nav {
@@ -243,20 +264,20 @@ table tr:nth-child(even) {
 .toolbar {
 	color: var(--color3);
 	background-color: var(--color5);
-	border-right: 2px solid var(--color6);
-	margin: auto;
+	border-right: 1px solid var(--color1);
+	display: flex;
+	flex-flow: column;
+	/* margin: auto; */
 	padding: 10pt;
 	padding-top: 10pt;
 	height: 100vh; /* Full-height: remove this if you want "auto" height */
-	width: 13.5%; /* Set the width of the sidebar */
+	width: 200pt; /* Set the width of the sidebar */
 	/* display: table-column; */
 	text-align: center;
 	position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-	/* z-index: 1; /* Stay on top !1! */
-	float: none;
 	top: 0; /* Stay at the top */
 	left: 45pt;
-	overflow-x: hidden; /* Disable horizontal scroll */
+	/*overflow-x: hidden; /* Disable horizontal scroll !1!*/
 }
 .toolbar_header {
 	top: 0;
@@ -285,7 +306,7 @@ table tr:nth-child(even) {
 	background-color: var(--color2);
 }
 .card-title {
-	color: var(--primary);
+	color: var(--color1);
 	top: 0;
 	bottom: 0;
 	text-decoration: none;
@@ -306,33 +327,34 @@ table tr:nth-child(even) {
 	flex: 0 1 auto;
 	background-color: var(--color4);
 	height: 100%;
+	border-radius: 5px;
 }
+
 .chatbox {
 	display: flex;
-	flex: 1 0 auto;
-	flex-flow: row;
-	position: fixed;
-	bottom: 0;
-	width: 100%;
-	height: auto;
+	flex-flow: row nowrap;
+	align-items: center;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 .chatbox-textarea {
 	color: var(--color3);
 	background-color: var(--color5);
-	width: 85%;
+	width: 100%;
 	overflow: auto;
 	resize: none;
 	min-height: 50px;
 	max-height: 250px;
 	line-height: 25px;
 	padding: 1%;
+	border-radius: 5px;
 }
+
 .chatbox-sendbutton {
-	
 	display: flex;
 	flex: 0 0;
-	width: 15%;
+	width: 100px;
 	height: 50px;
 	align-self: end;
 	text-align: center;
@@ -349,13 +371,28 @@ table tr:nth-child(even) {
 	width: 100%;
 	*/
 	list-style-type: none;
+	border-radius: 5px;
+	padding: 2px;
+	margin: 2px;
 }
+
 .chat-message:hover {
-	background-color: var(--color3);
+	background-color: var(--primary);
 }
+
 .message-list {
-	display: flex;
-	flex-flow: column;
-	flex: 1 0 auto;
+	list-style-type: none;
+	margin: 0;
+	padding: 5px;
 	width: 100%;
+}
+
+.message-list-container {
+	flex: 1 1 auto;
+	overflow-y: auto;
+	margin-bottom: 10px;
+}
+
+.chat-message--user {
+	background-color: var(--color5);
 }
