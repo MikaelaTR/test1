@@ -9,6 +9,6 @@ namespace AdvancedProjectMVC.Models
         public string ServerName { get; set; }
 
         public ICollection<Channel> Channels { get; set;}
-        public ICollection<ApplicationUser> ApplicationUsers { get; set;}
+        public ICollection<ServerMember> ServerMembers { get; set;}
     }
 }

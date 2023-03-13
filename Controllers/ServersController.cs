@@ -67,8 +67,7 @@ namespace AdvancedProjectMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ServerId,ServerName")] Server server)
         {
-            //The model state is returning invalid, commented out to be able to make new servers.
-            //if (ModelState.IsValid)
+           // if (ModelState.IsValid)
             //{
                 _context.Add(server);
                 await _context.SaveChangesAsync();
@@ -82,7 +81,7 @@ namespace AdvancedProjectMVC.Controllers
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
-           // }
+            //}
             //return View(server);
         }
 
