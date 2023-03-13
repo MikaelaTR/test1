@@ -6,7 +6,8 @@
 	--color5: #1A6076; /*Light Blue/darker than 4*/
 	--color6: #0B3C5D; /*Dark Blue/Green*/
 	--white: #FFFFFF;
-	--bg-color: --primary: #FFFFFF; /*White*/
+	--bg-color: #FFFFFF; /*White*/
+	--primary: #1CB5E0;
 	--primary-hover: #137799;
 	--secondary: #063156;
 	--secondary-hover: #00427A;
@@ -61,7 +62,7 @@ header {
 }
 
 a {
-	color: var(--color4);
+	color: var(--primary);
 }
 
 body {
@@ -327,46 +328,33 @@ table tr:nth-child(even) {
 	padding: 10pt;
 	padding-top: 10pt;
 	position: relative;
-	
-
 }
+
 .chat-area {
 	color: var(--color3);
+	background-color: var(--color6);
 	display: flex;
 	flex-flow: column;
 	flex: 0 1 auto;
-	background-color: var(--color6);
 	height: 100%;
-	border-radius: 5px;
-}
-
-.chatbox {
-	display: flex;
-	flex-flow: row nowrap;
-	align-items: center;
-	margin-top: 10px;
-	margin-bottom: 10px;
-}
-
-.chatbox-textarea {
-	color: var(--color3);
-	background-color: var(--color5);
-	width: 100%;
 	overflow: auto;
-	resize: none;
-	min-height: 50px;
-	max-height: 250px;
-	line-height: 25px;
-	padding: 1%;
+	min-height: 80vh;
+	max-height: 80vh;
 	border-radius: 5px;
 }
 
-.chatbox-sendbutton {
-	color: var(--color3);
+.message-list {
+	display: flex;
+	flex-flow: column;
+	flex: 0 1 auto;
+	list-style-type: none;
+	margin: 0;
+	padding: 5px;
+	width: 100%;
+}
+
+.chat-message--user {
 	background-color: var(--color5);
-	height: 50px;
-	align-self: end;
-	text-align: center;
 }
 
 .chat-message {
@@ -389,19 +377,34 @@ table tr:nth-child(even) {
 	background-color: var(--primary);
 }
 
-.message-list {
-	list-style-type: none;
-	margin: 0;
-	padding: 5px;
-	width: 100%;
-}
 
-.message-list-container {
-	flex: 1 1 auto;
-	overflow-y: auto;
+.chatbox {
+	background-color: var(--color6);
+	display: flex;
+	width: 65%;
+	flex-flow: row nowrap;
+	margin-top: 10px;
 	margin-bottom: 10px;
+	position: fixed;
+	bottom: 0;
 }
 
-.chat-message--user {
+.chatbox-textarea {
+	color: var(--color3);
 	background-color: var(--color5);
+	overflow: auto;
+	resize: none;
+	min-height: 50px;
+	max-height: 250px;
+	line-height: 25px;
+	padding: 1%;
+	border-radius: 5px;
+}
+
+.chatbox-sendbutton {
+	color: var(--color3);
+	background-color: var(--color5);
+	height: 50px;
+	align-self: end;
+	text-align: center;
 }

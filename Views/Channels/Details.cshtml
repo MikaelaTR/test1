@@ -31,11 +31,11 @@
         </div>
 
         <div class="container chat-area">
-            <div id="messagearea" class="row">
+            <div id="messageArea" class="row">
                 <div><p>Joined as: <b id="username">@User.Identity?.Name</b></p></div>
                 <hr />
                 <div class="row">
-                    <div class="col-md-6 message-list">
+                    <div class="col-md-6 message-list-container">
                         <ul id="messageList" class="message-list">
                             @foreach (var item in Model.ChatMessages)
                             {
@@ -49,13 +49,13 @@
                     </div>
                 </div>
                 <hr />
-                <div class="row chatbox ">
-                    <div class="p-2 col-md-6">
-                        <textarea type="text" id="message" autocomplete="off" onkeypress="enterKeySendMessage(event)" class="chatbox-textarea w-100"></textarea>
-                    </div>
-                    <div class="p-2 col-md-2 align-self-center">
-                        <input type="button" id="sendButton" value="Send" onclick="sendMessage(event)" class="chatbox-sendbutton" />
-                    </div>
+            </div>
+            <div class="row chatbox">
+                <div class="p-2 col-md-11">
+                    <textarea type="text" id="message" autocomplete="off" onkeypress="enterKeySendMessage(event)" class="chatbox-textarea w-100"></textarea>
+                </div>
+                <div class="p-2 col-md-2 align-self-center">
+                    <input type="button" id="sendButton" value="Send" onclick="sendMessage(event)" class="chatbox-sendbutton" />
                 </div>
             </div>
         </div>
@@ -77,8 +77,6 @@
 
     //Disable send button until connection is established
     document.getElementById("sendButton").disabled = true;
-
-    window.scrollTo(0, document.body.scrollHeight); //Scroll to bottom on load
 
     connection.on("ReceiveMessage", function (user, message) {
         console.log("hey! Listen!");
@@ -134,5 +132,17 @@
         this.style.height = "auto";
         this.style.height = `${this.scrollHeight}px`;
     });
+    
+    //Scroll to bottom of message list
+    //NOT WORKING
+    @*const delay = ms => new Promise(res => setTimeout(res, ms));
+    const scrollToBottomMessageFunction = async () => {
+        await delay(1000);
+        console.log("Waited 1s");
+        items = document.querySelectorAll(".chat-message");
+        last = items[items.length - 1];
+        last.scrollIntoView();
+    };
+    scrollToBottomMessageFunction();*@
 
 </script>

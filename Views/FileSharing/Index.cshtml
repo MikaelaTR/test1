@@ -1,4 +1,4 @@
-﻿@model List<string>
+﻿@model IEnumerable<AdvancedProjectMVC.Models.SharedFile>
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -6,7 +6,7 @@
     ViewData["Title"] = "File Sharing";
 }
 
-<h1> Shared Files</h1>
+<h1> Shard Files</h1>
 
 <table class="table">
     <thead>
@@ -21,7 +21,14 @@
         {
             <tr>
                 <td>
-                    @item.ToString()
+                    <a href="@item.DownloadURL" class="link-success">@item.FileName</a>
+                </td>
+                <td>
+                    <form method="post" asp-controller="FileSharing" asp-action="DeleteFile">
+                        <input type="hidden" name="fileName" value="@item.FileName">
+                        <input type="hidden" name="containerName" value="@ViewBag.ContainerName">
+                        <input class="btn btn-danger" type="submit" value="Delete" />
+                    </form>
                 </td>
             </tr>
         }
@@ -29,5 +36,5 @@
 </table>
 
 <p>
-    <a asp-action="Upload"> Upload New File</a> 
+    <a asp-action="Upload" asp-route-containerName="@ViewBag.ContainerName"> Upload New File</a> 
 </p>
