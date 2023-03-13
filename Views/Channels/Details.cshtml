@@ -5,60 +5,64 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<div class="container flex-parent">
+    <div class="toolbar flex-child">
+        <div class="toolbar_header">
+            <h3>@Html.DisplayFor(model => model.Server.ServerName)</h3>
+            @foreach (var item in Model.Server.Channels)
+            {
+                <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="Channels" asp-action="Details" asp-route-id="@item.Id">
+                    @Html.DisplayFor(item => item.ChannelName)
+                </a>
+            }
 
-<div>
-    <h4>Channel</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-3 col-md-2">
-            @Html.DisplayNameFor(model => model.ChannelName)
-        </dt>
-        <dd class="col-sm-9 col-md-10">
+        </div>
+        <div class="toolbar_buttons">
+            <a asp-action="Create" class="btn btn-primary toolbar_button rounded-lg">Create Channel</a>
+        </div>
+    </div>
+    <div class="mx-1 flex-child">
+        <header class="px-3 text-start">
             @Html.DisplayFor(model => model.ChannelName)
-        </dd>
-        <dt class="col-sm-3 col-md-2">
-            @Html.DisplayNameFor(model => model.Server.ServerName)
-        </dt>
-        <dd class="col-sm-9 col-md-10">
-            @Html.DisplayFor(model => model.Server.ServerName)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+        </header>
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+            <a asp-action="Index">Back to List</a>
+        </div>
 
-<div class="container chat-area">
-    <div id="messagearea" class="row">
-        <div><p>Joined as: <b id="username">@User.Identity?.Name</b></p></div>
-        <hr />
-            <div class="row">
-                <div class="col-md-6 message-list">
-                    <ul id="messageList" class="message-list">
-                        @foreach (var item in Model.ChatMessages)
-                        {
-                            <li class="chat-message @((item.ApplicationUser.UserName == User.Identity?.Name) ? "chat-message--user" : "")">
-                                @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
-                                says:
-                                @Html.DisplayFor(modelItem => item.Content)
-                            </li>
-                        }
-                    </ul>
+        <div class="container chat-area">
+            <div id="messagearea" class="row">
+                <div><p>Joined as: <b id="username">@User.Identity?.Name</b></p></div>
+                <hr />
+                <div class="row">
+                    <div class="col-md-6 message-list">
+                        <ul id="messageList" class="message-list">
+                            @foreach (var item in Model.ChatMessages)
+                            {
+                                <li class="chat-message @((item.ApplicationUser.UserName == User.Identity?.Name) ? "chat-message--user" : "")">
+                                    @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+                                    says:
+                                    @Html.DisplayFor(modelItem => item.Content)
+                                </li>
+                            }
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        <hr />
-        <div class="row chatbox">
-            <div class="col-md-6">
-                <textarea type="text" id="message" autocomplete="off" onkeypress="enterKeySendMessage(event)" class="chatbox-textarea"></textarea>
-            </div>
-            <div class="col-md-6">
-                <input type="button" id="sendButton" value="Send" onclick="sendMessage(event)" class="chatbox-sendbutton" />
+                <hr />
+                <div class="row chatbox ">
+                    <div class="p-2 col-md-6">
+                        <textarea type="text" id="message" autocomplete="off" onkeypress="enterKeySendMessage(event)" class="chatbox-textarea w-100"></textarea>
+                    </div>
+                    <div class="p-2 col-md-2 align-self-center">
+                        <input type="button" id="sendButton" value="Send" onclick="sendMessage(event)" class="chatbox-sendbutton" />
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+
 
 <footer>
     <script src="~/js/signalr/dist/browser/signalr.js"></script>
