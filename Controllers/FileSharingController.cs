@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGeneration;
 using System;
+using System.Text.RegularExpressions;
 
 namespace AdvancedProjectMVC.Controllers
 {
@@ -14,11 +15,13 @@ namespace AdvancedProjectMVC.Controllers
         private BlobServiceClient blobServiceClient = new BlobServiceClient("DefaultEndpointsProtocol=https;AccountName=advancedprojectfileshare;AccountKey=PX9Acb1JmVX9oQ2ZDSjzoMXimDQLb0cuInpzK/xxAP5GeYNgFoovg6qIBjL2uB04VGeaXZKGwnOX+AStnNBvxw==;EndpointSuffix=core.windows.net");
 
         private BlobContainerClient? blobContainerClient;
+
         private string downloadPath = System.Convert.ToString(Microsoft.Win32.Registry.GetValue(
              @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders"
             , "{374DE290-123F-4565-9164-39C4925E467B}"
             , String.Empty));
-        
+
+
         public async Task<IActionResult> Index(string serverName)
         {
             string formattedName = String.Concat(serverName.Where(c => !Char.IsWhiteSpace(c)));
@@ -27,16 +30,50 @@ namespace AdvancedProjectMVC.Controllers
             ViewBag.ContainerName = formattedName;
             return View(await GetAllFiles(formattedName));
         }
+
+
         //container is named after the server (or its hash or whatever else)
         [HttpGet("GetAllFiles")]
         public async Task<List<SharedFile>> GetAllFiles(string containerName)
         {
-            //containerName = "filesharecontainer";
+            await InitializeContainer(containerName);
+
+            List<SharedFile> files = new List<SharedFile>();
+            blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
+            try
+            {
+                var resultSegment = blobContainerClient.GetBlobsAsync().AsPages();
+
+                await foreach (Page<BlobItem> blobPage in resultSegment)
+                {
+                    foreach (BlobItem blobItem in blobPage.Values)
+                    {
+                        SharedFile file = new SharedFile();
+                        file.FileName = blobItem.Name;
+
+                        Console.WriteLine("Blob name: {0}", blobItem.Name);
+                        files.Add(file);
+                    }
+                    Console.WriteLine();
+                }
+            }
+            catch (RequestFailedException e)
+            {
+                Console.WriteLine(e.Message);
+                Console.ReadLine();
+                throw;
+            }
+            blobContainerClient = null;
+            return files;
+        }
+
+        public async Task InitializeContainer(string containerName)
+        {
             List<string> containerNames = new List<string>();
             try
             {
                 var containers = blobServiceClient.GetBlobContainersAsync().AsPages();
-                await foreach(Azure.Page<BlobContainerItem> containerPage in containers)
+                await foreach (Azure.Page<BlobContainerItem> containerPage in containers)
                 {
                     foreach (BlobContainerItem containerItem in containerPage.Values)
                     {
@@ -46,45 +83,26 @@ namespace AdvancedProjectMVC.Controllers
                     Console.WriteLine();
                 }
             }
-             catch (Exception ex) { 
+            catch (Exception ex)
+            {
                 Console.WriteLine("Exception " + ex);
             }
-            List<SharedFile> files = new List<SharedFile>();
-            if (containerNames.Contains(containerName)) 
-            {                
+
+            if (containerNames.Contains(containerName))
+            {
                 blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
-                try
-                {
-                    var resultSegment = blobContainerClient.GetBlobsAsync().AsPages();
-
-                    await foreach (Page<BlobItem> blobPage in resultSegment)
-                    {
-                        foreach (BlobItem blobItem in blobPage.Values)
-                        {
-                            SharedFile file = new SharedFile();
-                            file.FileName = blobItem.Name;
-
-                            Console.WriteLine("Blob name: {0}", blobItem.Name);
-                            files.Add(file);
-                        }
-                        Console.WriteLine();
-                    }
-                }
-                catch (RequestFailedException e)
-                {
-                    Console.WriteLine(e.Message);
-                    Console.ReadLine();
-                    throw;
-                } 
-                blobContainerClient = null;
-                return files;
+                await blobContainerClient.SetAccessPolicyAsync(PublicAccessType.Blob);
             }
             else
             {
                 await blobServiceClient.CreateBlobContainerAsync(containerName);
-                return files;
+                blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
+                await blobContainerClient.SetAccessPolicyAsync(PublicAccessType.Blob);
             }
+
+            blobContainerClient = null;
         }
+
 
         public IActionResult Upload(string containerName)
         {
@@ -95,7 +113,7 @@ namespace AdvancedProjectMVC.Controllers
 
         //TODO: Archives
         [HttpPost("UploadFile")]
-        public async Task<IActionResult> UploadFile(IFormFile TempFile, string containerName, string serverName)
+        public async Task<IActionResult> UploadFile(IFormFile TempFile, string serverName)
         {
             var filePath = Path.GetTempFileName();
             using (var stream = System.IO.File.Create(filePath))
@@ -141,7 +159,7 @@ namespace AdvancedProjectMVC.Controllers
 
             return RedirectToAction("Index");
         }
-        public async Task<IActionResult> Delete()
+        public IActionResult Delete()
         {
             return View();
         }
