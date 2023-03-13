@@ -72,11 +72,13 @@ namespace AdvancedProjectMVC.Controllers
                 _context.Add(server);
                 await _context.SaveChangesAsync();
 
-                Channel channel = new Channel();
-                channel.ChannelName = "General";
-                channel.ServerId = server.Id;
-
-                await new ChannelsController(_context).Create(channel);
+                Channel channel = new Channel
+                {
+                    ChannelName = "General",
+                    Server = server,
+                };
+                _context.Channels.Add(channel);
+                await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             //}
