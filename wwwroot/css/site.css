@@ -62,7 +62,7 @@ header {
 }
 
 a {
-	color: var(--color1);
+	color: var(--primary);
 }
 
 body {
