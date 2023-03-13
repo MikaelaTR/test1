@@ -21,13 +21,7 @@
         {
             <tr>
                 <td>
-                    @item.FileName
-                </td>
-                <td>
-                    <form method="get" asp-controller="FileSharing" asp-action="DownloadFile">
-                        <input type="hidden" name="fileName" value="@item.FileName">
-                        <input class="btn btn-success" type="submit" value="Download" />
-                    </form>
+                    <a href="@item.DownloadURL" class="link-success">@item.FileName</a>
                 </td>
                 <td>
                     <form method="post" asp-controller="FileSharing" asp-action="DeleteFile">

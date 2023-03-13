@@ -2,6 +2,7 @@
 using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Azure.Storage.Blobs.Specialized;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGeneration;
@@ -15,12 +16,6 @@ namespace AdvancedProjectMVC.Controllers
         private BlobServiceClient blobServiceClient = new BlobServiceClient("DefaultEndpointsProtocol=https;AccountName=advancedprojectfileshare;AccountKey=PX9Acb1JmVX9oQ2ZDSjzoMXimDQLb0cuInpzK/xxAP5GeYNgFoovg6qIBjL2uB04VGeaXZKGwnOX+AStnNBvxw==;EndpointSuffix=core.windows.net");
 
         private BlobContainerClient? blobContainerClient;
-
-        private string downloadPath = System.Convert.ToString(Microsoft.Win32.Registry.GetValue(
-             @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders"
-            , "{374DE290-123F-4565-9164-39C4925E467B}"
-            , String.Empty));
-
 
         public async Task<IActionResult> Index(string serverName)
         {
@@ -41,21 +36,19 @@ namespace AdvancedProjectMVC.Controllers
             List<SharedFile> files = new List<SharedFile>();
             blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
             try
-            {
-                var resultSegment = blobContainerClient.GetBlobsAsync().AsPages();
-
-                await foreach (Page<BlobItem> blobPage in resultSegment)
-                {
-                    foreach (BlobItem blobItem in blobPage.Values)
+            {                
+                var resultSegment = blobContainerClient.GetBlobsAsync();
+                    await foreach (BlobItem blobItem in resultSegment)
                     {
                         SharedFile file = new SharedFile();
+                        var block = blobContainerClient.GetBlockBlobClient(blobItem.Name);
                         file.FileName = blobItem.Name;
-
+                        file.DownloadURL = block.Uri.ToString();
                         Console.WriteLine("Blob name: {0}", blobItem.Name);
                         files.Add(file);
                     }
                     Console.WriteLine();
-                }
+                
             }
             catch (RequestFailedException e)
             {
@@ -130,35 +123,6 @@ namespace AdvancedProjectMVC.Controllers
             return RedirectToAction("Index", new {serverName = serverName});
         }
 
-        public async Task<IActionResult> DownloadFile(string containerName, string fileName)
-        {
-            containerName = "filesharecontainer";
-            
-            blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
-            BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
-
-            try
-            {
-                BlobDownloadResult blobDownloadResult = await blobClient.DownloadContentAsync();
-                var downloadData = blobDownloadResult.Content.ToStream();
-
-                BlobObject blobObject = new BlobObject { BlobContent = downloadData, BlobName = fileName };
-
-                using (var resultStream = System.IO.File.OpenWrite(downloadPath + "\\" + fileName))
-                {
-                    blobObject.BlobContent.CopyTo(resultStream);
-                }
-
-                blobContainerClient = null;
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine($"Error: {e.Message}");
-                blobContainerClient= null;
-            } 
-
-            return RedirectToAction("Index");
-        }
         public IActionResult Delete()
         {
             return View();

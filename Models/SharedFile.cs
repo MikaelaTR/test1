@@ -9,5 +9,6 @@
         public string ServerName { get; set; }
         public string ChannelName { get; set; }
         public string TempFile { get; set; }
+        public string DownloadURL { get; set; }
     }
 }
