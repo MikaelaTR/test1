@@ -109,7 +109,7 @@ namespace AdvancedProjectMVC.Controllers
             await blobClient.UploadAsync(filePath, true);
             blobContainerClient = null;
             
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new {serverName = serverName});
         }
 
         public async Task<IActionResult> DownloadFile(string containerName, string fileName)
