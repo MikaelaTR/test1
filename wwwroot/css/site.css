@@ -1,27 +1,20 @@
-/*:root {
-	--color1: #F5F5F5;
-	--color2: #269FBC;
-	--color3: #2E8B57;
-	--color4: #1E6E87;
-	--color5: #0B3C5D;
-	--primary: #1CB5E0;
-	--primary-hover: #137799;
-	--secondary: #2F9E44;
-	--secondary-hover: #208537;
-	--danger: #F44336;
-}*/
-
 :root {
 	--color1: #000000;
 	--color2: #EAEAEA;
 	--color3: #FFFFFF;
 	--color4: #269FBC;
 	--color5: #1A6076;
-	--primary: #063156;
-	--primary-hover: #00427A;
-	--secondary: #04C27F;
-	--secondary-hover: #028052;
+	--color6: #0B3C5D;
+	--primary: #1CB5E0;
+	--primary-hover: #137799;
+	--secondary: #063156;
+	--secondary-hover: #00427A;
 	--danger: #F44336;
+
+	/*--secondary: #04C27F;
+	--secondary-hover: #028052;*/
+	/*--secondary: #2F9E44;
+	--secondary-hover: #208537;*/
 }
 
 
@@ -31,10 +24,15 @@ html {
 	min-height: 100%;
 }
 
-.header {
-	padding-top: 30px;
+header {
+	margin: auto;
+	padding-top: 5px;
+	padding-bottom: 5px;
 	text-align: Center;
-	font-size: 30px;
+	font-size: 20px;
+	color: var(--color3);
+	background-color: var(--color5);
+	border-bottom: 1px solid var(--color6);
 }
 
 .main {
@@ -157,10 +155,11 @@ body {
 	position: fixed; /* Fixed Sidebar (stay in place on scroll) */
 	z-index: 1; /* Stay on top */
 	top: 0; /* Stay at the top */
-	left: 0; 
-	background-color: var(--primary);
+	left: 0;
+	background-color: var(--color6);
 	overflow-x: hidden; /* Disable horizontal scroll */
 	padding-top: 10pt;
+	border-right: 1px solid var(--color4);
 }
 
 .icon_button {
@@ -230,23 +229,26 @@ nav {
 
 /*TABLES*/
 table tr {
-	color: var(--color1);
+	color: var(--color3);
 }
 table tr:nth-child(odd) {
 	background-color: var(--color4);
 }
 table tr:nth-child(even) {
-	background-color: #03997E; /*var(--color5);*/
+	background-color: var(--color5);
 	
 }
 
 /*Toolbar*/
 .toolbar {
+	color: var(--color3);
+	background-color: var(--color5);
+	border-right: 2px solid var(--color6);
 	margin: auto;
 	padding: 10pt;
 	padding-top: 10pt;
 	height: 100vh; /* Full-height: remove this if you want "auto" height */
-	width: 12.5%; /* Set the width of the sidebar */
+	width: 13.5%; /* Set the width of the sidebar */
 	/* display: table-column; */
 	text-align: center;
 	position: fixed; /* Fixed Sidebar (stay in place on scroll) */
@@ -254,7 +256,6 @@ table tr:nth-child(even) {
 	float: none;
 	top: 0; /* Stay at the top */
 	left: 45pt;
-	background-color: var(--color4);
 	overflow-x: hidden; /* Disable horizontal scroll */
 }
 .toolbar_header {
@@ -266,11 +267,40 @@ table tr:nth-child(even) {
 	width: 100%;
 }
 
+/*CARDS*/
+.card-container {
+	margin: 20px;
+}
+.card {
+	display: inline-grid;
+	margin: 10px;
+	width: 30vh;
+	height: 25vh;
+}
+.card-header {
+	height: 100%;
+	text-align: center;
+	font-size: 42px;
+	bottom: 0;
+	background-color: var(--color2);
+}
+.card-title {
+	color: var(--primary);
+	top: 0;
+	bottom: 0;
+	text-decoration: none;
+}
+.card-title:hover {
+	text-decoration: underline;
+}
 
-
+.card-body {
+	height: 50%;
+}
 
 /*CHAT VIEW*/
 .chat-area {
+	color: var(--color3);
 	display: flex;
 	flex-flow: column;
 	flex: 0 1 auto;
@@ -283,12 +313,12 @@ table tr:nth-child(even) {
 	flex-flow: row;
 	position: fixed;
 	bottom: 0;
-	width: 75%;
+	width: 100%;
 	height: auto;
 }
 
 .chatbox-textarea {
-	color: var(--color1);
+	color: var(--color3);
 	background-color: var(--color5);
 	width: 85%;
 	overflow: auto;
@@ -299,6 +329,7 @@ table tr:nth-child(even) {
 	padding: 1%;
 }
 .chatbox-sendbutton {
+	
 	display: flex;
 	flex: 0 0;
 	width: 15%;
@@ -308,6 +339,7 @@ table tr:nth-child(even) {
 }
 
 .chat-message {
+	color: var(--color3);
 	display: flex;
 	word-break: break-word;
 	overflow-wrap: break-word; /*Wrap text*/
