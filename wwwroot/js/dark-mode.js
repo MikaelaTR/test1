@@ -2,19 +2,21 @@
 const currentTheme = localStorage.getItem("theme");
 
 if (currentTheme === "dark" || (!currentTheme && prefersDarkScheme.matches)) {
-    document.documentElement.classList.add("dark-mode");
+    document.documentElement.classList.add("dark");
 } else {
-    document.documentElement.classList.remove("dark-mode");
+    document.documentElement.classList.remove("dark");
 }
 
 function toggleDarkMode() {
     const currentTheme = localStorage.getItem("theme");
     if (currentTheme === "dark") {
         localStorage.setItem("theme", "light");
-        document.documentElement.classList.remove("dark-mode");
+        document.documentElement.classList.add("light");
+        document.documentElement.classList.remove("dark");
     } else {
         localStorage.setItem("theme", "dark");
-        document.documentElement.classList.add("dark-mode");
+        document.documentElement.classList.remove("light");
+        document.documentElement.classList.add("dark");
     }
 }
 
