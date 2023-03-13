@@ -95,7 +95,6 @@
     connection.start().then(function () {
         document.getElementById("sendButton").disabled = false;
         addToGroup(groupName);
-        //console.log("Connection: " + connection.invoke("GetConnectionId").toString() + "\n")
         console.log("Username: " + username + "\n");
         console.log("Channel: " + channelId + "\n");
     }).catch(function (err) {
@@ -103,7 +102,7 @@
     });
 
     function addToGroup(groupName) {
-        connection.invoke("AddToGroup", groupName).then(function () {
+        connection.invoke("AddToGroup", groupName, username, channelId).then(function () {
             console.log(username + " has joined " + groupName + ".");
         }).catch(function (err) {
             return console.error(err.toString());

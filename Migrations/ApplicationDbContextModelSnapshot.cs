@@ -324,11 +324,16 @@ namespace AdvancedProjectMVC.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("ServerName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Servers");
                 });
@@ -379,21 +384,6 @@ namespace AdvancedProjectMVC.Migrations
                     b.HasIndex("CourseId");
 
                     b.ToTable("TeachingAssignments");
-                });
-
-            modelBuilder.Entity("ApplicationUserServer", b =>
-                {
-                    b.Property<string>("ApplicationUsersId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("ServersId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ApplicationUsersId", "ServersId");
-
-                    b.HasIndex("ServersId");
-
-                    b.ToTable("ApplicationUserServer");
                 });
 
             modelBuilder.Entity("CourseSchoolProgram", b =>
@@ -611,6 +601,13 @@ namespace AdvancedProjectMVC.Migrations
                     b.Navigation("Course");
                 });
 
+            modelBuilder.Entity("AdvancedProjectMVC.Models.Server", b =>
+                {
+                    b.HasOne("AdvancedProjectMVC.Models.ApplicationUser", null)
+                        .WithMany("Servers")
+                        .HasForeignKey("ApplicationUserId");
+                });
+
             modelBuilder.Entity("AdvancedProjectMVC.Models.ServerMember", b =>
                 {
                     b.HasOne("AdvancedProjectMVC.Models.ApplicationUser", "ApplicationUser")
@@ -620,7 +617,7 @@ namespace AdvancedProjectMVC.Migrations
                         .IsRequired();
 
                     b.HasOne("AdvancedProjectMVC.Models.Server", "Server")
-                        .WithMany()
+                        .WithMany("ServerMembers")
                         .HasForeignKey("ServerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -647,21 +644,6 @@ namespace AdvancedProjectMVC.Migrations
                     b.Navigation("ApplicationUser");
 
                     b.Navigation("Course");
-                });
-
-            modelBuilder.Entity("ApplicationUserServer", b =>
-                {
-                    b.HasOne("AdvancedProjectMVC.Models.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("ApplicationUsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AdvancedProjectMVC.Models.Server", null)
-                        .WithMany()
-                        .HasForeignKey("ServersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("CourseSchoolProgram", b =>
@@ -736,6 +718,8 @@ namespace AdvancedProjectMVC.Migrations
 
                     b.Navigation("Enrollments");
 
+                    b.Navigation("Servers");
+
                     b.Navigation("TeachingAssignments");
                 });
 
@@ -759,6 +743,8 @@ namespace AdvancedProjectMVC.Migrations
             modelBuilder.Entity("AdvancedProjectMVC.Models.Server", b =>
                 {
                     b.Navigation("Channels");
+
+                    b.Navigation("ServerMembers");
                 });
 #pragma warning restore 612, 618
         }
