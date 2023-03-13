@@ -19,52 +19,70 @@ namespace AdvancedProjectMVC.Controllers
             , "{374DE290-123F-4565-9164-39C4925E467B}"
             , String.Empty));
         
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string serverName)
         {
-            return View(await GetAllFiles("serverName"));
+            string formattedName = String.Concat(serverName.Where(c => !Char.IsWhiteSpace(c)));
+            formattedName = formattedName.ToLower();
+
+            return View(await GetAllFiles(formattedName));
         }
         //container is named after the server (or its hash or whatever else)
         [HttpGet("GetAllFiles")]
         public async Task<List<SharedFile>> GetAllFiles(string containerName)
         {
+            //containerName = "filesharecontainer";
+            List<string> containerNames = new List<string>();
             try
             {
                 var containers = blobServiceClient.GetBlobContainersAsync().AsPages();
                 await foreach(Azure.Page<BlobContainerItem> containerPage in containers)
                 {
+                    foreach (BlobContainerItem containerItem in containerPage.Values)
+                    {
+                        containerNames.Add(containerItem.Name);
+                    }
 
+                    Console.WriteLine();
                 }
             }
              catch (Exception ex) { 
                 Console.WriteLine("Exception " + ex);
             }
             List<SharedFile> files = new List<SharedFile>();
-            blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
-            try
-            {
-                var resultSegment = blobContainerClient.GetBlobsAsync().AsPages();
-
-                await foreach (Page<BlobItem> blobPage in resultSegment)
+            if (containerNames.Contains(containerName)) 
+            {                
+                blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
+                try
                 {
-                    foreach (BlobItem blobItem in blobPage.Values)
-                    {
-                        SharedFile file = new SharedFile();
-                        file.FileName = blobItem.Name;
+                    var resultSegment = blobContainerClient.GetBlobsAsync().AsPages();
 
-                        Console.WriteLine("Blob name: {0}", blobItem.Name);
-                        files.Add(file);
+                    await foreach (Page<BlobItem> blobPage in resultSegment)
+                    {
+                        foreach (BlobItem blobItem in blobPage.Values)
+                        {
+                            SharedFile file = new SharedFile();
+                            file.FileName = blobItem.Name;
+
+                            Console.WriteLine("Blob name: {0}", blobItem.Name);
+                            files.Add(file);
+                        }
+                        Console.WriteLine();
                     }
-                    Console.WriteLine();
                 }
+                catch (RequestFailedException e)
+                {
+                    Console.WriteLine(e.Message);
+                    Console.ReadLine();
+                    throw;
+                } 
+                blobContainerClient = null;
+                return files;
             }
-            catch (RequestFailedException e)
+            else
             {
-                Console.WriteLine(e.Message);
-                Console.ReadLine();
-                throw;
+                await blobServiceClient.CreateBlobContainerAsync(containerName);
+                return files;
             }
-            blobContainerClient = null;
-            return files;
         }
 
         public IActionResult Upload()
