@@ -33,6 +33,13 @@ builder.Services.AddControllersWithViews();
     options.AddPolicy("StudentOnly", policy => policy.RequireClaim("StudentNumber"));
 });*/
 
+builder.Services.AddAuthentication()
+    .AddGoogle(googleOptions =>
+    {
+        googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+        googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+    });
+
 builder.Services.AddRazorPages();
 builder.Services.AddSignalR(hubOptions =>
 {

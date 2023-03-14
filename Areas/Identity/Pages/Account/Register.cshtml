@@ -4,62 +4,66 @@
     ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
 
-<div class="row">
-    <div class="col-md-4">
+
+<div class="row text-center justify-content-center">
+    <h1>@ViewData["Title"]</h1>
+    <div class="flex-column w-50">
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <h2>Create a new account.</h2>
-            <hr />
+            <hr/>
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
 
-            <div class="form-floating">
-                <input asp-for="Input.FirstName" class="form-control" placeholder="Enter your first name" />
+            <div class="form-floating m-2">
+                <input asp-for="Input.FirstName" class="form-control" placeholder="Enter your first name"/>
                 <label asp-for="Input.FirstName" class="form-label"></label>
                 <span asp-validation-for="Input.FirstName" class="text-danger"></span>
             </div>
 
-            <div class="form-floating">
-                <input asp-for="Input.LastName" class="form-control" placeholder="Enter your last name" />
+            <div class="form-floating m-2">
+                <input asp-for="Input.LastName" class="form-control" placeholder="Enter your last name"/>
                 <label asp-for="Input.LastName" class="form-label"></label>
                 <span asp-validation-for="Input.LastName" class="text-danger"></span>
             </div>
 
-            <div class="form-floating">
-                <input asp-for="Input.DOB" class="form-control" placeholder="Enter your DOB" />
+            <div class="form-floating m-2">
+                <input asp-for="Input.DOB" class="form-control" placeholder="Enter your DOB"/>
                 <label asp-for="Input.DOB" class="form-label"></label>
                 <span asp-validation-for="Input.DOB" class="text-danger"></span>
             </div>
 
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="Enter your email" />
+            <div class="form-floating m-2 mb-3">
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="Enter your email"/>
                 <label asp-for="Input.Email" class="form-label">Email</label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Enter your password" />
+            <hr/>
+            <div class="form-floating m-2 mb-1">
+                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Enter your password"/>
                 <label asp-for="Input.Password" class="form-label">Password</label>
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Confirm your password" />
+            <div class="form-floating m-2 mt-1">
+                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Confirm your password"/>
                 <label asp-for="Input.ConfirmPassword" class="form-label">Confirm Password</label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+            <div class="text-center">
+                <button id="registerSubmit" type="submit" class="w-50 btn btn-lg btn-primary m-2">Register</button>
+            </div>
         </form>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to register.</h3>
-            <hr />
+        <section class="text-center mt-5">
+            <h3>Or</h3>
+            <h4>Use another service to register.</h4>
+            <hr/>
             @{
                 if ((Model.ExternalLogins?.Count ?? 0) == 0)
                 {
                     <div>
                         <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
+                            There are no external authentication services configured. See this
+                            <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
+                                about setting up this ASP.NET application to support logging in via external services</a>.
                         </p>
                     </div>
                 }
@@ -70,7 +74,7 @@
                             <p>
                                 @foreach (var provider in Model.ExternalLogins!)
                                 {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                    <button type="submit" class="w-25 btn btn-lg btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
                                 }
                             </p>
                         </div>
@@ -79,6 +83,9 @@
             }
         </section>
     </div>
+    @*<div class="col-md-6 col-md-offset-2">
+        
+    </div>*@
 </div>
 
 @section Scripts {

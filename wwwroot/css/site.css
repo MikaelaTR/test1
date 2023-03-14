@@ -384,7 +384,7 @@ table tr:nth-child(even) {
 	width: 65%;
 	flex-flow: row nowrap;
 	margin-top: 10px;
-	margin-bottom: 10px;
+	/* margin-bottom: 10px; */
 	position: fixed;
 	bottom: 0;
 }
