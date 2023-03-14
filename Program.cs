@@ -60,10 +60,11 @@ using (var scope = app.Services.CreateScope())
         var context = services.GetRequiredService<ApplicationDbContext>();
         var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-        
+
         await DbInitializer.SeedRolesAsync(userManager, roleManager);
         await DbInitializer.SeedSuperAdminAsync(userManager, roleManager);
         await DbInitializer.SeedStudentsAsync(userManager, roleManager);
+        await DbInitializer.SeedServersAsync(context);
         DbInitializer.Initialize(context);
     }
     catch (Exception ex)
