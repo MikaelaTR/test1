@@ -11,7 +11,7 @@
 <form method="post" asp-controller="FileSharing" asp-action="UploadFile" enctype="multipart/form-data">
     <p>Upload file</p>
     <input type="hidden" asp-for="ServerName" value="@ViewBag.ContainerName" />
-    <input class="form-control" type="file" asp-for="TempFile" />
+    <input class="form-control" type="file" asp-for="TempFile" required/>
     <input class="btn btn-success" type="submit" value="Upload" />
 </form>
 
