@@ -62,7 +62,10 @@ header {
 }
 
 a {
-	color: var(--primary);
+	color: var(--color1);
+}
+a:hover {
+	color: var(--bs-info);
 }
 
 body {
@@ -165,18 +168,19 @@ body {
 
 /*SIDE NAV*/
 .sidenav {
-	margin: auto;
-	height: 100vh; /* Full-height: remove this if you want "auto" height */
-	width: 45pt; /* Set the width of the sidebar */
-	display: table-column;
 	position: fixed; /* Fixed Sidebar (stay in place on scroll) */
 	z-index: 1; /* Stay on top */
 	top: 0; /* Stay at the top */
-	left: 0;
-	background-color: var(--color6);
+	left: 0; /*Stay at the left*/
 	overflow-x: hidden; /* Disable horizontal scroll */
+
+	background-color: var(--color6);
+	margin: auto;
+	height: 100vh; /* Full screen height*/
+	width: 45pt;
+	display: table-column; /*Display in column style*/
+
 	padding-top: 10pt;
-	/*border-right: 1px solid var(--color1);*/
 }
 
 .icon_button {
@@ -298,6 +302,7 @@ table tr:nth-child(even) {
 	margin: 10px;
 	width: 30vh;
 	height: 25vh;
+	background-color: var(--color4);
 }
 .card-header {
 	height: 100%;
