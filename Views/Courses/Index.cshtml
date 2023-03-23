@@ -7,7 +7,7 @@
 
 <div class="header">
     <i class="fa fa-book"></i>
-    <h1 class="d-inline-flex">Course List</h1>
+    <h2 class="d-inline-flex">Course List</h2>
 </div>
 
 <p>
@@ -53,9 +53,9 @@
                 @Html.DisplayFor(modelItem => item.Credits)
             </td>
             <td>                
-                <a asp-action="Details" asp-route-id="@item.ID" class="btn btn-secondary">Details</a> |
-                <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-secondary">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-secondary">Delete</a>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary">Details</a> |
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
             </td>
         </tr>
 }

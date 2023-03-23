@@ -17,7 +17,7 @@ namespace AdvancedProjectMVC.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.3")
+                .HasAnnotation("ProductVersion", "7.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -228,11 +228,11 @@ namespace AdvancedProjectMVC.Migrations
 
             modelBuilder.Entity("AdvancedProjectMVC.Models.Course", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CourseCode")
                         .IsRequired()
@@ -251,7 +251,7 @@ namespace AdvancedProjectMVC.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Courses");
                 });
@@ -388,13 +388,13 @@ namespace AdvancedProjectMVC.Migrations
 
             modelBuilder.Entity("CourseSchoolProgram", b =>
                 {
-                    b.Property<int>("CoursesID")
+                    b.Property<int>("CoursesId")
                         .HasColumnType("int");
 
                     b.Property<int>("ProgramsId")
                         .HasColumnType("int");
 
-                    b.HasKey("CoursesID", "ProgramsId");
+                    b.HasKey("CoursesId", "ProgramsId");
 
                     b.HasIndex("ProgramsId");
 
@@ -650,7 +650,7 @@ namespace AdvancedProjectMVC.Migrations
                 {
                     b.HasOne("AdvancedProjectMVC.Models.Course", null)
                         .WithMany()
-                        .HasForeignKey("CoursesID")
+                        .HasForeignKey("CoursesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
