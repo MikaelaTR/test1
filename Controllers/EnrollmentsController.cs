@@ -8,30 +8,35 @@ using Microsoft.EntityFrameworkCore;
 using AdvancedProjectMVC.Data;
 using AdvancedProjectMVC.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using NuGet.ProjectModel;
 
 namespace AdvancedProjectMVC.Controllers
 {
-    [Authorize(Roles = "Admin,Student")]
+    //[Authorize(Roles = "Admin,Student")]
     public class EnrollmentsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public EnrollmentsController(ApplicationDbContext context)
+        public EnrollmentsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Enrollments
         public async Task<IActionResult> Index()
         {
-            var user = User.Identity?.Name;
+            var username = User.Identity?.Name;
+            var user = await _userManager.GetUserAsync(HttpContext.User);
 
             // If not null
-            if (user != null)
+            if (username != null)
             {
                 // Return only the list of events that the user has access to
                 return _context.Enrollments != null ?
-                              View(await _context.Enrollments.Where(m => m.ApplicationUserId == user).ToListAsync()) :
+                              View(await _context.Enrollments.Where(m => m.ApplicationUser == user).Include(m => m.Course).ToListAsync()) :
                               Problem("Entity set 'ApplicationDbContext.Enrollments'  is null.");
             }
 
@@ -60,14 +65,21 @@ namespace AdvancedProjectMVC.Controllers
         // GET: Enrollments/Create
         public IActionResult Create()
         {
-            //Add dropdown list.
-            List<SelectListItem> courses = new List<SelectListItem>();
-            foreach(var course in _context.Courses.ToList())
-            {
-                courses.Add(new SelectListItem { Text = course.Title, Value = course.ID.ToString() });
-            }
-            ViewBag.Courses = courses;
-            
+            /*            //Add dropdown list.
+                         List<SelectListItem> courses = new List<SelectListItem>();
+                         foreach (var course in _context.Courses.ToList())
+                         {
+                             courses.Add(new SelectListItem { Text = course.Title, Value = course.Id.ToString() });
+                         }
+            *//*           List<Course> courses = _context.Courses.ToList();*//*
+                         ViewData["Courses"] = new SelectList(courses);
+
+                        *//*            var courses = _context.Courses.ToList();
+                                    ViewBag.Courses = courses;*/
+
+            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["CourseId"] = new SelectList(_context.Courses, "Id", "Title");
+
             return View();
         }
 
@@ -76,15 +88,24 @@ namespace AdvancedProjectMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Grade")] Enrollment Enrollment)
+        public async Task<IActionResult> Create([Bind("Id,Grade,CourseId,AppliationUserId,Course,ApplicationUser")] Enrollment Enrollment)
         {
-            if (ModelState.IsValid)
-            {
+            var enrollment = Enrollment;
+            var user = await _userManager.GetUserAsync(User);
+            var course = await _context.Courses.FindAsync(Enrollment.CourseId);
+
+            Enrollment.Course = course;
+            Enrollment.ApplicationUser = user;
+            Enrollment.ApplicationUserId = user.Id;
+
+
+/*            if (ModelState.IsValid)
+            {*/
                 _context.Add(Enrollment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
-            return View(Enrollment);
+/*            }
+            return View(Enrollment);*/
         }
 
         // GET: Enrollments/Edit/5
@@ -108,7 +129,7 @@ namespace AdvancedProjectMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,EnrollmentCode,Title,Description,Location,Credits")] Enrollment Enrollment)
+        public async Task<IActionResult> Edit(int id, [Bind("Id")] Enrollment Enrollment)
         {
             if (id != Enrollment.Id)
             {
