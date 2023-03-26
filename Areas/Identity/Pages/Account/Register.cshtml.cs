@@ -93,6 +93,7 @@ namespace AdvancedProjectMVC.Areas.Identity.Pages.Account
 
             [Required]
             [EmailAddress]
+            [RegularExpression(@"^[a-zA-Z0-9._%+-]+(@lakeheadu\.ca)$", ErrorMessage = "Only Lakehead accounts can register.")]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
