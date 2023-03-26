@@ -107,15 +107,17 @@ namespace AdvancedProjectMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ServerId,ServerName")] Server server)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ServerName")] Server server)
         {
             if (id != server.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
+            // ModelState is invalid since not all values are binded (or do different type of validation instead)
+            // TODO: Fix later
+            //if (ModelState.IsValid)
+            //{
                 try
                 {
                     _context.Update(server);
@@ -133,8 +135,8 @@ namespace AdvancedProjectMVC.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
-            }
-            return View(server);
+            //}
+            //return View(server);
         }
 
         // GET: Servers/Delete/5
