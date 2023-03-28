@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AdvancedProjectMVC.Data;
 using AdvancedProjectMVC.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AdvancedProjectMVC.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CoursesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -36,7 +38,7 @@ namespace AdvancedProjectMVC.Controllers
             }
 
             var course = await _context.Courses
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (course == null)
             {
                 return NotFound();
@@ -56,7 +58,7 @@ namespace AdvancedProjectMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,CourseCode,Title,Description,Location,Credits")] Course course)
+        public async Task<IActionResult> Create([Bind("Id,CourseCode,Title,Description,Location,Credits")] Course course)
         {
             if (ModelState.IsValid)
             {
@@ -92,9 +94,9 @@ namespace AdvancedProjectMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,CourseCode,Title,Description,Location,Credits")] Course course)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CourseCode,Title,Description,Location,Credits")] Course course)
         {
-            if (id != course.ID)
+            if (id != course.Id)
             {
                 return NotFound();
             }
@@ -108,7 +110,7 @@ namespace AdvancedProjectMVC.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CourseExists(course.ID))
+                    if (!CourseExists(course.Id))
                     {
                         return NotFound();
                     }
@@ -131,7 +133,7 @@ namespace AdvancedProjectMVC.Controllers
             }
 
             var course = await _context.Courses
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (course == null)
             {
                 return NotFound();
@@ -161,7 +163,7 @@ namespace AdvancedProjectMVC.Controllers
 
         private bool CourseExists(int id)
         {
-          return (_context.Courses?.Any(e => e.ID == id)).GetValueOrDefault();
+          return (_context.Courses?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

@@ -50,7 +50,6 @@ namespace AdvancedProjectMVC.Controllers
         // GET: Channels/Create
         public IActionResult Create()
         {
-            ViewData["ServerId"] = new SelectList(_context.Servers, "ServerId", "ServerId");
             return View();
         }
 
@@ -61,14 +60,12 @@ namespace AdvancedProjectMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,ChannelName,ServerId")] Channel channel)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(channel);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ServerId"] = new SelectList(_context.Servers, "ServerId", "ServerId", channel.ServerId);
-            return View(channel);
+
+            _context.Add(channel);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+            
+            //return View(channel);
         }
 
         // GET: Channels/Edit/5

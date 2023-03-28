@@ -7,12 +7,15 @@
         @if (SignInManager.IsSignedIn(User)) //If logged in
         {
             <a class="btn icon_button" asp-controller="Servers" asp-action="Index" title="Chat Servers"><i class="fa fa-comments"></i></a>
-            <a class="btn icon_button" asp-controller="Courses" asp-action="Index" title="Courses"><i class="fa fa-book"></i></a>
-            @*<a class="btn icon_button" asp-controller="Students" asp-action="Index"  title="Students"><i class="fa fa-users"></i></a>*@
             <a class="btn icon_button" asp-controller="Enrollments" asp-action="Index" title="Enrollments"><i class="fa fa-university"></i></a>
-            <a class="btn icon_button" asp-controller="TeachingAssignments" asp-action="Index" title="Teaching Assignments"><i class="fa fa-graduation-cap"></i></a>
+            @if (User.IsInRole("Admin"))
+            {
+                <a class="btn icon_button" asp-controller="Courses" asp-action="Index" title="Courses"><i class="fa fa-book"></i></a>
+            }
+           /*<a class="btn icon_button" asp-controller="Students" asp-action="Index"  title="Students"><i class="fa fa-users"></i></a>
+            <a class="btn icon_button" asp-controller="TeachingAssignments" asp-action="Index" title="Teaching Assignments"><i class="fa fa-graduation-cap"></i></a>*/
             <a class="btn icon_button" asp-area="Identity" asp-page="/Account/Manage/Index" title="Profile"><i class="fa fa-user"></i></a>
             <a class="btn icon_button" asp-area="Identity" asp-page="/Account/Logout" title="Log Out" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"><i class="fa fa-sign-out"></i></a>
         }
-    <button class="btn icon_button" id="dark-mode-toggle" title="Toggle Dark Mode"><i class="fa fa-moon-o"></i></button>
+        <button class="btn icon_button" id="dark-mode-toggle" title="Toggle Dark Mode"><i class="fa fa-moon-o"></i></button>
     </div>
