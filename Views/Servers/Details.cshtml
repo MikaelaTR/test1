@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container flex-parent">
+<div class="flex-container">
     <div class="toolbar flex-child">
         <div class="toolbar_header">
             <h3>Tool Bar</h3>
@@ -30,6 +30,14 @@
                 }
                 <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
             </div>
+        </div>
+    </div>
+    
+    <div class="toolbar flex-child">
+        <div class="toolbar_header">
+            <p class="toolbar_header">Members</p>
+        </div>
+        <div class="toolbar_buttons">
         </div>
     </div>
 </div>
