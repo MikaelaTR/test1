@@ -7,48 +7,79 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AdvancedProjectMVC.Data;
 using AdvancedProjectMVC.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using NuGet.ProjectModel;
 
 namespace AdvancedProjectMVC.Controllers
 {
+    //[Authorize(Roles = "Admin,Student")]
     public class EnrollmentsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public EnrollmentsController(ApplicationDbContext context)
+        public EnrollmentsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Enrollments
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Enrollment.Include(e => e.Course);
-            return View(await applicationDbContext.ToListAsync());
+            var username = User.Identity?.Name;
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+
+            // If not null
+            if (username != null)
+            {
+                // Return only the list of events that the user has access to
+                return _context.Enrollments != null ?
+                              View(await _context.Enrollments.Where(m => m.ApplicationUser == user).Include(m => m.Course).ToListAsync()) :
+                              Problem("Entity set 'ApplicationDbContext.Enrollments'  is null.");
+            }
+
+            // Go to login page otherwise
+            return View("Login");
         }
 
         // GET: Enrollments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Enrollment == null)
+            if (id == null || _context.Enrollments == null)
             {
                 return NotFound();
             }
 
-            var enrollment = await _context.Enrollment
-                .Include(e => e.Course)
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (enrollment == null)
+            var Enrollment = await _context.Enrollments
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (Enrollment == null)
             {
                 return NotFound();
             }
 
-            return View(enrollment);
+            return View(Enrollment);
         }
 
         // GET: Enrollments/Create
         public IActionResult Create()
         {
-            ViewData["CourseID"] = new SelectList(_context.Course, "ID", "ID");
+            /*            //Add dropdown list.
+                         List<SelectListItem> courses = new List<SelectListItem>();
+                         foreach (var course in _context.Courses.ToList())
+                         {
+                             courses.Add(new SelectListItem { Text = course.Title, Value = course.Id.ToString() });
+                         }
+            *//*           List<Course> courses = _context.Courses.ToList();*//*
+                         ViewData["Courses"] = new SelectList(courses);
+
+                        *//*            var courses = _context.Courses.ToList();
+                                    ViewBag.Courses = courses;*/
+
+            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["CourseId"] = new SelectList(_context.Courses, "Id", "Title");
+
             return View();
         }
 
@@ -57,33 +88,40 @@ namespace AdvancedProjectMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,CourseID,Grade")] Enrollment enrollment)
+        public async Task<IActionResult> Create([Bind("Id,Grade,CourseId,AppliationUserId,Course,ApplicationUser")] Enrollment Enrollment)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(enrollment);
+            var enrollment = Enrollment;
+            var user = await _userManager.GetUserAsync(User);
+            var course = await _context.Courses.FindAsync(Enrollment.CourseId);
+
+            Enrollment.Course = course;
+            Enrollment.ApplicationUser = user;
+            Enrollment.ApplicationUserId = user.Id;
+
+
+/*            if (ModelState.IsValid)
+            {*/
+                _context.Add(Enrollment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
-            ViewData["CourseID"] = new SelectList(_context.Course, "ID", "ID", enrollment.CourseID);
-            return View(enrollment);
+/*            }
+            return View(Enrollment);*/
         }
 
         // GET: Enrollments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Enrollment == null)
+            if (id == null || _context.Enrollments == null)
             {
                 return NotFound();
             }
 
-            var enrollment = await _context.Enrollment.FindAsync(id);
-            if (enrollment == null)
+            var Enrollment = await _context.Enrollments.FindAsync(id);
+            if (Enrollment == null)
             {
                 return NotFound();
             }
-            ViewData["CourseID"] = new SelectList(_context.Course, "ID", "ID", enrollment.CourseID);
-            return View(enrollment);
+            return View(Enrollment);
         }
 
         // POST: Enrollments/Edit/5
@@ -91,9 +129,9 @@ namespace AdvancedProjectMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,CourseID,Grade")] Enrollment enrollment)
+        public async Task<IActionResult> Edit(int id, [Bind("Id")] Enrollment Enrollment)
         {
-            if (id != enrollment.ID)
+            if (id != Enrollment.Id)
             {
                 return NotFound();
             }
@@ -102,12 +140,12 @@ namespace AdvancedProjectMVC.Controllers
             {
                 try
                 {
-                    _context.Update(enrollment);
+                    _context.Update(Enrollment);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EnrollmentExists(enrollment.ID))
+                    if (!EnrollmentExists(Enrollment.Id))
                     {
                         return NotFound();
                     }
@@ -118,27 +156,25 @@ namespace AdvancedProjectMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CourseID"] = new SelectList(_context.Course, "ID", "ID", enrollment.CourseID);
-            return View(enrollment);
+            return View(Enrollment);
         }
 
         // GET: Enrollments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Enrollment == null)
+            if (id == null || _context.Enrollments == null)
             {
                 return NotFound();
             }
 
-            var enrollment = await _context.Enrollment
-                .Include(e => e.Course)
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (enrollment == null)
+            var Enrollment = await _context.Enrollments
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (Enrollment == null)
             {
                 return NotFound();
             }
 
-            return View(enrollment);
+            return View(Enrollment);
         }
 
         // POST: Enrollments/Delete/5
@@ -146,23 +182,23 @@ namespace AdvancedProjectMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Enrollment == null)
+            if (_context.Enrollments == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Enrollment'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Enrollments'  is null.");
             }
-            var enrollment = await _context.Enrollment.FindAsync(id);
-            if (enrollment != null)
+            var Enrollment = await _context.Enrollments.FindAsync(id);
+            if (Enrollment != null)
             {
-                _context.Enrollment.Remove(enrollment);
+                _context.Enrollments.Remove(Enrollment);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool EnrollmentExists(int id)
         {
-          return (_context.Enrollment?.Any(e => e.ID == id)).GetValueOrDefault();
+            return (_context.Enrollments?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

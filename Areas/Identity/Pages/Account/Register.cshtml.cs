@@ -93,6 +93,7 @@ namespace AdvancedProjectMVC.Areas.Identity.Pages.Account
 
             [Required]
             [EmailAddress]
+            [RegularExpression(@"^[a-zA-Z0-9._%+-]+(@lakeheadu\.ca)$", ErrorMessage = "Only Lakehead accounts can register.")]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
@@ -145,6 +146,8 @@ namespace AdvancedProjectMVC.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    await _userManager.AddToRoleAsync(user, "Student");
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

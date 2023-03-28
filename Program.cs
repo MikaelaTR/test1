@@ -2,8 +2,14 @@ using AdvancedProjectMVC.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using AdvancedProjectMVC.Models;
+using AdvancedProjectMVC.Hubs;
+using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.SignalR;
+using AdvancedProjectMVC.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var blobServiceClient = new BlobServiceClient(builder.Configuration.GetConnectionString("AzureBlobConnection"));
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -18,16 +24,32 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.S
     .AddDefaultUI()
     .AddDefaultTokenProviders();
 
+
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddAuthorization(options =>
+/*builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly", policy => policy.RequireClaim("AdminNumber"));
     options.AddPolicy("InstructorOnly", policy => policy.RequireClaim("InstructorNumber"));
     options.AddPolicy("StudentOnly", policy => policy.RequireClaim("StudentNumber"));
-});
+});*/
+
+builder.Services.AddAuthentication()
+    .AddGoogle(googleOptions =>
+    {
+        googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? string.Empty;
+        googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? string.Empty;
+    });
 
 builder.Services.AddRazorPages();
+
+builder.Services.AddTransient<OptionsService>();
+
+builder.Services.AddSignalR(hubOptions =>
+{
+    hubOptions.EnableDetailedErrors = true;
+    hubOptions.KeepAliveInterval = TimeSpan.FromMinutes(1);
+});
 
 var app = builder.Build();
 
@@ -35,16 +57,24 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+    var loggerFactory = services.GetRequiredService<ILoggerFactory>();
 
     try
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+        await DbInitializer.SeedRolesAsync(userManager, roleManager);
+        await DbInitializer.SeedSuperAdminAsync(userManager, roleManager);
+        await DbInitializer.SeedStudentsAsync(userManager, roleManager);
+        await DbInitializer.SeedServersAsync(context);
         DbInitializer.Initialize(context);
     }
     catch (Exception ex)
     {
-        //var logger = services.GetRequiredService<ILogger>();
-        //logger.LogError(ex, "An error occurred when creating the DB.");
+        var logger = loggerFactory.CreateLogger<Program>();
+        logger.LogError(ex, "An error occurred seeding the DB.");
     }
 }
 
@@ -57,7 +87,7 @@ else
 {
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    //app.UseHsts();
 }
 
 app.UseHttpsRedirection();
@@ -74,5 +104,7 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapRazorPages();
+
+app.MapHub<ChatHub>("/chathub");
 
 app.Run();

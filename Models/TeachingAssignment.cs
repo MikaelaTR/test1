@@ -2,10 +2,11 @@
 {
     public class TeachingAssignment
     {
-        public int ID { get; set; }
-        public int CourseID { get; set; }
+        public int Id { get; set; }
+        public int CourseId { get; set; }
+        public string ApplicationUserId { get; set; }
 
         public Course Course { get; set; }
-        public Instructor Instructor { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
     }
 }

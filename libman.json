@@ -1,0 +1,19 @@
+{
+  "version": "1.0",
+  "defaultProvider": "unpkg",
+  "libraries": [
+    {
+      "provider": "cdnjs",
+      "library": "fullcalendar@6.0.3",
+      "destination": "wwwroot/lib/fullcalendar/"
+    },
+    {
+      "library": "@microsoft/signalr@latest",
+      "destination": "wwwroot/js/signalr/",
+      "files": [
+        "dist/browser/signalr.js.map",
+        "dist/browser/signalr.min.js.map"
+      ]
+    }
+  ]
+}

@@ -1,9 +1,33 @@
-x_ColorPallette {
-	color: #E6FAFC;
-	color: #9CFC97;
-	color: #6BA368;
-	color: #515B3A;
-	color: #353D2F;
+:root, :root.light {
+	--color1: #000000; /*Black*/
+	--color2: #EAEAEA; /*Off White*/
+	--color3: #FFFFFF; /*White*/
+	--color4: #269FBC; /*Light Blue*/
+	--color5: #1A6076; /*Light Blue/darker than 4*/
+	--color6: #0B3C5D; /*Dark Blue/Green*/
+	--white: #FFFFFF;
+	--bg-color: #FFFFFF; /*White*/
+	--primary: #1CB5E0;
+	--primary-hover: #137799;
+	--secondary: #063156;
+	--secondary-hover: #00427A;
+	--danger: #F44336;
+}
+:root,
+:root.dark {
+	--color1: #F5F5F5; /*White*/
+	--color2: #269FBC; /*Light Blue*/
+	--color3: #FFFFFF; /*Light Green*/
+	--color4: #1E6E87; /*Light Blue/darker than 2*/
+	--color5: #0B3C5D; /*Dark Blue/Green*/
+	--color6: #0d3575; /*Dark Blue*/
+	--white: #FFFFFF;
+	--bg-color: #0d3575; /*Dark Blue/Green*/
+	--primary: #1CB5E0; /*Cyan*/
+	--primary-hover: #137799; /*Light Blue/darker than 2*/
+	--secondary: #2F9E44; /*Green*/
+	--secondary-hover: #208537; /*Dark Green*/
+	--danger: #F44336; /*Red*/
 }
 
 html {
@@ -12,11 +36,23 @@ html {
 	min-height: 100%;
 }
 
-.main{
-	display: flex;
-	flex-direction: column;
-	flex: 0.75;
-	height: 100vh;
+header {
+	margin: auto;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	text-align: Center;
+	font-size: 20px;
+	color: var(--color3);
+	background-color: var(--color5);
+	border-bottom: 1px solid var(--color1);
+}
+
+.fixed-container {
+	position: fixed;
+}
+
+.main-content {
+	margin-left: 45pt;
 }
 
 @media (min-width: 768px) {
@@ -30,76 +66,391 @@ html {
 }
 
 a {
-	color: white;
+	color: var(--color1);
+}
+a:hover {
+	color: var(--bs-info);
 }
 
 body {
-	margin-bottom: 60px;
-	color: #E6FAFC;
-	background-color: #6BA368;
+	color: var(--color1);
+	background-color: var(--bg-color);
+	font-size: 16px;
+	margin: auto;
+}
+@media screen and (min-width: 320px) {
+	body {
+		font-size: calc(16px + 6 * ((100vw - 320px) / 680));
+	}
+}
+@media screen and (min-width: 1000px) {
+	body {
+		font-size: 22px;
+	}
 }
 
+.flex-parent, .flex-container {
+	display: flex;
+	height: 100vh;
+}
+.flex-child {
+	flex: 1;
+	/*border: 2px solid yellow;*/ /*testing*/
+}
+
+/*Homepage Not Logged In*/
+.login-test {
+	background-color: var(--color2);
+}
+
+.lakehead-logo-div {
+	position: relative;
+	height: 1%; /* This, along with height: 1000% is... not ideal, but works */
+	width: auto;
+}
+
+#lakehead-logo {
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 1000%;
+	width: auto;
+}
+
+.logo-div {
+	position: relative;
+	height: 70%;
+	width: auto;
+	padding-bottom: 0;
+}
+
+#logo {
+	height: 100%;
+	width: auto;
+}
+
+
+/*LOGIN*/
 .login_form {
 	display: flex;
 	justify-content: center;
 }
-
 .login {
 	display: grid;
 	place-items: center;
-	height: 100vh;
-	width: 100%;
+	height: 98vh;
+	/* width: 100%; */
 }
-
-.login > div > img {
-	object-fit: contain;
-	height: 150px;
+.login_title {
+	font-size: 130px;
+	text-shadow: -2px 3px 0 #000,2px 3px 0 #000;
 }
 
 .login_button {
 	width: 350px;
-	background-color: #9CFC97;
+	background-color: var(--primary);
 	color: white;
 	font-weight: 600;
 	font-size: 26px;
 	margin: 2vw;
 	border-radius: 10px;
 }
-
 .login_button:hover {
-	background-color: #515B3A;
+	background-color: var(--primary-hover);
 	color: #c6c9cc;
 }
 
+/*FORM*/
 .form-control {
-	background-color: darkgreen;
+	color: black;
+	background-color: var(--color3);
 }
 .form-label {
-	
+	color: black;
 }
 
+
+/*SIDE NAV*/
 .sidenav {
-	height: 100vh; /* Full-height: remove this if you want "auto" height */
-	width: 3%; /* Set the width of the sidebar */
-	display: table-column;
 	position: fixed; /* Fixed Sidebar (stay in place on scroll) */
 	z-index: 1; /* Stay on top */
 	top: 0; /* Stay at the top */
-	left: 0;
-	background-color: #353D2F;
+	left: 0; /*Stay at the left*/
 	overflow-x: hidden; /* Disable horizontal scroll */
-	padding-top: 10px;
+
+	background-color: var(--color6);
+	margin: auto;
+	height: 100vh; /* Full screen height*/
+	width: 45pt;
+	display: table-column; /*Display in column style*/
+
+	padding-top: 10pt;
 }
 
 .icon_button {
-	background-color: #9CFC97;/* Blue background */
+	background-color: var(--color4); /* Blue background */
 	border: none; /* Remove borders */
 	color: white; /* White text */
+	width: 85%;
 	margin: 5%;
-	padding: 12px 16px; /* Some padding */
-	font-size: 16px; /* Set a font size */
+	padding: 15%; /* Some padding */
+	font-size: 22px; /* Set a font size */
 	cursor: pointer; /* Mouse pointer on hover */
 }
 .icon_button:hover {
-	background-color: #6BA368;
+	background-color: var(--color5);
+}
+
+#dark-mode-toggle {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+
+/*NAVs*/
+nav {
+
+}
+.nav-link{
+	color: var(--color1);
+}
+.nav-link:hover {
+	color: var(--color2);
+}
+/*If active, highlight with color*/
+.nav-pills .pill-1 .nav-link {
+	background-color: var(--primary);
+} /*If not active, make transparent*/
+.nav-pills .pill-1 .nav-link:not(.active) {
+	background-color: transparent;
+}
+
+
+/*BUTTONS*/
+.btn {
+	margin: 2pt;
+}
+.btn-primary {
+	background-color: var(--primary);
+	border: none;
+}
+.btn-primary:hover {
+	background-color: var(--primary-hover);
+}
+
+.btn-secondary {
+	background-color: var(--secondary);
+}
+.btn-secondary:hover {
+	background-color: var(--secondary-hover);
+}
+
+.btn-danger {
+	background-color: var(--danger);
+}
+
+@media screen and (min-width: 320px) {
+	.btn { font-size: calc(14px + 6 * ((100vw - 320px) / 680)); }
+}
+@media screen and (min-width: 1000px) {
+	.btn { font-size: 18px; }
+}
+
+
+/*TABLES*/
+table tr {
+	color: var(--color3);
+}
+table tr:nth-child(odd) {
+	background-color: var(--color4);
+}
+table tr:nth-child(even) {
+	background-color: var(--color5);
+	
+}
+
+/*Toolbar*/
+.toolbar {
+	color: var(--color3);
+	background-color: var(--color5);
+	text-align: center;
+	/*border-right: 1px solid var(--color1);*/
+	display: flex;
+	flex-flow: column;
+	flex: 0.15;
+	flex-shrink: 1;
+	/* margin: auto; */
+	padding: 10pt;
+	padding-top: 10pt;
+	/*height: 100vh;*/ /* Full-height: remove this if you want "auto" height */
+	width: 10px; /* Set the width of the sidebar */
+	/*position: fixed;*/ /* Fixed Sidebar (stay in place on scroll) */
+	/* top: 0; /* Stay at the top !1! */
+	min-width: 100px;
+	/*overflow-x: hidden; /* Disable horizontal scroll !1!*/
+}
+.toolbar_header {
+	top: 0;
+	font-size: 100%;
+	overflow: hidden;
+}
+.toolbar_buttons {
+}
+.toolbar_button {
+	width: 100%;
+}
+
+
+
+
+
+
+
+/*CARDS*/
+.card-container {
+	margin: auto;
+	margin-left: 5%;
+	margin-right: 0%;
+	/* text-align: center; */
+}
+.card {
+	display: inline-grid;
+	margin: 5px 10px;
+	margin-right: 0px;
+	margin-left: 0px;
+	width: 20%;
+	min-width: 20vw;
+	height: 15vw;
+	min-height: 20vw;
+	max-height: 20vw;
+	/*max-width: 30vw;
+	max-height: 25vh;*/
+	/*min-width: 15vw;
+	min-height: 10vh;*/
+	background-color: var(--color4);
+}
+.card-header {
+	height: 100%;
+	text-align: center;
+	font-size: 42px;
+	bottom: 0;
+	background-color: var(--color2);
+}
+.card-title {
+	color: var(--color1);
+	top: 0;
+	bottom: 0;
+	text-decoration: none;
+}
+.card-title:hover {
+	text-decoration: underline;
+}
+
+.card-body {
+	height: 50%;
+}
+
+
+
+
+
+
+
+/*CHAT VIEW*/
+.channel-header {
+	border-bottom: 1px solid var(--color1);
+	display: flex;
+	flex-flow: row;
+	padding: 10pt;
+	padding-top: 10pt;
+	position: relative;
+}
+
+.chat-area {
+	color: var(--color3);
+	/* background-color: var(--color6); */
+	display: flex;
+	flex-flow: column;
+	flex: 0 1 auto;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	overflow-x: hidden;
+	min-height: 75vh;
+	max-height: 75vh;
+	border-radius: 5px;
+}
+
+.message-list {
+	display: flex;
+	flex-flow: column;
+	flex: 0 1 auto;
+	list-style-type: none;
+	margin: 0;
+	padding: 5px;
+	width: 100%;
+}
+
+.chat-message--user {
+	background-color: var(--color5);
+}
+
+.chat-message {
+	color: var(--color3);
+	display: flex;
+	word-break: break-word;
+	overflow-wrap: break-word; /*Wrap text*/
+	inline-size: 100%;
+	/*flex-flow: row;
+	flex: 0 0 auto;
+	width: 100%;
+	*/
+	list-style-type: none;
+	border-radius: 5px;
+	padding: 2px;
+	padding-left: 1%;
+	margin: 2px;
+}
+
+.chat-message:hover {
+	background-color: var(--primary);
+}
+
+
+.chatbox {
+	/*background-color: var(--color6);*/
+	display: flex;
+	width: 60vw;
+	min-width: 0vw;
+	margin: 10px;
+	margin-right: 45pt;
+	flex-flow: row nowrap;
+	margin-top: 10px;
+	/* margin-bottom: 10px; */
+	position: fixed;
+	bottom: 0;
+}
+
+.chatbox-textarea {
+	display: flex;
+	flex: 0.5;
+	color: var(--color3);
+	background-color: var(--color5);
+	overflow: auto;
+	resize: none;
+	min-height: 50px;
+	max-height: 250px;
+	line-height: 25px;
+	padding: 1%;
+	border-radius: 5px;
+}
+
+.chatbox-sendbutton {
+	display: flex;
+	flex: 0.5;
+	color: var(--color3);
+	background-color: var(--color5);
+	height: 50px;
+	align-self: end;
+	text-align: center;
 }

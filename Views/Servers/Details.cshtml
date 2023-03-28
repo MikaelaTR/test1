@@ -1,0 +1,43 @@
+﻿@model AdvancedProjectMVC.Models.Server
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="flex-container">
+    <div class="toolbar flex-child">
+        <div class="toolbar_header">
+            <h3>Tool Bar</h3>
+        </div>
+        <div class="toolbar_buttons">
+            <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="FileSharing" asp-action="Index" asp-route-serverName="@Model.ServerName">File Sharing</a>
+            <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="Calendar" asp-action="Index">Calendar</a>
+        </div>
+    </div>
+    
+    <div class="flex-child">
+        <header>
+            <h1>@Html.DisplayFor(model => model.ServerName)</h1>
+        </header>
+        <div class="container">
+            <a asp-action="Index" title="Back to server list"><i class="btn btn-secondary btn-sm border-0 fa fa-long-arrow-left"></i></a>
+            <h4 class="text-center">Welcome to @Html.DisplayFor(model => model.ServerName)</h4>
+            <div>
+                @foreach (var item in Model.Channels)
+                {
+                    <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="Channels" asp-action="Details" asp-route-id="@item.Id">@item.ChannelName</a>
+                }
+                <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="toolbar flex-child">
+        <div class="toolbar_header">
+            <p class="toolbar_header">Members</p>
+        </div>
+        <div class="toolbar_buttons">
+        </div>
+    </div>
+</div>

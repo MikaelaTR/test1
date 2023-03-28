@@ -1,0 +1,131 @@
+﻿@model IEnumerable<AdvancedProjectMVC.Models.ChatMessage>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<body>
+    <h1>Chat</h1>
+
+@*    <p>
+        <a asp-action="Create">Create New</a>
+    </p>*@
+    <table class="table">
+ @*       <thead>
+            <tr>
+                <th>
+    @Html.DisplayNameFor(model => model.ApplicationUserId)
+                </th>
+                <th>
+    @Html.DisplayNameFor(model => model.Content)
+                </th>
+                <th>
+    @Html.DisplayNameFor(model => model.DatePosted)
+                </th>
+                <th></th>
+            </tr>
+        </thead>*@
+        <tbody>
+    @foreach (var item in Model)
+    {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DatePosted)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Content)
+                    </td>
+
+                    <td>
+@*                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
+                    </td>
+                </tr>
+    }
+        </tbody>
+    </table>
+
+    <div class="container chat-area">
+        <div id="messageArea" class="row">
+            <div><p>Joined as: <b id="username">@User.Identity?.Name</b></p></div>
+            <hr/>
+            <div class="row">
+                <div class="col-6 message-list-container">
+                    <ul id="messageList" class="message-list"></ul>
+                </div>
+            </div>
+            <hr/>
+        </div>
+        <div class="col-6 row chatbox">
+            <textarea type="text" id="message" autocomplete="off" onkeypress="enterKeySendMessage(event)" class="chatbox-textarea"></textarea>
+            <input type="button" id="sendButton" value="Send" onclick="sendMessage(event)" class="chatbox-sendbutton"/>
+        </div>
+    </div>
+</body>
+
+<footer>
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+</footer>
+
+<script>
+    var connection = new signalR.HubConnectionBuilder().withUrl("/chathub").build();
+    var username = document.getElementById("username").innerHTML;
+
+    //Disable send button until connection is established
+    document.getElementById("sendButton").disabled = true;
+    
+    window.scrollTo(0, document.body.scrollHeight); //Scroll to bottom on load
+    window.scrollTo(0, document.getElementById("messagearea").scrollHeight); //Scroll to bottom on load
+    window.scrollTo(0, document.getElementById("messageList").scrollHeight); //Scroll to bottom on load
+    var objDiv = document.getElementById("messageArea");
+    objDiv.scrollTop = objDiv.scrollHeight;
+
+    connection.on("ReceiveMessage", function (user, message) {
+        console.log("hey! Listen!");
+        var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/</g, "&gt;");
+        var encodedMsg = user + " says: " + msg;
+        var li = document.createElement("li")
+        li.textContent = encodedMsg;
+        li.classList.add("chat-message");
+        document.getElementById("messageList").appendChild(li);
+        console.log("Over here!");
+        window.scrollTo(0, document.body.scrollHeight); //Scroll to bottom of page when new message received
+    });
+
+    connection.start().then(function() {
+        document.getElementById("sendButton").disabled = false;
+    }).catch(function(err) {
+        return console.error(err.toString());
+    });
+
+    function sendMessage(e){
+        var message = document.getElementById("message").value;
+        if(message && message !== "\n"){ //Don't send empty message
+            connection.invoke("SendMessage", username, message).then(function() {
+                document.getElementById("message").value = "";
+            }).catch(function(err) {
+                document.getElementById("message").value = "";
+                return console.error(err.toString());
+            });
+            event.preventDefault();
+        }
+    }
+    function enterKeySendMessage(e){ //Send message if enter key hit, and not holding shift
+        if (e.code === "Enter" && !e.shiftKey) {
+            sendMessage(e);
+        }
+    }
+    
+    //Resizes the text area to fit content
+    const textArea = document.getElementById("message");
+    textArea.style.cssText = `height: ${textArea.scrollHeight}px; overflow-y hidden`;
+    textArea.addEventListener("input", function(){
+        this.style.height = "auto";
+        this.style.height= `${this.scrollHeight}px`;
+    });
+
+</script>
