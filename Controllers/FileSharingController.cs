@@ -1,4 +1,5 @@
-﻿using AdvancedProjectMVC.Models;
+﻿using AdvancedProjectMVC.Data;
+using AdvancedProjectMVC.Models;
 using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
@@ -17,6 +18,11 @@ namespace AdvancedProjectMVC.Controllers
 
         private BlobContainerClient? blobContainerClient;
 
+        private readonly ApplicationDbContext _context;
+        public FileSharingController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
         public async Task<IActionResult> Index(string serverName)
         {
             string formattedName = String.Concat(serverName.Where(c => !Char.IsWhiteSpace(c)));
@@ -33,19 +39,29 @@ namespace AdvancedProjectMVC.Controllers
         {
             await InitializeContainer(containerName);
 
-            List<SharedFile> files = new List<SharedFile>();
+            var applicationDbContext = await _context.SharedFiles.ToListAsync();
             blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
             try
             {                
                 var resultSegment = blobContainerClient.GetBlobsAsync();
                     await foreach (BlobItem blobItem in resultSegment)
                     {
-                        SharedFile file = new SharedFile();
                         var block = blobContainerClient.GetBlockBlobClient(blobItem.Name);
-                        file.FileName = blobItem.Name;
-                        file.DownloadURL = block.Uri.ToString();
+                        //Sometimes the applicationDbContext and the blob container can get desynced (a file exists in blob, but not in the db)
+                        //Usually caused by updating the db, it clears the table but not the blob
+                        //For now this is the best solution I could come up with, if you get a NullReferenceException just continue and it should sort itself out
+                        try
+                        {
+                            applicationDbContext.Find(i => i.FileName == blobItem.Name).DownloadURL = block.Uri.ToString();
+                        } catch (NullReferenceException e)
+                        {
+                            blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
+                            var blobToDelete = blobContainerClient.GetBlobClient(blobItem.Name);
+                            await blobToDelete.DeleteIfExistsAsync();
+                        }
+                        
+                        
                         Console.WriteLine("Blob name: {0}", blobItem.Name);
-                        files.Add(file);
                     }
                     Console.WriteLine();
                 
@@ -57,7 +73,7 @@ namespace AdvancedProjectMVC.Controllers
                 throw;
             }
             blobContainerClient = null;
-            return files;
+            return applicationDbContext;
         }
 
         public async Task InitializeContainer(string containerName)
@@ -119,7 +135,14 @@ namespace AdvancedProjectMVC.Controllers
             BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
             await blobClient.UploadAsync(filePath, true);
             blobContainerClient = null;
-            
+
+            SharedFile file = new SharedFile();
+            file.ApplicationUserID = User.Identity?.Name;
+            file.FileName = fileName;
+
+            _context.Add(file);
+            await _context.SaveChangesAsync();
+
             return RedirectToAction("Index", new {serverName = serverName});
         }
 
@@ -129,13 +152,24 @@ namespace AdvancedProjectMVC.Controllers
         }
 
         [HttpPost("DeleteFile")]
-        public async Task<IActionResult> DeleteFile(string containerName, string fileName)
+        public async Task<IActionResult> DeleteFile(string containerName, string fileName, int id)
         {
             blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
             var blobToDelete = blobContainerClient.GetBlobClient(fileName);
             await blobToDelete.DeleteIfExistsAsync(); 
 
-            
+            if(_context.SharedFiles == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.SharedFiles'  is null.");
+            }
+            var file = await _context.SharedFiles.FindAsync(id);
+            if (file != null)
+            {
+                _context.SharedFiles.Remove(file);
+            }
+
+            await _context.SaveChangesAsync();
+
             return RedirectToAction("Index", new { serverName = containerName});
         }
     }
