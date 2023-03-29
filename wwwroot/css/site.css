@@ -301,12 +301,6 @@ table tr:nth-child(even) {
 	width: 100%;
 }
 
-
-
-
-
-
-
 /*CARDS*/
 .card-container {
 	margin: auto;
@@ -440,6 +434,7 @@ table tr:nth-child(even) {
 	/* margin-bottom: 10px; */
 	/*position: absolute;*/
 	bottom: 0;
+	left:254pt;
 }
 
 .chatbox-textarea {
