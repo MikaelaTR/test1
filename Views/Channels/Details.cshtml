@@ -56,17 +56,18 @@
         </div>
     </div>
 
-    <div class="toolbar flex-child">
-        <div class="toolbar_header">
-            <p class="toolbar_header">Members</p>
+    <div class="col-sm-2 toolbar memberList">
+        @*TODO: Make memberlist css, replace toolbar class*@
+        <div class="memberList_header">
+            <h3>Member List</h3>
         </div>
         <div class="toolbar_buttons">
-            @foreach (var member in Model.Server.ServerMembers)
-                {
-                    <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="ServerMembers" asp-action="Details" asp-route-id="@member.Id">
-                        @member.ApplicationUser.UserName
-                    </a>
-                }
+            @*@foreach (var member in Model.ServerMembers)
+            {
+                <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="ServerMembers" asp-action="Details" asp-route-id="@member.Id">
+                    @member.ApplicationUser.UserName
+                </a>
+            }*@
         </div>
     </div>
 </div>

@@ -426,15 +426,13 @@ table tr:nth-child(even) {
 	display: flex;
 	width: 100%;
 	min-width: 0vw;
-	/*margin: 10px;*/
-	margin: 0;
+	margin: 0; /*10px;*/
 	/* margin-right: 45pt; */
-	flex-flow: row nowrap;
 	/*margin-top: 10px;*/
 	/* margin-bottom: 10px; */
+	flex-flow: row nowrap;
 	/*position: absolute;*/
 	bottom: 0;
-	left:254pt;
 }
 
 .chatbox-textarea {

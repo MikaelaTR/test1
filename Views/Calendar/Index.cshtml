@@ -38,5 +38,14 @@
     }
     );
 </script>
-<div id="calendar" class="flex-shrink-1 flex-grow-1 overflow-hidden"></div>
-<a asp-action="Create">Add New Event</a>
+
+<div class="flex-container">
+    <div class="p-xxl-5 m-xxl-5">@*Spacer*@</div>
+    <div class="flex-child d-flex flex-column text-center">
+        <div id="calendar" class="flex-shrink-1 flex-grow-1 overflow-hidden mx-xxl-5 text-center align-content-center"></div>
+        <div>
+            <a asp-action="Create" class="btn btn-sm btn-primary w-25">Add New Event</a>
+        </div>
+    </div>
+    <div class="p-xxl-5 m-xxl-5">@*Spacer*@</div>
+</div>

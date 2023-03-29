@@ -7,6 +7,7 @@
         @if (SignInManager.IsSignedIn(User)) //If logged in
         {
             <a class="btn icon_button" asp-controller="Servers" asp-action="Index" title="Chat Servers"><i class="fa fa-comments"></i></a>
+            <a class="btn icon_button" asp-controller="Calendar" asp-action="Index" title="Calendar"><i class="fa fa-calendar"></i></a>
             <a class="btn icon_button" asp-controller="Enrollments" asp-action="Index" title="Enrollments"><i class="fa fa-university"></i></a>
             @if (User.IsInRole("Admin"))
             {
