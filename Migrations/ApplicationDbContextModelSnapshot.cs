@@ -362,6 +362,48 @@ namespace AdvancedProjectMVC.Migrations
                     b.ToTable("ServerMembers");
                 });
 
+            modelBuilder.Entity("AdvancedProjectMVC.Models.SharedFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicationUserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ChannelID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ChannelName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DownloadURL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ServerID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ServerName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TempFile")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SharedFiles");
+                });
+
             modelBuilder.Entity("AdvancedProjectMVC.Models.TeachingAssignment", b =>
                 {
                     b.Property<int>("Id")
