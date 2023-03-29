@@ -47,8 +47,12 @@ header {
 	border-bottom: 1px solid var(--color1);
 }
 
+.fixed-container {
+	position: fixed;
+}
+
 .main-content {
-	left: 245pt;
+	margin-left: 45pt;
 }
 
 @media (min-width: 768px) {
@@ -62,7 +66,10 @@ header {
 }
 
 a {
-	color: var(--primary);
+	color: var(--color1);
+}
+a:hover {
+	color: var(--bs-info);
 }
 
 body {
@@ -82,13 +89,13 @@ body {
 	}
 }
 
-.flex-parent {
+.flex-parent, .flex-container {
 	display: flex;
-	/* width: 50%; */
+	height: 100vh;
 }
 .flex-child {
 	flex: 1;
-	margin: auto;
+	/*border: 2px solid yellow;*/ /*testing*/
 }
 
 /*Homepage Not Logged In*/
@@ -165,18 +172,19 @@ body {
 
 /*SIDE NAV*/
 .sidenav {
-	margin: auto;
-	height: 100vh; /* Full-height: remove this if you want "auto" height */
-	width: 45pt; /* Set the width of the sidebar */
-	display: table-column;
 	position: fixed; /* Fixed Sidebar (stay in place on scroll) */
 	z-index: 1; /* Stay on top */
 	top: 0; /* Stay at the top */
-	left: 0;
-	background-color: var(--color6);
+	left: 0; /*Stay at the left*/
 	overflow-x: hidden; /* Disable horizontal scroll */
+
+	background-color: var(--color6);
+	margin: auto;
+	height: 100vh; /* Full screen height*/
+	width: 45pt;
+	display: table-column; /*Display in column style*/
+
 	padding-top: 10pt;
-	/*border-right: 1px solid var(--color1);*/
 }
 
 .icon_button {
@@ -265,23 +273,26 @@ table tr:nth-child(even) {
 .toolbar {
 	color: var(--color3);
 	background-color: var(--color5);
+	text-align: center;
 	/*border-right: 1px solid var(--color1);*/
-/*	display: flex;
-	flex-flow: column;*/
+	display: flex;
+	flex-flow: column;
+	flex: 0.15;
+	flex-shrink: 1;
 	/* margin: auto; */
 	padding: 10pt;
 	padding-top: 10pt;
-	height: 100vh; /* Full-height: remove this if you want "auto" height */
-	width: 200pt; /* Set the width of the sidebar */
-	/* display: table-column; */
-	text-align: center;
-	position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-	top: 0; /* Stay at the top */
-	left: 45pt;
+	/*height: 100vh;*/ /* Full-height: remove this if you want "auto" height */
+	width: 10px; /* Set the width of the sidebar */
+	/*position: fixed;*/ /* Fixed Sidebar (stay in place on scroll) */
+	/* top: 0; /* Stay at the top !1! */
+	min-width: 100px;
 	/*overflow-x: hidden; /* Disable horizontal scroll !1!*/
 }
 .toolbar_header {
 	top: 0;
+	font-size: 100%;
+	overflow: hidden;
 }
 .toolbar_buttons {
 }
@@ -289,48 +300,28 @@ table tr:nth-child(even) {
 	width: 100%;
 }
 
-/*MemberList*/
-.memberList {
-	color: var(--color3);
-	background-color: var(--color5);
-	/*border-right: 1px solid var(--color1);*/
-/*	display: flex;
-	flex-flow: column;*/
-	/* margin: auto; */
-	padding: 10pt;
-	padding-top: 10pt;
-	height: 100vh; /* Full-height: remove this if you want "auto" height */
-	/*width: 200pt;*/  /*Set the width of the sidebar*/ 
-	/* display: table-column; */
-	text-align: center;
-	position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-	top: 0; /* Stay at the top */
-	right: 0;
-	/*overflow-x: hidden; /* Disable horizontal scroll !1!*/
-}
-.memberList_header {
-	top: 0;
-}
-
-.middle_container {
-	color: var(--color6);
-	background-color: var(--color6);
-	/*margin: auto;*/ 
-	height: 100vh;  /*Full-height: remove this if you want "auto" height */
-	/* display: table-column; */
-	top: 0; /* Stay at the top */
-	left: 300pt;
-}
-
 /*CARDS*/
 .card-container {
-	margin: 20px;
+	margin: auto;
+	margin-left: 5%;
+	margin-right: 0%;
+	/* text-align: center; */
 }
 .card {
 	display: inline-grid;
-	margin: 10px;
-	width: 30vh;
-	height: 25vh;
+	margin: 5px 10px;
+	margin-right: 0px;
+	margin-left: 0px;
+	width: 20%;
+	min-width: 20vw;
+	height: 15vw;
+	min-height: 20vw;
+	max-height: 20vw;
+	/*max-width: 30vw;
+	max-height: 25vh;*/
+	/*min-width: 15vw;
+	min-height: 10vh;*/
+	background-color: var(--color4);
 }
 .card-header {
 	height: 100%;
@@ -353,6 +344,12 @@ table tr:nth-child(even) {
 	height: 50%;
 }
 
+
+
+
+
+
+
 /*CHAT VIEW*/
 .channel-header {
 	border-bottom: 1px solid var(--color1);
@@ -365,14 +362,16 @@ table tr:nth-child(even) {
 
 .chat-area {
 	color: var(--color3);
-	background-color: var(--color6);
+	/* background-color: var(--color6); */
 	display: flex;
 	flex-flow: column;
 	flex: 0 1 auto;
+	width: 100%;
 	height: 100%;
 	overflow: auto;
-	min-height: 80vh;
-	max-height: 80vh;
+	overflow-x: hidden;
+	min-height: 75vh;
+	max-height: 75vh;
 	border-radius: 5px;
 }
 
@@ -403,6 +402,7 @@ table tr:nth-child(even) {
 	list-style-type: none;
 	border-radius: 5px;
 	padding: 2px;
+	padding-left: 1%;
 	margin: 2px;
 }
 
@@ -412,9 +412,12 @@ table tr:nth-child(even) {
 
 
 .chatbox {
-	background-color: var(--color6);
+	/*background-color: var(--color6);*/
 	display: flex;
-	width: 80%;
+	width: 60vw;
+	min-width: 0vw;
+	margin: 10px;
+	margin-right: 45pt;
 	flex-flow: row nowrap;
 	margin-top: 10px;
 	/* margin-bottom: 10px; */
@@ -424,6 +427,8 @@ table tr:nth-child(even) {
 }
 
 .chatbox-textarea {
+	display: flex;
+	flex: 0.5;
 	color: var(--color3);
 	background-color: var(--color5);
 	overflow: auto;
@@ -436,6 +441,8 @@ table tr:nth-child(even) {
 }
 
 .chatbox-sendbutton {
+	display: flex;
+	flex: 0.5;
 	color: var(--color3);
 	background-color: var(--color5);
 	height: 50px;

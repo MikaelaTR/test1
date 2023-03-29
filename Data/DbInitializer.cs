@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using AdvancedProjectMVC.Controllers;
-using Microsoft.EntityFrameworkCore;
 
 namespace AdvancedProjectMVC.Data
 {
@@ -27,22 +25,24 @@ namespace AdvancedProjectMVC.Data
             {
                 var courses = new Course[]
                 {
+                    new Course{Title="Clinical Decision Support",CourseCode="COMP4111",Credits=1},
                     new Course{Title="Introduction to Data Science",CourseCode="COMP4112",Credits=1},
                     new Course{Title="Programming Language Processors",CourseCode="COMP4413",Credits=1},
                     new Course{Title="Algorithm Design and Analysis",CourseCode="COMP4433",Credits=4},
+                    new Course{Title="Theory of Computing",CourseCode="COMP4451",Credits=4},
+                    new Course{Title="Computer Graphics",CourseCode="COMP4471",Credits=3},
+                    new Course{Title="Topics in Artificial Intelligence",CourseCode="COMP4475",Credits=4}
                 };
                 foreach (Course c in courses)
                 {
                     context.Courses.Add(c);
                 }
                 context.SaveChanges();
-
             }
 
-/*            //Add test server
+            //Add test server
             if (!context.Servers.Any())
             {
-
                 var server = new Server { ServerName = "Test Server" };
                 context.Servers.Add(server);
 
@@ -50,23 +50,10 @@ namespace AdvancedProjectMVC.Data
                 context.Channels.Add(channel);
 
                 context.SaveChanges();
-            }*/
-        }
-
-        public static async Task SeedServersAsync(ApplicationDbContext context)
-        {
-            var courses = await context.Courses.ToListAsync();
-            if (!context.Servers.Any())
-            {
-                foreach (Course c in courses)
-                {
-                    Server server = new Server();
-                    server.ServerName = c.Title;
-                    await new ServersController(context).Create(server);
-                }
-
             }
         }
+
+
 
         // Seed DB with default roles.
         public static async Task SeedRolesAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
@@ -84,12 +71,11 @@ namespace AdvancedProjectMVC.Data
             var defaultUser = new ApplicationUser
             {
                 UserName = "ab",
-                Email = "ab@lakeheadu.ca",
+                Email = "ab@lakehead.ca",
                 FirstName = "Alex",
                 LastName = "Blom",
                 EmailConfirmed = true,
-                PhoneNumberConfirmed = true,
-
+                PhoneNumberConfirmed = true
             };
             if (userManager.Users.All(u => u.Id != defaultUser.Id))
             {
@@ -125,6 +111,11 @@ namespace AdvancedProjectMVC.Data
                     await userManager.AddToRoleAsync(student, Roles.Student.ToString());
                 }
             }
+        }
+
+        internal static Task SeedServersAsync(ApplicationDbContext context)
+        {
+            throw new NotImplementedException();
         }
     }
 }

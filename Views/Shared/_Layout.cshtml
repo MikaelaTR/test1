@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - AdvancedProjectMVC</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/AdvancedProjectMVC.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
     <script src="~/js/dark-mode.js" asp-append-version="true"></script>
 </head>
 <body>
@@ -42,13 +43,11 @@
         <partial name="Sidebar"/>
     </div>
 
-    <div class="container main">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <main role="main" class="main-content">
+        @RenderBody()
+    </main>
 
-    <!--
+<!--
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2023 - AdvancedProjectMVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>

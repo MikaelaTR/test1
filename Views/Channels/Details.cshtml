@@ -5,75 +5,70 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container middle_container">
-    <div class="row justify-content-center">
-        <div class="col-2 toolbar">
-            <div class="toolbar_header">
-                <h3>@Html.DisplayFor(model => model.Server.ServerName)</h3>
-            </div>
-            <div class="toolbar_buttons">
-                @foreach (var item in Model.Server.Channels)
-                {
-                    <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="Channels" asp-action="Details" asp-route-id="@item.Id">
-                        @Html.DisplayFor(item => item.ChannelName)
-                    </a>
-                }
-            </div>
-            <div class="toolbar_buttons">
-                <a asp-action="Create" class="btn btn-primary toolbar_button rounded-lg">Create Channel</a>
-            </div>
+<div class="flex-container">
+    <div class="toolbar flex-child">
+        <div class="toolbar_header">
+            <h3>@Html.DisplayFor(model => model.Server.ServerName)</h3>
+            @foreach (var item in Model.Server.Channels)
+            {
+                <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="Channels" asp-action="Details" asp-route-id="@item.Id">
+                    @Html.DisplayFor(item => item.ChannelName)
+                </a>
+            }
+
         </div>
-        <header class="px-3 text-center">
+        <div class="toolbar_buttons">
+            <a asp-action="Create" class="btn btn-primary toolbar_button rounded-lg">Create Channel</a>
+        </div>
+    </div>
+
+    <div class="mx-1 flex-child">
+        <header class="px-3 text-start">
+            <a asp-controller="Servers" asp-action="Details" asp-route-id="@Model.ServerId" title="Back to server"><i class="btn btn-secondary btn-sm border-0 fa fa-long-arrow-left"></i></a>
             @Html.DisplayFor(model => model.ChannelName)
         </header>
-        <div class="col-10 middle_container">
-            
-            <div>
-                <a asp-controller="Servers" asp-action="Details" asp-route-id="@Model.ServerId" title="Back to server"><i class="btn btn-secondary btn-sm border-dark fa fa-long-arrow-left"></i></a>
-            </div>
-
-            <div class="container chat-area">
-                <div id="messageArea" class="row">
-                    <div><p>Joined as: <b id="username">@User.Identity?.Name</b></p></div>
-                    <hr />
-                    <div class="row">
-                        <div class="col-md-6 message-list-container">
-                            <ul id="messageList" class="message-list">
-                                @foreach (var item in Model.ChatMessages)
-                                {
-                                    <li class="chat-message @((item.ApplicationUser.UserName == User.Identity?.Name) ? "chat-message--user" : "")">
-                                        @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
-                                        says:
-                                        @Html.DisplayFor(modelItem => item.Content)
-                                    </li>
-                                }
-                            </ul>
-                        </div>
-                    </div>
-                    <hr />
-                </div>
-                <div class="row chatbox px-8">
-                    <div class="p-1 px-4 col-md-9">
-                        <textarea type="text" id="message" autocomplete="off" onkeypress="enterKeySendMessage(event)" class="chatbox-textarea w-100"></textarea>
-                    </div>
-                    <div class="p-1 col-md-2 align-self-center">
-                        <input type="button" id="sendButton" value="Send" onclick="sendMessage(event)" class="chatbox-sendbutton" />
-                    </div>
+        <div>
+            <p>Joined as: <b id="username">@User.Identity?.Name</b></p>
+        </div>
+        <hr/>
+        <div id="chatArea" class="chat-area">
+            <div id="messageArea" class="row">
+                <div class="col-md-6 message-list-container flex-child">
+                    <ul id="messageList" class="message-list">
+                        @foreach (var item in Model.ChatMessages)
+                        {
+                            <li class="chat-message @((item.ApplicationUser.UserName == User.Identity?.Name) ? "chat-message--user" : "")">
+                                @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+                                says:
+                                @Html.DisplayFor(modelItem => item.Content)
+                            </li>
+                        }
+                    </ul>
                 </div>
             </div>
         </div>
-        <div class="col-2 memberList">
-            <div class="memberList_header">
-                <h3>Member List</h3>
+        <div class="chatbox flex-child">
+            <div class="p-2 col-md-11">
+                <textarea type="text" id="message" autocomplete="off" onkeypress="enterKeySendMessage(event)" class="chatbox-textarea w-100"></textarea>
             </div>
-            <div class="toolbar_buttons">
-                @foreach (var member in Model.Server.ServerMembers)
+            <div class="p-2 col-md-2 align-self-center">
+                <input type="button" id="sendButton" value="Send" onclick="sendMessage(event)" class="chatbox-sendbutton" />
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="toolbar flex-child">
+        <div class="toolbar_header">
+            <p class="toolbar_header">Members</p>
+        </div>
+        <div class="toolbar_buttons">
+            @foreach (var member in Model.Server.ServerMembers)
                 {
                     <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="ServerMembers" asp-action="Details" asp-route-id="@member.Id">
                         @member.ApplicationUser.UserName
                     </a>
                 }
-            </div>
         </div>
     </div>
 </div>
@@ -97,7 +92,7 @@
     connection.on("ReceiveMessage", function (user, message) {
         console.log("hey! Listen!");
         var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/</g, "&gt;");
-        var encodedMsg = user + " says: " + msg;
+        var encodedMsg = user + ": " + msg;
         var li = document.createElement("li")
         li.textContent = encodedMsg;
         li.classList.add("chat-message");
@@ -151,14 +146,16 @@
     
     //Scroll to bottom of message list
     //NOT WORKING
-    @*const delay = ms => new Promise(res => setTimeout(res, ms));
+    const delay = ms => new Promise(res => setTimeout(res, ms));
     const scrollToBottomMessageFunction = async () => {
-        await delay(1000);
-        console.log("Waited 1s");
-        items = document.querySelectorAll(".chat-message");
+        await delay(100);
+        console.log("Wait Done.");
+        var objDiv = document.getElementById("chatArea");
+        objDiv.scrollTop = objDiv.scrollHeight;
+        @*items = document.querySelectorAll(".chat-message");
         last = items[items.length - 1];
-        last.scrollIntoView();
+        last.scrollIntoView();  *@      
     };
-    scrollToBottomMessageFunction();*@
+    scrollToBottomMessageFunction();
 
 </script>
