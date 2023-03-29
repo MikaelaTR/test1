@@ -63,6 +63,12 @@
             <p class="toolbar_header">Members</p>
         </div>
         <div class="toolbar_buttons">
+            @foreach (var member in Model.Server.ServerMembers)
+                {
+                    <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="ServerMembers" asp-action="Details" asp-route-id="@member.Id">
+                        @member.ApplicationUser.UserName
+                    </a>
+                }
         </div>
     </div>
 </div>

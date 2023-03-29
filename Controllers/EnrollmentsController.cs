@@ -101,9 +101,19 @@ namespace AdvancedProjectMVC.Controllers
 
 /*            if (ModelState.IsValid)
             {*/
-                _context.Add(Enrollment);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+            _context.Add(Enrollment);
+            await _context.SaveChangesAsync();
+
+            //Find the Course's Server. This assumes no two of the same server names in the db.
+            string serverName = course.Title;
+            Server server = _context.Servers.Where(s => s.ServerName == serverName).ToList().First();
+
+            ServerMember serverMember = new ServerMember();
+            serverMember.ApplicationUserId = user.Id;
+            serverMember.ServerId = server.Id;
+            await new ServerMembersController(_context).Create(serverMember);
+
+            return RedirectToAction(nameof(Index));
 /*            }
             return View(Enrollment);*/
         }
