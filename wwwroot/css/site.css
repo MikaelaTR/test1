@@ -266,8 +266,8 @@ table tr:nth-child(even) {
 	color: var(--color3);
 	background-color: var(--color5);
 	/*border-right: 1px solid var(--color1);*/
-	display: flex;
-	flex-flow: column;
+/*	display: flex;
+	flex-flow: column;*/
 	/* margin: auto; */
 	padding: 10pt;
 	padding-top: 10pt;
@@ -287,6 +287,39 @@ table tr:nth-child(even) {
 }
 .toolbar_button {
 	width: 100%;
+}
+
+/*MemberList*/
+.memberList {
+	color: var(--color3);
+	background-color: var(--color5);
+	/*border-right: 1px solid var(--color1);*/
+/*	display: flex;
+	flex-flow: column;*/
+	/* margin: auto; */
+	padding: 10pt;
+	padding-top: 10pt;
+	height: 100vh; /* Full-height: remove this if you want "auto" height */
+	/*width: 200pt;*/  /*Set the width of the sidebar*/ 
+	/* display: table-column; */
+	text-align: center;
+	position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+	top: 0; /* Stay at the top */
+	right: 0;
+	/*overflow-x: hidden; /* Disable horizontal scroll !1!*/
+}
+.memberList_header {
+	top: 0;
+}
+
+.middle_container {
+	color: var(--color6);
+	background-color: var(--color6);
+	/*margin: auto;*/ 
+	height: 100vh;  /*Full-height: remove this if you want "auto" height */
+	/* display: table-column; */
+	top: 0; /* Stay at the top */
+	left: 300pt;
 }
 
 /*CARDS*/
@@ -381,12 +414,13 @@ table tr:nth-child(even) {
 .chatbox {
 	background-color: var(--color6);
 	display: flex;
-	width: 65%;
+	width: 80%;
 	flex-flow: row nowrap;
 	margin-top: 10px;
 	/* margin-bottom: 10px; */
 	position: fixed;
 	bottom: 0;
+	left:254pt;
 }
 
 .chatbox-textarea {
