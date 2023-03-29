@@ -44,7 +44,7 @@ header {
 	font-size: 20px;
 	color: var(--color3);
 	background-color: var(--color5);
-	border-bottom: 1px solid var(--color1);
+	/*border-bottom: 1px solid var(--color1);*/
 }
 
 .fixed-container {
@@ -95,6 +95,7 @@ body {
 }
 .flex-child {
 	flex: 1;
+	position: relative;
 	/*border: 2px solid yellow;*/ /*testing*/
 }
 
@@ -318,11 +319,10 @@ table tr:nth-child(even) {
 	margin: 5px 10px;
 	margin-right: 0px;
 	margin-left: 0px;
-	width: 20%;
-	min-width: 20vw;
-	height: 15vw;
-	min-height: 20vw;
-	max-height: 20vw;
+	width: 17.5%;
+	min-width: 17.5vw;
+	min-height: 17.5vw;
+	max-height: 17.5vh;
 	/*max-width: 30vw;
 	max-height: 25vh;*/
 	/*min-width: 15vw;
@@ -366,17 +366,27 @@ table tr:nth-child(even) {
 	position: relative;
 }
 
+.chat {
+	display: inline-grid;
+	width: 100%;
+	height: 88%;
+	max-height: 88%;
+	/*border: 2px solid yellow;*/
+}
+
 .chat-area {
 	color: var(--color3);
-	/* background-color: var(--color6); */
 	display: flex;
-	flex-flow: column;
-	flex: 0 1 auto;
-	width: 100%;
-	height: 100%;
 	overflow: auto;
 	overflow-x: hidden;
-	min-height: 75vh;
+	/* background-color: var(--color6); */
+	flex-flow: column;
+	flex-shrink: 1;
+	flex-grow: 0;
+	/*flex: 1 1 auto;*/
+	/*width: 100%;*/
+	/*height: 100%;
+	min-height: 75vh;*/
 	max-height: 75vh;
 	border-radius: 5px;
 }
@@ -384,9 +394,9 @@ table tr:nth-child(even) {
 .message-list {
 	display: flex;
 	flex-flow: column;
-	flex: 0 1 auto;
+	flex: 1 1 auto;
 	list-style-type: none;
-	margin: 0;
+	margin: 1px;
 	padding: 5px;
 	width: 100%;
 }
@@ -420,14 +430,15 @@ table tr:nth-child(even) {
 .chatbox {
 	/*background-color: var(--color6);*/
 	display: flex;
-	width: 60vw;
+	width: 100%;
 	min-width: 0vw;
-	margin: 10px;
-	margin-right: 45pt;
+	/*margin: 10px;*/
+	margin: 0;
+	/* margin-right: 45pt; */
 	flex-flow: row nowrap;
-	margin-top: 10px;
+	/*margin-top: 10px;*/
 	/* margin-bottom: 10px; */
-	position: fixed;
+	/*position: absolute;*/
 	bottom: 0;
 }
 
@@ -453,4 +464,23 @@ table tr:nth-child(even) {
 	height: 50px;
 	align-self: end;
 	text-align: center;
+}
+
+
+
+
+
+/*Custom scrollbar*/
+.scroll::-webkit-scrollbar {
+	width: 12px;
+}
+
+.scroll::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0px 0px 5px var(--color1);
+	border-radius: 5px;
+}
+
+.scroll::-webkit-scrollbar-thumb {
+	-webkit-box-shadow: inset 5px 5px 100px var(--color1);
+	border-radius: 5px;
 }

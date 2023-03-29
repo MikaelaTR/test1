@@ -15,26 +15,25 @@
                     @Html.DisplayFor(item => item.ChannelName)
                 </a>
             }
-
         </div>
         <div class="toolbar_buttons">
             <a asp-action="Create" class="btn btn-primary toolbar_button rounded-lg">Create Channel</a>
         </div>
     </div>
 
-    <div class="mx-1 flex-child">
+    <div class="flex-child">
         <header class="px-3 text-start">
             <a asp-controller="Servers" asp-action="Details" asp-route-id="@Model.ServerId" title="Back to server"><i class="btn btn-secondary btn-sm border-0 fa fa-long-arrow-left"></i></a>
             @Html.DisplayFor(model => model.ChannelName)
         </header>
-        <div>
+        <div class="mx-2">
             <p>Joined as: <b id="username">@User.Identity?.Name</b></p>
+            <hr />
         </div>
-        <hr/>
-        <div id="chatArea" class="chat-area">
-            <div id="messageArea" class="row">
-                <div class="col-md-6 message-list-container flex-child">
-                    <ul id="messageList" class="message-list">
+        <div class="chat">
+            <div id="chatArea" class="chat-area flex-child scroll m-0">
+                <div class="col-md-6 message-list-container flex-child m-0 w-100">
+                    <ul id="messageList" class="message-list mx-0 w-100">
                         @foreach (var item in Model.ChatMessages)
                         {
                             <li class="chat-message @((item.ApplicationUser.UserName == User.Identity?.Name) ? "chat-message--user" : "")">
@@ -46,16 +45,15 @@
                     </ul>
                 </div>
             </div>
-        </div>
-        <div class="chatbox flex-child">
-            <div class="p-2 col-md-11">
-                <textarea type="text" id="message" autocomplete="off" onkeypress="enterKeySendMessage(event)" class="chatbox-textarea w-100"></textarea>
+            <div class="chatbox flex-child">
+                <div class="p-2 col-md-11">
+                    <textarea type="text" id="message" autocomplete="off" onkeypress="enterKeySendMessage(event)" class="chatbox-textarea w-100 scroll"></textarea>
+                </div>
+                <div class="p-2 col-md-2 align-self-center">
+                    <input type="button" id="sendButton" value="Send" onclick="sendMessage(event)" class="chatbox-sendbutton" />
+                </div>
             </div>
-            <div class="p-2 col-md-2 align-self-center">
-                <input type="button" id="sendButton" value="Send" onclick="sendMessage(event)" class="chatbox-sendbutton" />
-            </div>
         </div>
-        
     </div>
 
     <div class="toolbar flex-child">
@@ -76,6 +74,7 @@
 <script>
     "use strict";
     const connection = new signalR.HubConnectionBuilder().withUrl("/chathub").configureLogging(signalR.LogLevel.Trace).build();
+    connection.serverTimeoutInMilliseconds = 600000; //Longer timeout
     var username = document.getElementById("username").innerHTML;
     var channelId = @Model.Id;
     var groupName = "@Model.ChannelName";
@@ -103,6 +102,8 @@
     }).catch(function (err) {
         return console.error(err.toString());
     });
+
+
 
     function addToGroup(groupName) {
         connection.invoke("AddToGroup", groupName, username, channelId).then(function () {
