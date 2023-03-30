@@ -183,7 +183,7 @@ namespace AdvancedProjectMVC.Controllers
             };
             await new ServersController(_context).Create(dm);
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Servers");
         }
     }
 }
