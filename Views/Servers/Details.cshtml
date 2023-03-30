@@ -13,6 +13,7 @@
         <div class="toolbar_buttons">
             <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="FileSharing" asp-action="Index" asp-route-serverName="@Model.ServerName">File Sharing</a>
             <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="Calendar" asp-action="Index">Calendar</a>
+            <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="Channels" asp-action="Create" asp-route-ServerId="@Model?.Id">Create New Channel</a>
         </div>
     </div>
     <div class="col flex-child middle_container">

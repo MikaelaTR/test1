@@ -20,7 +20,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="ServerId" class="control-label"></label>
-                <input asp-for="ServerId" class="form-control" />
+                <input asp-for="ServerId" class="form-control" id="serverId"/>
                 <span asp-validation-for="ServerId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -33,6 +33,14 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+<script>
+    const serverId = new URLSearchParams(window.location.search).get("ServerId");
+    if(serverId != null) {
+        document.getElementById("serverId").value = serverId;
+        document.getElementById("serverId").setAttribute("disabled", "");
+    }
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
