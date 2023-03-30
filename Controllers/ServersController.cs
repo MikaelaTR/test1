@@ -8,9 +8,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AdvancedProjectMVC.Data;
 using AdvancedProjectMVC.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AdvancedProjectMVC.Controllers
 {
+    [Authorize]
     public class ServersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -68,6 +70,7 @@ namespace AdvancedProjectMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Superadmin")]
         public async Task<IActionResult> Create([Bind("ServerId,ServerName")] Server server)
         {
            // if (ModelState.IsValid)
@@ -89,6 +92,7 @@ namespace AdvancedProjectMVC.Controllers
         }
 
         // GET: Servers/Edit/5
+        [Authorize(Roles = "Admin, Superadmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Servers == null)
@@ -109,6 +113,7 @@ namespace AdvancedProjectMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Superadmin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,ServerName")] Server server)
         {
             if (id != server.Id)
@@ -142,6 +147,7 @@ namespace AdvancedProjectMVC.Controllers
         }
 
         // GET: Servers/Delete/5
+        [Authorize(Roles = "Admin, Superadmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Servers == null)
@@ -162,6 +168,7 @@ namespace AdvancedProjectMVC.Controllers
         // POST: Servers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Superadmin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Servers == null)

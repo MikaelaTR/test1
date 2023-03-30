@@ -33,9 +33,12 @@
                             <a class="card-title" asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.ServerName)</a>
                         </h3>
                     </div>
-                    <div class="card-body">
-                        <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-ellipsis-h"></i></a>
-                    </div>
+                    @if (User.IsInRole("Admin") || User.IsInRole("Superadmin"))
+                    {
+                        <div class="card-body">
+                            <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-ellipsis-h"></i></a>
+                        </div>
+                    }
                 </div>
             }
         </div>
