@@ -118,6 +118,11 @@
         document.getElementById(username).className = "px-1 online";
     })
 
+    connection.on("SetOffline", function(username) {
+        console.log(username + "'s status set to offline.");
+        document.getElementById(username).className = "px-1 offline";
+    })
+
     function addToGroup(groupName) {
         connection.invoke("AddToGroup", groupName, username, channelId).then(function () {
             console.log(username + " has joined " + groupName + ".");

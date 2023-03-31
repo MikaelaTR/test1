@@ -81,10 +81,14 @@ namespace AdvancedProjectMVC.Hubs
             await base.OnConnectedAsync();
         }
 
-        public override Task OnDisconnectedAsync(Exception? exception)
+        public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            
-            return base.OnDisconnectedAsync(exception);
+            string userId = Context.UserIdentifier;
+            var user = await _userManager.FindByIdAsync(userId);
+            string username = user.UserName;
+            await Clients.All.SendAsync("SetOffline", username);
+
+            await base.OnDisconnectedAsync(exception);
         }
 
         public string GetConnectionId()
