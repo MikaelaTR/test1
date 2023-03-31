@@ -459,9 +459,20 @@ table tr:nth-child(even) {
 	text-align: center;
 }
 
+member_button {
+
+}
 
 
+.online {
+	color: lawngreen;
 
+}
+
+.offline {
+	color: gray;
+
+}
 
 /*Custom scrollbar*/
 .scroll::-webkit-scrollbar {
