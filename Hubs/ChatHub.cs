@@ -13,6 +13,7 @@ namespace AdvancedProjectMVC.Hubs
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private static int userCount;
 
         public ChatHub(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
@@ -54,12 +55,8 @@ namespace AdvancedProjectMVC.Hubs
             var channel = await _context.Channels.FindAsync(channelId);
 
             //If user does not already exist as a ServerMember, create ServerMember and add to DB.
-            //var member = channel.Server.ServerMembers.Where(s => s.ApplicationUser == user).FirstOrDefault();
             var server = await _context.Servers.FindAsync(channel.ServerId);
-            //var member = server.ServerMembers.FirstOrDefault(s => s.ApplicationUserId == user.Id);
 
-            //if (member == null)
-            //{
             var newMember = new ServerMember
             {
                 ServerId = channel.ServerId,
@@ -73,9 +70,32 @@ namespace AdvancedProjectMVC.Hubs
             }
         }
 
+        public override async Task OnConnectedAsync()
+        {
+            userCount++;
+            string userId = Context.UserIdentifier;
+            var user = await _userManager.FindByIdAsync(userId);
+            string username = user.UserName;
+            await Clients.All.SendAsync("SetOnline", username);
+
+            await base.OnConnectedAsync();
+        }
+
+        public override Task OnDisconnectedAsync(Exception? exception)
+        {
+            
+            return base.OnDisconnectedAsync(exception);
+        }
+
         public string GetConnectionId()
         {
+            userCount--;
             return Context.ConnectionId;
+        }
+
+        public int GetUserCount()
+        {
+            return userCount;
         }
     }
 }
