@@ -14,6 +14,7 @@ namespace AdvancedProjectMVC.Hubs
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private static int userCount;
+        private static HashSet<string> connectedUsers = new HashSet<string>();
 
         public ChatHub(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
@@ -70,22 +71,39 @@ namespace AdvancedProjectMVC.Hubs
             }
         }
 
+        public async Task SetConnectedUsersStatusOnline()
+        {
+            foreach(var user in connectedUsers)
+            {
+                await Clients.All.SendAsync("SetOnline", user);
+            }
+        }
+
         public override async Task OnConnectedAsync()
         {
             userCount++;
+
+            //Send message to set user's status to online.
             string userId = Context.UserIdentifier;
             var user = await _userManager.FindByIdAsync(userId);
             string username = user.UserName;
-            await Clients.All.SendAsync("SetOnline", username);
+            connectedUsers.Add(username);
+
+            //Iterate through connected users list and set each online.
+            await SetConnectedUsersStatusOnline();
 
             await base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
+            userCount--;
+
+            //Send message to set user's status to offline.
             string userId = Context.UserIdentifier;
             var user = await _userManager.FindByIdAsync(userId);
             string username = user.UserName;
+            connectedUsers.Add(username);
             await Clients.All.SendAsync("SetOffline", username);
 
             await base.OnDisconnectedAsync(exception);
@@ -100,6 +118,11 @@ namespace AdvancedProjectMVC.Hubs
         public int GetUserCount()
         {
             return userCount;
+        }
+
+        public List<string> GetConnectedUsers()
+        {
+            return connectedUsers.ToList();
         }
     }
 }

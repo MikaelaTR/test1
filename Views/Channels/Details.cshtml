@@ -107,6 +107,7 @@
     connection.start().then(function () {
         document.getElementById("sendButton").disabled = false;
         addToGroup(groupName);
+        getConnectedUsers();
         console.log("Username: " + username + "\n");
         console.log("Channel: " + channelId + "\n");
     }).catch(function (err) {
@@ -122,6 +123,20 @@
         console.log(username + "'s status set to offline.");
         document.getElementById(username).className = "px-1 offline";
     })
+
+    connection.on("RetrieveUsers", function(connectedUsers) {
+        for (user of connectedUsers) {
+            document.getElementById(user).className = "px-1 online";
+        }
+    })
+
+    function getConnectedUsers() {
+        connection.invoke("GetConnectedUsers").then(function (connections) {
+            console.log(connections);
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+    }
 
     function addToGroup(groupName) {
         connection.invoke("AddToGroup", groupName, username, channelId).then(function () {
