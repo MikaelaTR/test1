@@ -76,6 +76,9 @@ namespace AdvancedProjectMVC.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ProfileImage")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("SchoolProgramId")
                         .HasColumnType("int");
 

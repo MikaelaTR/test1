@@ -74,6 +74,10 @@ namespace AdvancedProjectMVC.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [DataType(DataType.ImageUrl)]
+            [Display(Name = "Profile Image")]
+            public string ProfileImage { get; set; }
         }
 
         private async Task LoadAsync(ApplicationUser user)
@@ -85,10 +89,11 @@ namespace AdvancedProjectMVC.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-                FirstName = user.FirstName, 
+                FirstName = user.FirstName,
                 LastName = user.LastName,
                 DOB = user.DOB,
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                ProfileImage = user.ProfileImage
             };
         }
 
@@ -142,6 +147,11 @@ namespace AdvancedProjectMVC.Areas.Identity.Pages.Account.Manage
             if (Input.DOB != user.DOB)
             {
                 user.DOB = Input.DOB;
+            }
+
+            if (Input.ProfileImage!= user.ProfileImage)
+            {
+                user.ProfileImage = Input.ProfileImage;
             }
 
             await _userManager.UpdateAsync(user);
