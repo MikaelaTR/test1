@@ -10,6 +10,7 @@ using AdvancedProjectMVC.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using NuGet.ProjectModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace AdvancedProjectMVC.Controllers
 {
@@ -88,34 +89,46 @@ namespace AdvancedProjectMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Grade,CourseId,AppliationUserId,Course,ApplicationUser")] Enrollment Enrollment)
+        public async Task<IActionResult> Create([Bind("Id,CourseId,AppliationUserId,Grade,Course,ApplicationUser")] Enrollment Enrollment)
         {
+            // Create new validation context for Enrollment
+            var validationContext = new ValidationContext(Enrollment);
+
             var enrollment = Enrollment;
             var user = await _userManager.GetUserAsync(User);
             var course = await _context.Courses.FindAsync(Enrollment.CourseId);
+
+            // If course is not found from the list
+            if (course == null) {
+                return NotFound();
+            }
 
             Enrollment.Course = course;
             Enrollment.ApplicationUser = user;
             Enrollment.ApplicationUserId = user.Id;
 
+            // Revalidate the model (in case something funky happens and user/user.id is null)
+            var results = new List<ValidationResult>();
+            var isValid = Validator.TryValidateObject(Enrollment, validationContext, results);
 
-/*            if (ModelState.IsValid)
-            {*/
-            _context.Add(Enrollment);
-            await _context.SaveChangesAsync();
+            if (isValid)
+            {
+                _context.Add(Enrollment);
+                await _context.SaveChangesAsync();
 
-            //Find the Course's Server. This assumes no two of the same server names in the db.
-            string serverName = course.Title;
-            Server server = _context.Servers.Where(s => s.ServerName == serverName).ToList().First();
+                //Find the Course's Server. This assumes no two of the same server names in the db.
+                string serverName = course.Title;
+                Server server = _context.Servers.Where(s => s.ServerName == serverName).ToList().First();
 
-            ServerMember serverMember = new ServerMember();
-            serverMember.ApplicationUserId = user.Id;
-            serverMember.ServerId = server.Id;
-            await new ServerMembersController(_context).Create(serverMember);
+                ServerMember serverMember = new ServerMember();
+                serverMember.ApplicationUserId = user.Id;
+                serverMember.ServerId = server.Id;
+                await new ServerMembersController(_context).Create(serverMember);
 
-            return RedirectToAction(nameof(Index));
-/*            }
-            return View(Enrollment);*/
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(Enrollment);
         }
 
         // GET: Enrollments/Edit/5
