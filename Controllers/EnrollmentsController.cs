@@ -13,7 +13,7 @@ using NuGet.ProjectModel;
 
 namespace AdvancedProjectMVC.Controllers
 {
-    //[Authorize(Roles = "Admin,Student")]
+    [Authorize]
     public class EnrollmentsController : Controller
     {
         private readonly ApplicationDbContext _context;

@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace AdvancedProjectMVC.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Superadmin")]
     public class CoursesController : Controller
     {
         private readonly ApplicationDbContext _context;
