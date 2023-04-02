@@ -13,7 +13,15 @@ namespace AdvancedProjectMVC.Controllers
 {
     public class FileSharingController : Controller
     {
-        private BlobServiceClient blobServiceClient = new BlobServiceClient("DefaultEndpointsProtocol=https;AccountName=advancedprojectfileshare;AccountKey=PX9Acb1JmVX9oQ2ZDSjzoMXimDQLb0cuInpzK/xxAP5GeYNgFoovg6qIBjL2uB04VGeaXZKGwnOX+AStnNBvxw==;EndpointSuffix=core.windows.net");
+        //private BlobServiceClient blobServiceClient = new BlobServiceClient("DefaultEndpointsProtocol=https;AccountName=advancedprojectfileshare;AccountKey=PX9Acb1JmVX9oQ2ZDSjzoMXimDQLb0cuInpzK/xxAP5GeYNgFoovg6qIBjL2uB04VGeaXZKGwnOX+AStnNBvxw==;EndpointSuffix=core.windows.net");
+
+
+        private readonly BlobServiceClient _blobServiceClient;
+
+        public FileSharingController(BlobServiceClient blobServiceClient)
+        {
+            _blobServiceClient = blobServiceClient;
+        }
 
         private BlobContainerClient? blobContainerClient;
 
@@ -34,7 +42,7 @@ namespace AdvancedProjectMVC.Controllers
             await InitializeContainer(containerName);
 
             List<SharedFile> files = new List<SharedFile>();
-            blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
+            blobContainerClient = _blobServiceClient.GetBlobContainerClient(containerName);
             try
             {                
                 var resultSegment = blobContainerClient.GetBlobsAsync();
@@ -65,7 +73,7 @@ namespace AdvancedProjectMVC.Controllers
             List<string> containerNames = new List<string>();
             try
             {
-                var containers = blobServiceClient.GetBlobContainersAsync().AsPages();
+                var containers = _blobServiceClient.GetBlobContainersAsync().AsPages();
                 await foreach (Azure.Page<BlobContainerItem> containerPage in containers)
                 {
                     foreach (BlobContainerItem containerItem in containerPage.Values)
@@ -83,13 +91,13 @@ namespace AdvancedProjectMVC.Controllers
 
             if (containerNames.Contains(containerName))
             {
-                blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
+                blobContainerClient = _blobServiceClient.GetBlobContainerClient(containerName);
                 await blobContainerClient.SetAccessPolicyAsync(PublicAccessType.Blob);
             }
             else
             {
-                await blobServiceClient.CreateBlobContainerAsync(containerName);
-                blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
+                await _blobServiceClient.CreateBlobContainerAsync(containerName);
+                blobContainerClient = _blobServiceClient.GetBlobContainerClient(containerName);
                 await blobContainerClient.SetAccessPolicyAsync(PublicAccessType.Blob);
             }
 
@@ -114,7 +122,7 @@ namespace AdvancedProjectMVC.Controllers
                 TempFile.CopyTo(stream);  
             }
 
-            blobContainerClient = blobServiceClient.GetBlobContainerClient(serverName);
+            blobContainerClient = _blobServiceClient.GetBlobContainerClient(serverName);
             string fileName = (TempFile.FileName);
             BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
             await blobClient.UploadAsync(filePath, true);
@@ -131,7 +139,7 @@ namespace AdvancedProjectMVC.Controllers
         [HttpPost("DeleteFile")]
         public async Task<IActionResult> DeleteFile(string containerName, string fileName)
         {
-            blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
+            blobContainerClient = _blobServiceClient.GetBlobContainerClient(containerName);
             var blobToDelete = blobContainerClient.GetBlobClient(fileName);
             await blobToDelete.DeleteIfExistsAsync(); 
 
