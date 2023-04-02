@@ -14,9 +14,6 @@ namespace AdvancedProjectMVC.Controllers
 {
     public class FileSharingController : Controller
     {
-
-        //private BlobServiceClient blobServiceClient = new BlobServiceClient("DefaultEndpointsProtocol=https;AccountName=advancedprojectfileshare;AccountKey=PX9Acb1JmVX9oQ2ZDSjzoMXimDQLb0cuInpzK/xxAP5GeYNgFoovg6qIBjL2uB04VGeaXZKGwnOX+AStnNBvxw==;EndpointSuffix=core.windows.net");
-
         [FromServices]
         public BlobServiceClient BlobServiceClient { get; set; }
 
@@ -27,6 +24,7 @@ namespace AdvancedProjectMVC.Controllers
         {
             _context = context;
         }
+
         public async Task<IActionResult> Index(string serverName)
         {
             string formattedName = String.Concat(serverName.Where(c => !Char.IsWhiteSpace(c)));
