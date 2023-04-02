@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var blobServiceClient = new BlobServiceClient(builder.Configuration.GetConnectionString("AzureBlobConnection"));
+var blobServiceClientConnectionString = builder.Configuration.GetConnectionString("AzureBlobConnection");
+builder.Services.AddSingleton<BlobServiceClient>(blobServiceClient => new BlobServiceClient(blobServiceClientConnectionString));
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
