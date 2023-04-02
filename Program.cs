@@ -6,10 +6,17 @@ using AdvancedProjectMVC.Hubs;
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.SignalR;
 using AdvancedProjectMVC.Services;
+using Microsoft.Extensions.Azure;
+using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var blobServiceClient = new BlobServiceClient(builder.Configuration.GetConnectionString("AzureBlobConnection"));
+var blobServiceClientConnectionString = builder.Configuration.GetConnectionString("AzureBlobConnection");
+//Environment.GetEnvironmentVariable("AZURE_STORAGE_CONNECTION_STRING");
+
+//var blobServiceClient = new BlobServiceClient(blobServiceClientConnectionString);
+
+builder.Services.AddSingleton<BlobServiceClient>(blobServiceClient => new BlobServiceClient(blobServiceClientConnectionString));
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");

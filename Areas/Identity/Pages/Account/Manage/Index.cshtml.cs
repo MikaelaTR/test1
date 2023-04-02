@@ -149,6 +149,9 @@ namespace AdvancedProjectMVC.Areas.Identity.Pages.Account.Manage
                 user.DOB = Input.DOB;
             }
 
+            //Change this to upload image in azure blob. Maybe need to change InputModel class higher to add 2 things:
+            //1. Profile image name to display the name
+            //2. link to Azure blob image, for it to go in view under <image href = @LINK>
             if (Input.ProfileImage!= user.ProfileImage)
             {
                 user.ProfileImage = Input.ProfileImage;
