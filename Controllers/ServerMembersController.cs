@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AdvancedProjectMVC.Data;
 using AdvancedProjectMVC.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace AdvancedProjectMVC.Controllers
 {
     public class ServerMembersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ServerMembersController(ApplicationDbContext context)
+        public ServerMembersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: ServerMembers
@@ -181,7 +184,7 @@ namespace AdvancedProjectMVC.Controllers
             {
                 ServerName = member1 + " + " + member2,
             };
-            await new ServersController(_context).Create(dm);
+            await new ServersController(_context, _userManager).Create(dm);
 
             return RedirectToAction("Index", "Servers");
         }

@@ -111,7 +111,7 @@ namespace AdvancedProjectMVC.Controllers
             ServerMember serverMember = new ServerMember();
             serverMember.ApplicationUserId = user.Id;
             serverMember.ServerId = server.Id;
-            await new ServerMembersController(_context).Create(serverMember);
+            await new ServerMembersController(_context, _userManager).Create(serverMember);
 
             return RedirectToAction(nameof(Index));
 /*            }
