@@ -9,37 +9,42 @@
     <div class="toolbar flex-child">
         <div class="toolbar_header">
             <h3>@Html.DisplayFor(model => model.Server.ServerName)</h3>
+        </div>
+        <div class="toolbar_buttons">
+            
             @foreach (var item in Model.Server.Channels)
             {
                 <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="Channels" asp-action="Details" asp-route-id="@item.Id">
                     @Html.DisplayFor(item => item.ChannelName)
                 </a>
             }
-        </div>
-        <div class="toolbar_buttons">
             <a asp-action="Create" class="btn btn-primary toolbar_button rounded-lg">Create Channel</a>
         </div>
     </div>
 
-    <div class="flex-child">
-        <header class="px-3 text-start">
-            <a asp-controller="Servers" asp-action="Details" asp-route-id="@Model.ServerId" title="Back to server"><i class="btn btn-secondary btn-sm border-0 fa fa-long-arrow-left"></i></a>
-            @Html.DisplayFor(model => model.ChannelName)
+    <div class="flex-child chat">
+        <header class="align-content-xxl-stretch w-100">
+            <a asp-controller="Servers" asp-action="Details" asp-route-id="@Model.ServerId" title="Back to server"><i class="btn btn-secondary btn-sm border-0 fa fa-long-arrow-left text-start"></i></a>
+            <h3 class="d-inline">@Html.DisplayFor(model => model.ChannelName)</h3>
         </header>
         <div class="mx-2">
             <p>Joined as: <b id="username">@User.Identity?.Name</b></p>
             <hr />
         </div>
-        <div class="chat">
+        <div class="chat flex-container">
             <div id="chatArea" class="chat-area flex-child scroll m-0">
-                <div class="col-md-6 message-list-container flex-child m-0 w-100">
+                <div class="message-list-container m-0 w-100">
                     <ul id="messageList" class="message-list mx-0 w-100">
                         @foreach (var item in Model.ChatMessages)
                         {
                             <li class="chat-message @((item.ApplicationUser.UserName == User.Identity?.Name) ? "chat-message--user" : "")">
-                                @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
-                                says:
-                                @Html.DisplayFor(modelItem => item.Content)
+                                <div class="chat-message-header">
+                                    <div class="chat-message-username"> @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)</div>
+                                    <div class="chat-message-timestamp">@Html.DisplayFor(modelItem => item.DatePosted)</div>
+                                </div>
+                                <div class="chat-message-content">
+                                    <p>@Html.DisplayFor(modelItem => item.Content)</p>
+                                </div>
                             </li>
                         }
                     </ul>
@@ -66,7 +71,7 @@
             {
                 <div class="d-flex flex-row justify-content-start align-items-center">
                     <span id="@member.ApplicationUser.UserName" class="px-1 offline">●</span>
-                    <a class="btn btn-primary rounded-lg px-3" asp-controller="ServerMembers" asp-action="Details" asp-route-id="@member.Id">
+                    <a class="btn btn-primary rounded-lg px-3 w-100" asp-controller="ServerMembers" asp-action="Details" asp-route-id="@member.Id">
                         @member.ApplicationUser.UserName
                     </a>
                 </div>
