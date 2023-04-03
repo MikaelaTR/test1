@@ -28,7 +28,7 @@
                     <form method="post" asp-controller="FileSharing" asp-action="DeleteFile">
                         <input type="hidden" name="fileName" value="@item.FileName">
                         <input type="hidden" name="containerName" value="@ViewBag.ContainerName">
-                        <input name="appUserID" value="@item.CreatorID" >
+                        <input name="appUserID" value="@item.CreatorID">
                         @if (item.CreatorID == User.Identity?.Name)
                         {
                             <input class="btn btn-danger" type="submit" value="Delete" />
