@@ -20,11 +20,6 @@ namespace AdvancedProjectMVC.Controllers
 
         private BlobContainerClient? blobContainerClient;
 
-        private readonly ApplicationDbContext _context;
-        public FileSharingController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
 
         public async Task<IActionResult> Index(string serverName)
         {
