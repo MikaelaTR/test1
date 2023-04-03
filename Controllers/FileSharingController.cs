@@ -14,6 +14,7 @@ namespace AdvancedProjectMVC.Controllers
 {
     public class FileSharingController : Controller
     {
+
         [FromServices]
         public BlobServiceClient BlobServiceClient { get; set; }
 
@@ -41,7 +42,7 @@ namespace AdvancedProjectMVC.Controllers
         {
             await InitializeContainer(containerName);
 
-            var applicationDbContext = await _context.SharedFiles.ToListAsync();
+            List<SharedFile> files = new List<SharedFile>();
             blobContainerClient = BlobServiceClient.GetBlobContainerClient(containerName);
             try
             {                
@@ -135,6 +136,13 @@ namespace AdvancedProjectMVC.Controllers
             blobContainerClient = BlobServiceClient.GetBlobContainerClient(serverName);
             string fileName = (TempFile.FileName);
             BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
+
+            IDictionary<string, string> metadata = new Dictionary<string, string>();
+            metadata.Add("CreatorID", User.Identity.Name);
+
+            await blobClient.SetMetadataAsync(metadata);
+
+
             await blobClient.UploadAsync(filePath, true);
             blobContainerClient = null;
 
