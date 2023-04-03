@@ -65,9 +65,12 @@
         <div class="toolbar_buttons">
             @foreach (var member in Model.Server.ServerMembers)
             {
-                <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="ServerMembers" asp-action="Details" asp-route-id="@member.Id">
-                    @member.ApplicationUser.UserName
-                </a>
+                <div class="d-flex flex-row justify-content-start align-items-center">
+                    <span id="@member.ApplicationUser.UserName" class="px-1 offline">●</span>
+                    <a class="btn btn-primary rounded-lg px-3" asp-controller="ServerMembers" asp-action="Details" asp-route-id="@member.Id">
+                        @member.ApplicationUser.UserName
+                    </a>
+                </div>
             }
         </div>
     </div>
@@ -105,13 +108,36 @@
     connection.start().then(function () {
         document.getElementById("sendButton").disabled = false;
         addToGroup(groupName);
+        getConnectedUsers();
         console.log("Username: " + username + "\n");
         console.log("Channel: " + channelId + "\n");
     }).catch(function (err) {
         return console.error(err.toString());
     });
 
+    connection.on("SetOnline", function(username) {
+        console.log(username + "'s status set to online.");
+        document.getElementById(username).className = "px-1 online";
+    })
 
+    connection.on("SetOffline", function(username) {
+        console.log(username + "'s status set to offline.");
+        document.getElementById(username).className = "px-1 offline";
+    })
+
+    connection.on("RetrieveUsers", function(connectedUsers) {
+        for (user of connectedUsers) {
+            document.getElementById(user).className = "px-1 online";
+        }
+    })
+
+    function getConnectedUsers() {
+        connection.invoke("GetConnectedUsers").then(function (connections) {
+            console.log(connections);
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+    }
 
     function addToGroup(groupName) {
         connection.invoke("AddToGroup", groupName, username, channelId).then(function () {
