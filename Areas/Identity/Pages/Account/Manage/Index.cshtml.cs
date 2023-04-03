@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using AdvancedProjectMVC.Models;
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -17,6 +18,8 @@ namespace AdvancedProjectMVC.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        [FromServices]
+        public BlobServiceClient BlobServiceClient { get; set; }
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
@@ -74,6 +77,12 @@ namespace AdvancedProjectMVC.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [DataType(DataType.ImageUrl)]
+            [Display(Name = "Profile Image")]
+            public string ProfileImage { get; set; }
+
+            public IFormFile ProfileImageFile { get; set; }
         }
 
         private async Task LoadAsync(ApplicationUser user)
@@ -83,13 +92,17 @@ namespace AdvancedProjectMVC.Areas.Identity.Pages.Account.Manage
 
             Username = userName;
 
+
             Input = new InputModel
             {
-                FirstName = user.FirstName, 
+                FirstName = user.FirstName,
                 LastName = user.LastName,
                 DOB = user.DOB,
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                ProfileImage = user.ProfileImage,
             };
+            
+
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -142,6 +155,28 @@ namespace AdvancedProjectMVC.Areas.Identity.Pages.Account.Manage
             if (Input.DOB != user.DOB)
             {
                 user.DOB = Input.DOB;
+            }
+
+            if(Input.ProfileImageFile!= null)
+            {
+                Input.ProfileImage = Input.ProfileImageFile.FileName;
+            }
+            //Change this to upload image in azure blob. Maybe need to change InputModel class higher to add 2 things:
+            //1. Profile image name to display the name
+            //2. link to Azure blob image, for it to go in view under <image href = @LINK>
+            if (Input.ProfileImageFile != null && Input.ProfileImage!= user.ProfileImage)
+            {
+                user.ProfileImage = "https://advancedprojectfileshare.blob.core.windows.net/profileimage/"+ user.UserName;
+
+                var filePath = Path.GetTempFileName();
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    Input.ProfileImageFile.CopyTo(stream);
+                }
+
+                BlobContainerClient blobContainerClient = BlobServiceClient.GetBlobContainerClient("profileimage");
+                BlobClient blobClient = blobContainerClient.GetBlobClient(user.UserName);
+                await blobClient.UploadAsync(filePath, true);
             }
 
             await _userManager.UpdateAsync(user);
