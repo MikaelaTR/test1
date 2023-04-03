@@ -5,6 +5,7 @@ using AdvancedProjectMVC.Models;
 using AdvancedProjectMVC.Hubs;
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.SignalR;
+using AdvancedProjectMVC.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,7 +35,17 @@ builder.Services.AddControllersWithViews();
     options.AddPolicy("StudentOnly", policy => policy.RequireClaim("StudentNumber"));
 });*/
 
+builder.Services.AddAuthentication()
+    .AddGoogle(googleOptions =>
+    {
+        googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? string.Empty;
+        googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? string.Empty;
+    });
+
 builder.Services.AddRazorPages();
+
+builder.Services.AddTransient<OptionsService>();
+
 builder.Services.AddSignalR(hubOptions =>
 {
     hubOptions.EnableDetailedErrors = true;
@@ -54,10 +65,11 @@ using (var scope = app.Services.CreateScope())
         var context = services.GetRequiredService<ApplicationDbContext>();
         var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-        
+
         await DbInitializer.SeedRolesAsync(userManager, roleManager);
         await DbInitializer.SeedSuperAdminAsync(userManager, roleManager);
         await DbInitializer.SeedStudentsAsync(userManager, roleManager);
+        await DbInitializer.SeedServersAsync(context);
         DbInitializer.Initialize(context);
     }
     catch (Exception ex)

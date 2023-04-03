@@ -3,7 +3,9 @@ using AdvancedProjectMVC.Models;
 using AdvancedProjectMVC.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol.Core.Types;
+using System.Threading.Channels;
 
 namespace AdvancedProjectMVC.Hubs
 {
@@ -11,10 +13,8 @@ namespace AdvancedProjectMVC.Hubs
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-
-        //private IChatRepository _repository;
-
-
+        private static int userCount;
+        private static HashSet<string> connectedUsers = new HashSet<string>();
 
         public ChatHub(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
@@ -25,14 +25,11 @@ namespace AdvancedProjectMVC.Hubs
         public async Task SendMessage(string username, string message)
         {
             await Clients.All.SendAsync("ReceiveMessage", username, message);
-            //_repository.AddMessage(username, message);
             
         }
 
         public async Task SendMessageToGroup(string username, string message, string groupName, int channelId)
         {
-           
-            
             await Clients.Group(groupName).SendAsync("ReceiveMessage", username, message);
             var user = await _userManager.FindByNameAsync(username);
             var channel = await _context.Channels.FindAsync(channelId);
@@ -46,23 +43,86 @@ namespace AdvancedProjectMVC.Hubs
                 Content = message,
                 DatePosted = DateTime.Now,
             };
-
             _context.Add(chatMessage);
             _context.SaveChanges();
         }
 
-        public async Task AddToGroup(string groupName)
+        public async Task AddToGroup(string groupName, string username, int channelId)
         {
             
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
 
-            await Clients.Group(groupName).SendAsync("Send", $"{Context.ConnectionId} has joined the group {groupName}.");
+            var user = await _userManager.FindByNameAsync(username);
+            var channel = await _context.Channels.FindAsync(channelId);
 
+            //If user does not already exist as a ServerMember, create ServerMember and add to DB.
+            var server = await _context.Servers.FindAsync(channel.ServerId);
+
+            var newMember = new ServerMember
+            {
+                ServerId = channel.ServerId,
+                ApplicationUserId = user.Id
+            };
+
+            if (_context.ServerMembers.Where(s => s.ApplicationUserId == newMember.ApplicationUserId && s.ServerId == server.Id).First() == null)
+            {
+                _context.Add(newMember);
+                _context.SaveChanges();
+            }
+        }
+
+        public async Task SetConnectedUsersStatusOnline()
+        {
+            foreach(var user in connectedUsers)
+            {
+                await Clients.All.SendAsync("SetOnline", user);
+            }
+        }
+
+        public override async Task OnConnectedAsync()
+        {
+            userCount++;
+
+            //Send message to set user's status to online.
+            string userId = Context.UserIdentifier;
+            var user = await _userManager.FindByIdAsync(userId);
+            string username = user.UserName;
+            connectedUsers.Add(username);
+
+            //Iterate through connected users list and set each online.
+            await SetConnectedUsersStatusOnline();
+
+            await base.OnConnectedAsync();
+        }
+
+        public override async Task OnDisconnectedAsync(Exception? exception)
+        {
+            userCount--;
+
+            //Send message to set user's status to offline.
+            string userId = Context.UserIdentifier;
+            var user = await _userManager.FindByIdAsync(userId);
+            string username = user.UserName;
+            connectedUsers.Add(username);
+            await Clients.All.SendAsync("SetOffline", username);
+
+            await base.OnDisconnectedAsync(exception);
         }
 
         public string GetConnectionId()
         {
+            userCount--;
             return Context.ConnectionId;
+        }
+
+        public int GetUserCount()
+        {
+            return userCount;
+        }
+
+        public List<string> GetConnectedUsers()
+        {
+            return connectedUsers.ToList();
         }
     }
 }

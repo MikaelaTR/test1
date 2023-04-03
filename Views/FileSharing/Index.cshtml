@@ -5,8 +5,9 @@
 @{
     ViewData["Title"] = "File Sharing";
 }
+@using Microsoft.AspNetCore.Identity;
 
-<h1> Shard Files</h1>
+<h1>Shared Files</h1>
 
 <table class="table">
     <thead>
@@ -21,13 +22,18 @@
         {
             <tr>
                 <td>
-                    <a href="@item.DownloadURL" class="link-success">@item.FileName</a>
+                    <a href="@item.DownloadURL" class="">@item.FileName</a>
                 </td>
                 <td>
                     <form method="post" asp-controller="FileSharing" asp-action="DeleteFile">
                         <input type="hidden" name="fileName" value="@item.FileName">
                         <input type="hidden" name="containerName" value="@ViewBag.ContainerName">
-                        <input class="btn btn-danger" type="submit" value="Delete" />
+                        <input name="appUserID" value="@item.CreatorID" readonly>
+                        @if (item.CreatorID == User.Identity?.Name)
+                        {
+                            <input class="btn btn-danger" type="submit" value="Delete" />
+                            <input type="hidden" name="id" value="@item.Id">
+                        }
                     </form>
                 </td>
             </tr>
@@ -38,3 +44,5 @@
 <p>
     <a asp-action="Upload" asp-route-containerName="@ViewBag.ContainerName"> Upload New File</a> 
 </p>
+
+<script>

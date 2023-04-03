@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AdvancedProjectMVC.Data;
 using AdvancedProjectMVC.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace AdvancedProjectMVC.Controllers
 {
@@ -63,6 +64,10 @@ namespace AdvancedProjectMVC.Controllers
         {
             if (ModelState.IsValid)
             {
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == serverMember.ApplicationUserId);
+                var server = await _context.Servers.FirstOrDefaultAsync(s => s.Id == serverMember.ServerId);
+                serverMember.ApplicationUser = user;
+                serverMember.Server = server;
                 _context.Add(serverMember);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

@@ -5,59 +5,77 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container flex-parent">
+<div class="flex-container">
     <div class="toolbar flex-child">
         <div class="toolbar_header">
             <h3>@Html.DisplayFor(model => model.Server.ServerName)</h3>
+        </div>
+        <div class="toolbar_buttons">
+            
             @foreach (var item in Model.Server.Channels)
             {
                 <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="Channels" asp-action="Details" asp-route-id="@item.Id">
                     @Html.DisplayFor(item => item.ChannelName)
                 </a>
             }
-
-        </div>
-        <div class="toolbar_buttons">
             <a asp-action="Create" class="btn btn-primary toolbar_button rounded-lg">Create Channel</a>
         </div>
     </div>
-    <div class="mx-1 flex-child">
-        <header class="px-3 text-start">
-            @Html.DisplayFor(model => model.ChannelName)
-        </header>
-        <div>
-            <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-            <a asp-action="Index">Back to List</a>
-        </div>
 
-        <div class="container chat-area">
-            <div id="messagearea" class="row">
-                <div><p>Joined as: <b id="username">@User.Identity?.Name</b></p></div>
-                <hr />
-                <div class="row">
-                    <div class="col-md-6 message-list">
-                        <ul id="messageList" class="message-list">
-                            @foreach (var item in Model.ChatMessages)
-                            {
-                                <li class="chat-message @((item.ApplicationUser.UserName == User.Identity?.Name) ? "chat-message--user" : "")">
-                                    @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
-                                    says:
-                                    @Html.DisplayFor(modelItem => item.Content)
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                </div>
-                <hr />
-                <div class="row chatbox ">
-                    <div class="p-2 col-md-6">
-                        <textarea type="text" id="message" autocomplete="off" onkeypress="enterKeySendMessage(event)" class="chatbox-textarea w-100"></textarea>
-                    </div>
-                    <div class="p-2 col-md-2 align-self-center">
-                        <input type="button" id="sendButton" value="Send" onclick="sendMessage(event)" class="chatbox-sendbutton" />
-                    </div>
+    <div class="flex-child chat">
+        <header class="align-content-xxl-stretch w-100">
+            <a asp-controller="Servers" asp-action="Details" asp-route-id="@Model.ServerId" title="Back to server"><i class="btn btn-secondary btn-sm border-0 fa fa-long-arrow-left text-start"></i></a>
+            <h3 class="d-inline">@Html.DisplayFor(model => model.ChannelName)</h3>
+        </header>
+        <div class="mx-2">
+            <p>Joined as: <b id="username">@User.Identity?.Name</b></p>
+            <hr />
+        </div>
+        <div class="chat flex-container">
+            <div id="chatArea" class="chat-area flex-child scroll m-0">
+                <div class="message-list-container m-0 w-100">
+                    <ul id="messageList" class="message-list mx-0 w-100">
+                        @foreach (var item in Model.ChatMessages)
+                        {
+                            <li class="chat-message @((item.ApplicationUser.UserName == User.Identity?.Name) ? "chat-message--user" : "")">
+                                <div class="chat-message-header">
+                                    <div class="chat-message-username"> @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)</div>
+                                    <div class="chat-message-timestamp">@Html.DisplayFor(modelItem => item.DatePosted)</div>
+                                </div>
+                                <div class="chat-message-content">
+                                    <p>@Html.DisplayFor(modelItem => item.Content)</p>
+                                </div>
+                            </li>
+                        }
+                    </ul>
                 </div>
             </div>
+            <div class="chatbox flex-child">
+                <div class="p-2 col-md-11">
+                    <textarea type="text" id="message" autocomplete="off" onkeypress="enterKeySendMessage(event)" class="chatbox-textarea w-100 scroll"></textarea>
+                </div>
+                <div class="p-2 col-md-2 align-self-center">
+                    <input type="button" id="sendButton" value="Send" onclick="sendMessage(event)" class="chatbox-sendbutton" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-2 toolbar memberList">
+        @*TODO: Make memberlist css, replace toolbar class*@
+        <div class="memberList_header">
+            <h3>Member List</h3>
+        </div>
+        <div class="toolbar_buttons">
+            @foreach (var member in Model.Server.ServerMembers)
+            {
+                <div class="d-flex flex-row justify-content-start align-items-center">
+                    <span id="@member.ApplicationUser.UserName" class="px-1 offline">●</span>
+                    <a class="btn btn-primary rounded-lg px-3 w-100" asp-controller="ServerMembers" asp-action="Details" asp-route-id="@member.Id">
+                        @member.ApplicationUser.UserName
+                    </a>
+                </div>
+            }
         </div>
     </div>
 </div>
@@ -71,6 +89,7 @@
 <script>
     "use strict";
     const connection = new signalR.HubConnectionBuilder().withUrl("/chathub").configureLogging(signalR.LogLevel.Trace).build();
+    connection.serverTimeoutInMilliseconds = 600000; //Longer timeout
     var username = document.getElementById("username").innerHTML;
     var channelId = @Model.Id;
     var groupName = "@Model.ChannelName";
@@ -78,12 +97,10 @@
     //Disable send button until connection is established
     document.getElementById("sendButton").disabled = true;
 
-    window.scrollTo(0, document.body.scrollHeight); //Scroll to bottom on load
-
     connection.on("ReceiveMessage", function (user, message) {
         console.log("hey! Listen!");
         var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/</g, "&gt;");
-        var encodedMsg = user + " says: " + msg;
+        var encodedMsg = user + ": " + msg;
         var li = document.createElement("li")
         li.textContent = encodedMsg;
         li.classList.add("chat-message");
@@ -95,15 +112,39 @@
     connection.start().then(function () {
         document.getElementById("sendButton").disabled = false;
         addToGroup(groupName);
-        //console.log("Connection: " + connection.invoke("GetConnectionId").toString() + "\n")
+        getConnectedUsers();
         console.log("Username: " + username + "\n");
         console.log("Channel: " + channelId + "\n");
     }).catch(function (err) {
         return console.error(err.toString());
     });
 
+    connection.on("SetOnline", function(username) {
+        console.log(username + "'s status set to online.");
+        document.getElementById(username).className = "px-1 online";
+    })
+
+    connection.on("SetOffline", function(username) {
+        console.log(username + "'s status set to offline.");
+        document.getElementById(username).className = "px-1 offline";
+    })
+
+    connection.on("RetrieveUsers", function(connectedUsers) {
+        for (user of connectedUsers) {
+            document.getElementById(user).className = "px-1 online";
+        }
+    })
+
+    function getConnectedUsers() {
+        connection.invoke("GetConnectedUsers").then(function (connections) {
+            console.log(connections);
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+    }
+
     function addToGroup(groupName) {
-        connection.invoke("AddToGroup", groupName).then(function () {
+        connection.invoke("AddToGroup", groupName, username, channelId).then(function () {
             console.log(username + " has joined " + groupName + ".");
         }).catch(function (err) {
             return console.error(err.toString());
@@ -135,5 +176,19 @@
         this.style.height = "auto";
         this.style.height = `${this.scrollHeight}px`;
     });
+    
+    //Scroll to bottom of message list
+    //NOT WORKING
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+    const scrollToBottomMessageFunction = async () => {
+        await delay(100);
+        console.log("Wait Done.");
+        var objDiv = document.getElementById("chatArea");
+        objDiv.scrollTop = objDiv.scrollHeight;
+        @*items = document.querySelectorAll(".chat-message");
+        last = items[items.length - 1];
+        last.scrollIntoView();  *@      
+    };
+    scrollToBottomMessageFunction();
 
 </script>

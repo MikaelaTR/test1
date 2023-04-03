@@ -71,7 +71,7 @@ namespace AdvancedProjectMVC.Data
             var defaultUser = new ApplicationUser
             {
                 UserName = "ab",
-                Email = "ab@school.ca",
+                Email = "ab@lakehead.ca",
                 FirstName = "Alex",
                 LastName = "Blom",
                 EmailConfirmed = true,
@@ -111,6 +111,11 @@ namespace AdvancedProjectMVC.Data
                     await userManager.AddToRoleAsync(student, Roles.Student.ToString());
                 }
             }
+        }
+
+        internal static Task SeedServersAsync(ApplicationDbContext context)
+        {
+            throw new NotImplementedException();
         }
     }
 }

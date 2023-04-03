@@ -1,4 +1,5 @@
-﻿using AdvancedProjectMVC.Models;
+﻿using AdvancedProjectMVC.Data;
+using AdvancedProjectMVC.Models;
 using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
@@ -19,6 +20,12 @@ namespace AdvancedProjectMVC.Controllers
 
         private BlobContainerClient? blobContainerClient;
 
+        private readonly ApplicationDbContext _context;
+        public FileSharingController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         public async Task<IActionResult> Index(string serverName)
         {
             string formattedName = String.Concat(serverName.Where(c => !Char.IsWhiteSpace(c)));
@@ -38,19 +45,24 @@ namespace AdvancedProjectMVC.Controllers
             List<SharedFile> files = new List<SharedFile>();
             blobContainerClient = BlobServiceClient.GetBlobContainerClient(containerName);
             try
-            {                
+            {
                 var resultSegment = blobContainerClient.GetBlobsAsync();
-                    await foreach (BlobItem blobItem in resultSegment)
-                    {
-                        SharedFile file = new SharedFile();
-                        var block = blobContainerClient.GetBlockBlobClient(blobItem.Name);
-                        file.FileName = blobItem.Name;
-                        file.DownloadURL = block.Uri.ToString();
-                        Console.WriteLine("Blob name: {0}", blobItem.Name);
-                        files.Add(file);
-                    }
-                    Console.WriteLine();
-                
+                await foreach (BlobItem blobItem in resultSegment)
+                {
+                    SharedFile file = new SharedFile();
+                    var block = blobContainerClient.GetBlockBlobClient(blobItem.Name);
+                    BlobProperties blobProperties = await block.GetPropertiesAsync();
+                    
+                    file.FileName = blobItem.Name;
+                    file.DownloadURL = block.Uri.ToString();
+                    string value;
+                    blobProperties.Metadata.TryGetValue("CreatorID", out value);
+                    file.CreatorID = value;
+                    Console.WriteLine("Blob name: {0}", blobItem.Name);
+                    files.Add(file);
+                }
+                Console.WriteLine();
+
             }
             catch (RequestFailedException e)
             {
@@ -119,16 +131,25 @@ namespace AdvancedProjectMVC.Controllers
             blobContainerClient = BlobServiceClient.GetBlobContainerClient(serverName);
             string fileName = (TempFile.FileName);
             BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
+            
+           
+
 
             IDictionary<string, string> metadata = new Dictionary<string, string>();
             metadata.Add("CreatorID", User.Identity.Name);
-
-            await blobClient.SetMetadataAsync(metadata);
-
-
             await blobClient.UploadAsync(filePath, true);
-            blobContainerClient = null;
             
+            
+            await blobClient.SetMetadataAsync(metadata);      
+            blobContainerClient = null;
+
+            //SharedFile file = new SharedFile();
+            //file.ApplicationUserID = User.Identity?.Name;
+            //file.FileName = fileName;
+
+            //_context.Add(file);
+            //await _context.SaveChangesAsync();
+
             return RedirectToAction("Index", new {serverName = serverName});
         }
 
@@ -138,13 +159,12 @@ namespace AdvancedProjectMVC.Controllers
         }
 
         [HttpPost("DeleteFile")]
-        public async Task<IActionResult> DeleteFile(string containerName, string fileName)
+        public async Task<IActionResult> DeleteFile(string containerName, string fileName, int id)
         {
             blobContainerClient = BlobServiceClient.GetBlobContainerClient(containerName);
             var blobToDelete = blobContainerClient.GetBlobClient(fileName);
             await blobToDelete.DeleteIfExistsAsync(); 
 
-            
             return RedirectToAction("Index", new { serverName = containerName});
         }
     }

@@ -50,19 +50,19 @@
     </table>
 
     <div class="container chat-area">
-        <div id="messagearea" class="row">
+        <div id="messageArea" class="row">
             <div><p>Joined as: <b id="username">@User.Identity?.Name</b></p></div>
             <hr/>
             <div class="row">
-                <div class="col-6 message-list">
+                <div class="col-6 message-list-container">
                     <ul id="messageList" class="message-list"></ul>
                 </div>
             </div>
             <hr/>
-            <div class="row chatbox">
-                <textarea type="text" id="message" autocomplete="off" onkeypress="enterKeySendMessage(event)" class="chatbox-textarea"></textarea>
-                <input type="button" id="sendButton" value="Send" onclick="sendMessage(event)" class="chatbox-sendbutton"/>
-            </div>
+        </div>
+        <div class="col-6 row chatbox">
+            <textarea type="text" id="message" autocomplete="off" onkeypress="enterKeySendMessage(event)" class="chatbox-textarea"></textarea>
+            <input type="button" id="sendButton" value="Send" onclick="sendMessage(event)" class="chatbox-sendbutton"/>
         </div>
     </div>
 </body>
@@ -79,6 +79,10 @@
     document.getElementById("sendButton").disabled = true;
     
     window.scrollTo(0, document.body.scrollHeight); //Scroll to bottom on load
+    window.scrollTo(0, document.getElementById("messagearea").scrollHeight); //Scroll to bottom on load
+    window.scrollTo(0, document.getElementById("messageList").scrollHeight); //Scroll to bottom on load
+    var objDiv = document.getElementById("messageArea");
+    objDiv.scrollTop = objDiv.scrollHeight;
 
     connection.on("ReceiveMessage", function (user, message) {
         console.log("hey! Listen!");

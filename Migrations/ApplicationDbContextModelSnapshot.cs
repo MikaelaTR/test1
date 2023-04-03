@@ -17,7 +17,7 @@ namespace AdvancedProjectMVC.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.3")
+                .HasAnnotation("ProductVersion", "7.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -228,11 +228,11 @@ namespace AdvancedProjectMVC.Migrations
 
             modelBuilder.Entity("AdvancedProjectMVC.Models.Course", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CourseCode")
                         .IsRequired()
@@ -251,7 +251,7 @@ namespace AdvancedProjectMVC.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Courses");
                 });
@@ -324,11 +324,16 @@ namespace AdvancedProjectMVC.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("ServerName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Servers");
                 });
@@ -357,6 +362,50 @@ namespace AdvancedProjectMVC.Migrations
                     b.ToTable("ServerMembers");
                 });
 
+            modelBuilder.Entity("AdvancedProjectMVC.Models.SharedFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicationUserID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ChannelID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ChannelName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatorID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DownloadURL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ServerID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ServerName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TempFile")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SharedFiles");
+                });
+
             modelBuilder.Entity("AdvancedProjectMVC.Models.TeachingAssignment", b =>
                 {
                     b.Property<int>("Id")
@@ -381,30 +430,15 @@ namespace AdvancedProjectMVC.Migrations
                     b.ToTable("TeachingAssignments");
                 });
 
-            modelBuilder.Entity("ApplicationUserServer", b =>
-                {
-                    b.Property<string>("ApplicationUsersId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("ServersId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ApplicationUsersId", "ServersId");
-
-                    b.HasIndex("ServersId");
-
-                    b.ToTable("ApplicationUserServer");
-                });
-
             modelBuilder.Entity("CourseSchoolProgram", b =>
                 {
-                    b.Property<int>("CoursesID")
+                    b.Property<int>("CoursesId")
                         .HasColumnType("int");
 
                     b.Property<int>("ProgramsId")
                         .HasColumnType("int");
 
-                    b.HasKey("CoursesID", "ProgramsId");
+                    b.HasKey("CoursesId", "ProgramsId");
 
                     b.HasIndex("ProgramsId");
 
@@ -611,6 +645,13 @@ namespace AdvancedProjectMVC.Migrations
                     b.Navigation("Course");
                 });
 
+            modelBuilder.Entity("AdvancedProjectMVC.Models.Server", b =>
+                {
+                    b.HasOne("AdvancedProjectMVC.Models.ApplicationUser", null)
+                        .WithMany("Servers")
+                        .HasForeignKey("ApplicationUserId");
+                });
+
             modelBuilder.Entity("AdvancedProjectMVC.Models.ServerMember", b =>
                 {
                     b.HasOne("AdvancedProjectMVC.Models.ApplicationUser", "ApplicationUser")
@@ -620,7 +661,7 @@ namespace AdvancedProjectMVC.Migrations
                         .IsRequired();
 
                     b.HasOne("AdvancedProjectMVC.Models.Server", "Server")
-                        .WithMany()
+                        .WithMany("ServerMembers")
                         .HasForeignKey("ServerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -649,26 +690,11 @@ namespace AdvancedProjectMVC.Migrations
                     b.Navigation("Course");
                 });
 
-            modelBuilder.Entity("ApplicationUserServer", b =>
-                {
-                    b.HasOne("AdvancedProjectMVC.Models.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("ApplicationUsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AdvancedProjectMVC.Models.Server", null)
-                        .WithMany()
-                        .HasForeignKey("ServersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("CourseSchoolProgram", b =>
                 {
                     b.HasOne("AdvancedProjectMVC.Models.Course", null)
                         .WithMany()
-                        .HasForeignKey("CoursesID")
+                        .HasForeignKey("CoursesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -736,6 +762,8 @@ namespace AdvancedProjectMVC.Migrations
 
                     b.Navigation("Enrollments");
 
+                    b.Navigation("Servers");
+
                     b.Navigation("TeachingAssignments");
                 });
 
@@ -759,6 +787,8 @@ namespace AdvancedProjectMVC.Migrations
             modelBuilder.Entity("AdvancedProjectMVC.Models.Server", b =>
                 {
                     b.Navigation("Channels");
+
+                    b.Navigation("ServerMembers");
                 });
 #pragma warning restore 612, 618
         }
