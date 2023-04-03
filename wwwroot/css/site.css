@@ -2,32 +2,31 @@
 	--color1: #000000; /*Black*/
 	--color2: #EAEAEA; /*Off White*/
 	--color3: #FFFFFF; /*White*/
-	--color4: #269FBC; /*Light Blue*/
-	--color5: #1A6076; /*Light Blue/darker than 4*/
-	--color6: #0B3C5D; /*Dark Blue/Green*/
+	--color4: #0087F5; /*Light Blue*/
+	--color5: #005DA8; /*Light Blue/darker than 4*/
+	--color6: #00325C; /*Dark Blue/Green*/
 	--white: #FFFFFF;
 	--bg-color: #FFFFFF; /*White*/
-	--primary: #1CB5E0;
-	--primary-hover: #137799;
+	--primary: #3273A8;
+	--primary-hover: #235075;
 	--secondary: #063156;
 	--secondary-hover: #00427A;
 	--danger: #F44336;
 }
-:root,
-:root.dark {
-	--color1: #F5F5F5; /*White*/
-	--color2: #269FBC; /*Light Blue*/
-	--color3: #FFFFFF; /*Light Green*/
-	--color4: #1E6E87; /*Light Blue/darker than 2*/
-	--color5: #0B3C5D; /*Dark Blue/Green*/
-	--color6: #0d3575; /*Dark Blue*/
+:root, :root.dark {
+	--color1: #F5F5F5;
+	--color2: #15335E;
+	--color3: #FFFFFF;
+	--color4: #3E5678;
+	--color5: #152842;
+	--color6: #0d3575;
 	--white: #FFFFFF;
-	--bg-color: #0d3575; /*Dark Blue/Green*/
-	--primary: #1CB5E0; /*Cyan*/
-	--primary-hover: #137799; /*Light Blue/darker than 2*/
-	--secondary: #2F9E44; /*Green*/
-	--secondary-hover: #208537; /*Dark Green*/
-	--danger: #F44336; /*Red*/
+	--bg-color: #1D385E;
+	--primary: #295CA3;
+	--primary-hover: #137799;
+	--secondary: #2F9E44;
+	--secondary-hover: #208537;
+	--danger: #F44336;
 }
 
 html {
@@ -166,10 +165,6 @@ body {
 	color: black;
 	background-color: var(--color3);
 }
-.form-label {
-	color: black;
-}
-
 
 /*SIDE NAV*/
 .sidenav {
@@ -321,7 +316,7 @@ table tr:nth-child(even) {
 	max-height: 25vh;*/
 	/*min-width: 15vw;
 	min-height: 10vh;*/
-	background-color: var(--color4);
+	background-color: var(--primary);
 }
 .card-header {
 	height: 100%;
@@ -396,11 +391,11 @@ table tr:nth-child(even) {
 }
 
 .chat-message--user {
-	background-color: var(--color5);
+	background-color: var(--color2);
 }
 
 .chat-message {
-	color: var(--color3);
+	color: var(--color1);
 	display: flex;
 	word-break: break-word;
 	overflow-wrap: break-word; /*Wrap text*/
