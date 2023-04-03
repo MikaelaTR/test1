@@ -8,16 +8,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AdvancedProjectMVC.Data;
 using AdvancedProjectMVC.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace AdvancedProjectMVC.Controllers
 {
     public class ServersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ServersController(ApplicationDbContext context)
+        public ServersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Servers
@@ -72,18 +75,26 @@ namespace AdvancedProjectMVC.Controllers
         {
            // if (ModelState.IsValid)
             //{
-                _context.Add(server);
-                await _context.SaveChangesAsync();
+            _context.Add(server);
+            await _context.SaveChangesAsync();
 
-                Channel channel = new Channel
-                {
-                    ChannelName = "General",
-                    Server = server,
-                };
-                _context.Channels.Add(channel);
-                await _context.SaveChangesAsync();
+            Channel channel = new Channel
+            {
+                ChannelName = "General",
+                Server = server,
+            };
+            _context.Channels.Add(channel);
 
-                return RedirectToAction(nameof(Index));
+            await _context.SaveChangesAsync();
+            var user = await _userManager.GetUserAsync(User);
+
+            //Add user as serverMember
+            ServerMember serverMember = new ServerMember();
+            serverMember.ApplicationUserId = user.Id;
+            serverMember.ServerId = server.Id;
+            await new ServerMembersController(_context, _userManager).Create(serverMember);
+
+            return RedirectToAction(nameof(Index));
             //}
             //return View(server);
         }

@@ -13,6 +13,8 @@ namespace AdvancedProjectMVC.Hubs
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private static int userCount;
+        private static HashSet<string> connectedUsers = new HashSet<string>();
 
         public ChatHub(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
@@ -54,12 +56,8 @@ namespace AdvancedProjectMVC.Hubs
             var channel = await _context.Channels.FindAsync(channelId);
 
             //If user does not already exist as a ServerMember, create ServerMember and add to DB.
-            //var member = channel.Server.ServerMembers.Where(s => s.ApplicationUser == user).FirstOrDefault();
             var server = await _context.Servers.FindAsync(channel.ServerId);
-            //var member = server.ServerMembers.FirstOrDefault(s => s.ApplicationUserId == user.Id);
 
-            //if (member == null)
-            //{
             var newMember = new ServerMember
             {
                 ServerId = channel.ServerId,
@@ -73,9 +71,58 @@ namespace AdvancedProjectMVC.Hubs
             }
         }
 
+        public async Task SetConnectedUsersStatusOnline()
+        {
+            foreach(var user in connectedUsers)
+            {
+                await Clients.All.SendAsync("SetOnline", user);
+            }
+        }
+
+        public override async Task OnConnectedAsync()
+        {
+            userCount++;
+
+            //Send message to set user's status to online.
+            string userId = Context.UserIdentifier;
+            var user = await _userManager.FindByIdAsync(userId);
+            string username = user.UserName;
+            connectedUsers.Add(username);
+
+            //Iterate through connected users list and set each online.
+            await SetConnectedUsersStatusOnline();
+
+            await base.OnConnectedAsync();
+        }
+
+        public override async Task OnDisconnectedAsync(Exception? exception)
+        {
+            userCount--;
+
+            //Send message to set user's status to offline.
+            string userId = Context.UserIdentifier;
+            var user = await _userManager.FindByIdAsync(userId);
+            string username = user.UserName;
+            connectedUsers.Add(username);
+            await Clients.All.SendAsync("SetOffline", username);
+
+            await base.OnDisconnectedAsync(exception);
+        }
+
         public string GetConnectionId()
         {
+            userCount--;
             return Context.ConnectionId;
+        }
+
+        public int GetUserCount()
+        {
+            return userCount;
+        }
+
+        public List<string> GetConnectedUsers()
+        {
+            return connectedUsers.ToList();
         }
     }
 }
