@@ -14,12 +14,10 @@ namespace AdvancedProjectMVC.Controllers
     public class ServerMembersController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ServerMembersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public ServerMembersController(ApplicationDbContext context)
         {
             _context = context;
-            _userManager = userManager;
         }
 
         // GET: ServerMembers
@@ -176,17 +174,6 @@ namespace AdvancedProjectMVC.Controllers
         private bool ServerMemberExists(int id)
         {
             return (_context.ServerMembers?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
-
-        public async Task<IActionResult> CreateDM(String member1, String member2)
-        {
-            Server dm = new Server
-            {
-                ServerName = member1 + " + " + member2,
-            };
-            await new ServersController(_context, _userManager).Create(dm);
-
-            return RedirectToAction("Index", "Servers");
         }
     }
 }

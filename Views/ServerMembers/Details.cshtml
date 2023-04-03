@@ -28,5 +28,5 @@
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
-    <a asp-action="CreateDM" asp-route-member1="@User.Identity.Name" asp-route-member2="@Model.ApplicationUser.UserName">Open Private DM</a>
+    <a asp-action="Create" asp-controller="Servers" asp-route-member1=" @User.Identity.Name" asp-route-member2="@Model.ApplicationUser.UserName" asp-route-memberId="@Model.ApplicationUserId">Open Private DM</a>
 </div>

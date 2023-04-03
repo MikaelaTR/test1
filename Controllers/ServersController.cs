@@ -106,7 +106,44 @@ namespace AdvancedProjectMVC.Controllers
             ServerMember serverMember = new ServerMember();
             serverMember.ApplicationUserId = user.Id;
             serverMember.ServerId = server.Id;
-            await new ServerMembersController(_context, _userManager).Create(serverMember);
+            await new ServerMembersController(_context).Create(serverMember);
+
+            return RedirectToAction(nameof(Index));
+            //}
+            //return View(server);
+        }
+
+        //For creation of DM's, adds both users to server
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateDM([Bind("ServerId,ServerName")] Server server, string userId)
+        {
+            // if (ModelState.IsValid)
+            //{
+            _context.Add(server);
+            await _context.SaveChangesAsync();
+
+            Channel channel = new Channel
+            {
+                ChannelName = "General",
+                Server = server,
+            };
+            _context.Channels.Add(channel);
+
+            await _context.SaveChangesAsync();
+            var user = await _userManager.GetUserAsync(User);
+
+            //Add user as serverMember
+            ServerMember serverMember = new ServerMember();
+            serverMember.ApplicationUserId = user.Id;
+            serverMember.ServerId = server.Id;
+
+            //Add user as serverMember
+            ServerMember serverMember2 = new ServerMember();
+            serverMember2.ApplicationUserId = userId;
+            serverMember2.ServerId = server.Id;
+            await new ServerMembersController(_context).Create(serverMember);
+            await new ServerMembersController(_context).Create(serverMember2);
 
             return RedirectToAction(nameof(Index));
             //}
