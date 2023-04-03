@@ -97,7 +97,7 @@ body {
 .flex-child {
 	flex: 1;
 	position: relative;
-	border: 2px solid yellow; /*testing*/
+	/*border: 2px solid yellow;*/ /*testing*/
 }
 
 /*Homepage Not Logged In*/
