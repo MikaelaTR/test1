@@ -19,12 +19,12 @@
     </div>
     <div class="col flex-child middle_container">
         <header>
-            <h1>@Html.DisplayFor(model => model.ServerName)</h1>
+            <a asp-action="Index" title="Back to server list"><i class="btn btn-secondary border-0 fa fa-long-arrow-left"></i></a>
+            <h1 class="d-inline">@Html.DisplayFor(model => model.ServerName)</h1>
             <a asp-action="Edit" asp-route-id="@Model?.Id"><i class="material-icons">settings</i></a>
         </header>
-        <div class="mx-5">
-            <a asp-action="Index" title="Back to server list"><i class="btn btn-secondary border-0 fa fa-long-arrow-left"></i></a>
-            <h4 class="text-center">Welcome to @Html.DisplayFor(model => model.ServerName)</h4>
+        <div class="mx-5 text-center">
+            <h4 class="text-center d-inline">Welcome to @Html.DisplayFor(model => model.ServerName)</h4>
             <div>
                 @foreach (var item in Model.Channels)
                 {
