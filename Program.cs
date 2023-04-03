@@ -1,5 +1,6 @@
 using AdvancedProjectMVC.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using AdvancedProjectMVC.Models;
 using AdvancedProjectMVC.Hubs;
@@ -24,7 +25,6 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.S
     .AddDefaultUI()
     .AddDefaultTokenProviders();
 
-
 builder.Services.AddControllersWithViews();
 
 /*builder.Services.AddAuthorization(options =>
@@ -34,12 +34,12 @@ builder.Services.AddControllersWithViews();
     options.AddPolicy("StudentOnly", policy => policy.RequireClaim("StudentNumber"));
 });*/
 
-builder.Services.AddAuthentication()
-    .AddGoogle(googleOptions =>
-    {
-        googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? string.Empty;
-        googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? string.Empty;
-    });
+//builder.Services.AddAuthentication()
+//    .AddGoogle(googleOptions =>
+//    {
+//        googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? string.Empty;
+//        googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? string.Empty;
+//    });
 
 builder.Services.AddRazorPages();
 
@@ -50,6 +50,9 @@ builder.Services.AddSignalR(hubOptions =>
     hubOptions.EnableDetailedErrors = true;
     hubOptions.KeepAliveInterval = TimeSpan.FromMinutes(1);
 });
+
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
 
 var app = builder.Build();
 
