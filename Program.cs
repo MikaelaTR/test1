@@ -38,12 +38,12 @@ builder.Services.AddControllersWithViews();
     options.AddPolicy("StudentOnly", policy => policy.RequireClaim("StudentNumber"));
 });*/
 
-//builder.Services.AddAuthentication()
-//    .AddGoogle(googleOptions =>
-//    {
-//        googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? string.Empty;
-//        googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? string.Empty;
-//    });
+builder.Services.AddAuthentication()
+    .AddGoogle(googleOptions =>
+    {
+        googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? string.Empty;
+        googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? string.Empty;
+    });
 
 builder.Services.AddRazorPages();
 
