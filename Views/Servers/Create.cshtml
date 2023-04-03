@@ -5,41 +5,40 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<div class="mx-xxl-5">
+    <h1>Create Server</h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="ServerName" class="control-label">Server Name</label>
+                    <input asp-for="ServerName" class="form-control"/>
+                    <span asp-validation-for="ServerName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary"/>
+                </div>
+            </form>
 
-<h4>Server</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ServerName" class="control-label"></label>
-                <input asp-for="ServerName" class="form-control"/>
-                <span asp-validation-for="ServerName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary"/>
-            </div>
-        </form>
+            <form asp-action="CreateDM" hidden>
+                <div class="form-group">
+                    <input asp-for="ServerName" class="form-control" id="nameInput" />
+                    <span asp-validation-for="ServerName" class="text-danger"></span>
 
-        <form asp-action="CreateDM" hidden>
-            <div class="form-group">
-                <input asp-for="ServerName" class="form-control" id="nameInput" />
-                <span asp-validation-for="ServerName" class="text-danger"></span>
-
-                <input name="userId" id="userId" class="form-control"/>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="CreateDM" class="btn btn-primary" id="submitBtn" />
-            </div>
-        </form>
+                    <input name="userId" id="userId" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="CreateDM" class="btn btn-primary" id="submitBtn" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-    <div>
-        <a class="btn btn-sm btn-primary" asp-action="Index">Cancel</a>
-    </div>
+        <div>
+            <a class="btn btn-sm btn-primary" asp-action="Index">Cancel</a>
+        </div>
 </div>
 
 <script>
