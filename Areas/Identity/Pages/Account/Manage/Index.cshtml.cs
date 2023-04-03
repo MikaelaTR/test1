@@ -92,6 +92,7 @@ namespace AdvancedProjectMVC.Areas.Identity.Pages.Account.Manage
 
             Username = userName;
 
+
             Input = new InputModel
             {
                 FirstName = user.FirstName,
@@ -100,6 +101,7 @@ namespace AdvancedProjectMVC.Areas.Identity.Pages.Account.Manage
                 PhoneNumber = phoneNumber,
                 ProfileImage = user.ProfileImage,
             };
+            
 
         }
 
@@ -164,7 +166,7 @@ namespace AdvancedProjectMVC.Areas.Identity.Pages.Account.Manage
             //2. link to Azure blob image, for it to go in view under <image href = @LINK>
             if (Input.ProfileImageFile != null && Input.ProfileImage!= user.ProfileImage)
             {
-                user.ProfileImage = Input.ProfileImage;
+                user.ProfileImage = "https://advancedprojectfileshare.blob.core.windows.net/profileimage/"+ user.UserName;
 
                 var filePath = Path.GetTempFileName();
                 using (var stream = System.IO.File.Create(filePath))

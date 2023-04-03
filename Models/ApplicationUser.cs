@@ -17,8 +17,6 @@ namespace AdvancedProjectMVC.Models
 
         [PersonalData]
         public String? ProfileImage { get; set; }
-        [PersonalData]
-        public String? ProfileImageURL { get; set; }
 
         public DateTime DateRegistered { get; set; }
 

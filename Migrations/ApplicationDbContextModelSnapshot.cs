@@ -79,9 +79,6 @@ namespace AdvancedProjectMVC.Migrations
                     b.Property<string>("ProfileImage")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProfileImageURL")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("SchoolProgramId")
                         .HasColumnType("int");
 
