@@ -13,43 +13,37 @@
         <div class="toolbar_buttons">
             <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="FileSharing" asp-action="Index" asp-route-serverName="@Model.ServerName">File Sharing</a>
             <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="Calendar" asp-action="Index">Calendar</a>
+            <hr/>
+            <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="Channels" asp-action="Create" asp-route-ServerId="@Model?.Id">Create New Channel</a>
         </div>
-        <div class="col middle_container">
-            <header>
-                <h1>@Html.DisplayFor(model => model.ServerName)</h1>
-            </header>
+    </div>
+    <div class="col flex-child middle_container">
+        <header>
+            <a asp-action="Index" title="Back to server list"><i class="btn btn-secondary border-0 fa fa-long-arrow-left"></i></a>
+            <h1 class="d-inline">@Html.DisplayFor(model => model.ServerName)</h1>
+            <a asp-action="Edit" asp-route-id="@Model?.Id"><i class="material-icons">settings</i></a>
+        </header>
+        <div class="mx-5 text-center">
+            <h4 class="text-center d-inline">Welcome to @Html.DisplayFor(model => model.ServerName)</h4>
             <div>
-                <a asp-action="Index" title="Back to server list"><i class="btn btn-secondary btn-sm border-0 fa fa-long-arrow-left"></i></a>
-                <h4 class="text-center">Welcome to @Html.DisplayFor(model => model.ServerName)</h4>
-                <div>
-                    @foreach (var item in Model.Channels)
-                    {
-                        <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="Channels" asp-action="Details" asp-route-id="@item.Id">@item.ChannelName</a>
-                    }
-                    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-2 memberList">
-            <div class="memberList_header">
-                <h3>Member List</h3>
-            </div>
-            <div class="toolbar_buttons">
-                @foreach (var member in Model.ServerMembers)
+                @foreach (var item in Model.Channels)
                 {
-                    <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="ServerMembers" asp-action="Details" asp-route-id="@member.Id">
-                        @member.ApplicationUser.UserName
-                    </a>
+                    <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="Channels" asp-action="Details" asp-route-id="@item.Id">@item.ChannelName</a>
                 }
             </div>
         </div>
     </div>
-    
-    <div class="toolbar flex-child">
-        <div class="toolbar_header">
-            <p class="toolbar_header">Members</p>
+    <div class="col-sm-2 toolbar memberList"> @*TODO: Make memberlist css, replace toolbar class*@
+        <div class="memberList_header">
+            <h3>Member List</h3>
         </div>
         <div class="toolbar_buttons">
+            @foreach (var member in Model.ServerMembers)
+            {
+                <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="ServerMembers" asp-action="Details" asp-route-id="@member.Id">
+                    @member.ApplicationUser.UserName
+                </a>
+            }
         </div>
     </div>
 </div>

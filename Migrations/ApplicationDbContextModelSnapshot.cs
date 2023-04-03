@@ -371,13 +371,15 @@ namespace AdvancedProjectMVC.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ApplicationUserID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ChannelID")
                         .HasColumnType("int");
 
                     b.Property<string>("ChannelName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatorID")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DownloadURL")
