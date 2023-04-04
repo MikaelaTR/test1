@@ -8,22 +8,25 @@
 <h1>Details</h1>
 
 <div>
-    <h4>ServerMember</h4>
+    <h4>Profile for @Html.DisplayFor(model => model.ApplicationUser.UserName)</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Server)
+            Name
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Server.Id)
+            @Html.DisplayFor(model => model.ApplicationUser.FirstName)
+            @Html.DisplayFor(model => model.ApplicationUser.LastName)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ApplicationUser)
+        <dt class="col-sm-2">
+            Date of Birth
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ApplicationUser.Id)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ApplicationUser.DOB)
         </dd>
+        
     </dl>
+    <img class="col-sm-10" src="@Model.ApplicationUser.ProfileImage" style="border:5px solid black; max-width: 50%; width: auto/9; height: auto">
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
