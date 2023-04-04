@@ -1,0 +1,38 @@
+﻿@model AdvancedProjectMVC.Models.ServerInvite
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>Create Server Invite</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="serverId" class="control-label">Server Name</label>
+                <select asp-for="serverId" class ="form-control" asp-items="ViewBag.serverId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ApplicationUserId" class="control-label">Recipient</label>
+                <select asp-for="ApplicationUserId" class ="form-control" asp-items="ViewBag.ApplicationUserId"></select>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="DateSent" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

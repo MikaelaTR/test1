@@ -16,6 +16,9 @@
             <p class="toolbar_header">@User.Identity?.Name</p>
         </div>
         <div class="toolbar_buttons">
+            <hr />
+            <a asp-action="Index" asp-controller="ServerInvites" class="btn btn-primary toolbar_button rounded-lg">Server Invites</a>
+            <hr />
             <a asp-action="Create" class="btn btn-primary toolbar_button rounded-lg">Create Server</a>
         </div>
     </div>

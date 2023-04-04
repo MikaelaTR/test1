@@ -341,6 +341,37 @@ namespace AdvancedProjectMVC.Migrations
                     b.ToTable("Servers");
                 });
 
+            modelBuilder.Entity("AdvancedProjectMVC.Models.ServerInvite", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("DateSent")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SenderUserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("serverId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("serverId");
+
+                    b.ToTable("ServerInvites");
+                });
+
             modelBuilder.Entity("AdvancedProjectMVC.Models.ServerMember", b =>
                 {
                     b.Property<int>("Id")
@@ -653,6 +684,25 @@ namespace AdvancedProjectMVC.Migrations
                     b.HasOne("AdvancedProjectMVC.Models.ApplicationUser", null)
                         .WithMany("Servers")
                         .HasForeignKey("ApplicationUserId");
+                });
+
+            modelBuilder.Entity("AdvancedProjectMVC.Models.ServerInvite", b =>
+                {
+                    b.HasOne("AdvancedProjectMVC.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AdvancedProjectMVC.Models.Server", "Server")
+                        .WithMany()
+                        .HasForeignKey("serverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Server");
                 });
 
             modelBuilder.Entity("AdvancedProjectMVC.Models.ServerMember", b =>
