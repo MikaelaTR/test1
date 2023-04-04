@@ -71,7 +71,7 @@ namespace AdvancedProjectMVC.Data
             var defaultUser = new ApplicationUser
             {
                 UserName = "ab",
-                Email = "ab@lakehead.ca",
+                Email = "ab@lakeheadu.ca",
                 FirstName = "Alex",
                 LastName = "Blom",
                 EmailConfirmed = true,
