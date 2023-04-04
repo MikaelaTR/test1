@@ -8,9 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using AdvancedProjectMVC.Data;
 using AdvancedProjectMVC.Models;
 using Microsoft.AspNetCore.Identity;
-using AdvancedProjectMVC.Controllers;
 
-namespace AdvancedProjectMVC
+namespace AdvancedProjectMVC.Controllers
 {
     public class ServerInvitesController : Controller
     {
@@ -65,15 +64,15 @@ namespace AdvancedProjectMVC
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,serverId,ApplicationUserId")] ServerInvite serverInvite)
         {
-            if (ModelState.IsValid)
-            {
+            //if (ModelState.IsValid)
+            //{
                 var user = await _userManager.GetUserAsync(User);
                 serverInvite.SenderUserName = user.UserName;
-                serverInvite.DateSent= DateTime.Now;
+                serverInvite.DateSent = DateTime.Now;
                 _context.Add(serverInvite);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
+            //}
             ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "UserName", serverInvite.ApplicationUserId);
             ViewData["serverId"] = new SelectList(_context.Servers, "Id", "ServerName", serverInvite.serverId);
             return View(serverInvite);
@@ -168,26 +167,30 @@ namespace AdvancedProjectMVC
             {
                 _context.ServerInvites.Remove(serverInvite);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ServerInviteExists(int id)
         {
-          return (_context.ServerInvites?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.ServerInvites?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
-        public async Task<IActionResult> Join(int id)
+        public async Task<IActionResult> Join(int serverId, int inviteId)
         {
             var user = await _userManager.GetUserAsync(User);
-            var server = await _context.Servers.FindAsync(id);
+            var server = await _context.Servers.FindAsync(serverId);
+            var invite = await _context.ServerInvites.FindAsync(inviteId);
 
             //Add user as serverMember
             ServerMember serverMember = new ServerMember();
             serverMember.ApplicationUserId = user.Id;
             serverMember.ServerId = server.Id;
             await new ServerMembersController(_context).Create(serverMember);
+
+            _context.ServerInvites.Remove(invite);
+            await _context.SaveChangesAsync();
 
             return RedirectToAction("Index", "Servers");
         }

@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<AdvancedProjectMVC.Models.ServerInvite>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Server Invites";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Server Invites</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -39,11 +39,12 @@
             </td>
             <td>
                 <form asp-action="Join">
-                    <input type="hidden" value="@item.Id" />
+                    <input type="hidden" name="serverId" value=@item.serverId />
+                    <input type="hidden" name="inviteId" value=@item.Id />
                     <input type="submit" value="Join" class="btn btn-success" />
                 </form>
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
+@*                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+*@            </td>
         </tr>
 }
     </tbody>
