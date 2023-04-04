@@ -135,7 +135,7 @@ namespace AdvancedProjectMVC.Areas.Identity.Pages.Account
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
                 user.DOB = Input.DOB;
-                
+                user.ProfileImage = "https://advancedprojectfileshare.blob.core.windows.net/profileimage/default.png";
 
                 
 
