@@ -1,21 +1,22 @@
 :root, :root.light {
-	--color1: #000000; /*Black*/
-	--color2: #EAEAEA; /*Off White*/
-	--color3: #FFFFFF; /*White*/
-	--color4: #0087F5; /*Light Blue*/
-	--color5: #005DA8; /*Light Blue/darker than 4*/
-	--color6: #00325C; /*Dark Blue/Green*/
+	--color1: #000000;
+	--color2: #CCCCCC;
+	--color3: #FFFFFF;
+	--color4: #0087F5;
+	--color5: #005DA8;
+	--color6: #00325C;
 	--white: #FFFFFF;
-	--bg-color: #FFFFFF; /*White*/
+	--bg-color: #FFFFFF;
 	--primary: #3273A8;
 	--primary-hover: #235075;
 	--secondary: #686e65;
 	--secondary-hover: #4e524c;
 	--danger: #F44336;
 }
+
 	:root, :root.dark {
 		--color1: #F5F5F5;
-		--color2: #15335E;
+		--color2: #0E223E;
 		--color3: #FFFFFF;
 		--color4: #3E5678;
 		--color5: #152842;

@@ -11,12 +11,12 @@
             <h3>@Html.DisplayFor(model => model.Server.ServerName)</h3>
         </div>
         <div class="toolbar_buttons">
-            
+
             @foreach (var item in Model.Server.Channels)
             {
-                <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="Channels" asp-action="Details" asp-route-id="@item.Id">
+                    <a class="btn btn-primary toolbar_button rounded-lg" asp-controller="Channels" asp-action="Details" asp-route-id="@item.Id">
                     @Html.DisplayFor(item => item.ChannelName)
-                </a>
+                    </a>
             }
             <a asp-action="Create" class="btn btn-primary toolbar_button rounded-lg">Create Channel</a>
         </div>
@@ -37,15 +37,15 @@
                     <ul id="messageList" class="message-list mx-0 w-100">
                         @foreach (var item in Model.ChatMessages)
                         {
-                            <li class="chat-message @((item.ApplicationUser.UserName == User.Identity?.Name) ? "chat-message--user" : "")">
-                                <div class="chat-message-header">
-                                    <div class="chat-message-username"> @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)</div>
-                                    <div class="chat-message-timestamp">@Html.DisplayFor(modelItem => item.DatePosted)</div>
-                                </div>
-                                <div class="chat-message-content">
-                                    <p>@Html.DisplayFor(modelItem => item.Content)</p>
-                                </div>
-                            </li>
+                                <li class="chat-message @((item.ApplicationUser.UserName == User.Identity?.Name) ? "chat-message--user" : "")">
+                                    <div class="chat-message-header">
+                                        <div class="chat-message-username"> @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)</div>
+                                        <div class="chat-message-timestamp">@Html.DisplayFor(modelItem => item.DatePosted)</div>
+                                    </div>
+                                    <div class="chat-message-content">
+                                        <p>@Html.DisplayFor(modelItem => item.Content)</p>
+                                    </div>
+                                </li>
                         }
                     </ul>
                 </div>
@@ -69,12 +69,12 @@
         <div class="toolbar_buttons">
             @foreach (var member in Model.Server.ServerMembers)
             {
-                <div class="d-flex flex-row justify-content-start align-items-center">
-                    <span id="@member.ApplicationUser.UserName" class="px-1 offline">●</span>
-                    <a class="btn btn-primary rounded-lg px-3 w-100" asp-controller="ServerMembers" asp-action="Details" asp-route-id="@member.Id">
+                    <div class="d-flex flex-row justify-content-start align-items-center">
+                        <span id="@member.ApplicationUser.UserName" class="px-1 offline">●</span>
+                        <a class="btn btn-primary rounded-lg px-3 w-100" asp-controller="ServerMembers" asp-action="Details" asp-route-id="@member.Id">
                         @member.ApplicationUser.UserName
-                    </a>
-                </div>
+                        </a>
+                    </div>
             }
         </div>
     </div>
@@ -98,15 +98,44 @@
     document.getElementById("sendButton").disabled = true;
 
     connection.on("ReceiveMessage", function (user, message) {
-        console.log("hey! Listen!");
         var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/</g, "&gt;");
-        var encodedMsg = user + ": " + msg;
-        var li = document.createElement("li")
-        li.textContent = encodedMsg;
+
+        // Create HTML structure for new message
+        var li = document.createElement("li");
         li.classList.add("chat-message");
+        if (user === username) {
+            li.classList.add("chat-message--user");
+        }
+
+        var headerDiv = document.createElement("div");
+        headerDiv.classList.add("chat-message-header");
+
+        var usernameDiv = document.createElement("div");
+        usernameDiv.classList.add("chat-message-username");
+        usernameDiv.textContent = user;
+
+        var timestampDiv = document.createElement("div");
+        timestampDiv.classList.add("chat-message-timestamp");
+        timestampDiv.textContent = formatDate(new Date());
+
+        var contentDiv = document.createElement("div");
+        contentDiv.classList.add("chat-message-content");
+
+        var messageP = document.createElement("p");
+        messageP.textContent = msg;
+
+        // Assemble HTML structure
+        headerDiv.appendChild(usernameDiv);
+        headerDiv.appendChild(timestampDiv);
+        contentDiv.appendChild(messageP);
+        li.appendChild(headerDiv);
+        li.appendChild(contentDiv);
+
+        // Add new message element to messageList
         document.getElementById("messageList").appendChild(li);
-        console.log("Over here!");
-        window.scrollTo(0, document.body.scrollHeight); //Scroll to bottom of page when new message received
+
+        // Scroll to bottom of messageList
+        document.getElementById("messageList").scrollTop = document.getElementById("messageList").scrollHeight;
     });
 
     connection.start().then(function () {
@@ -134,6 +163,29 @@
             document.getElementById(user).className = "px-1 online";
         }
     })
+
+    function formatDate(date) {
+        const formatter = new Intl.DateTimeFormat('en-US', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            hour12: true
+        });
+
+        const parts = formatter.formatToParts(date);
+        const month = parts.find(part => part.type === 'month').value;
+        const day = parts.find(part => part.type === 'day').value;
+        const year = parts.find(part => part.type === 'year').value;
+        const hour = parts.find(part => part.type === 'hour').value;
+        const minute = parts.find(part => part.type === 'minute').value;
+        const second = parts.find(part => part.type === 'second').value;
+        const period = parts.find(part => part.type === 'dayPeriod').value;
+
+        return `${year}-${month}-${day} ${hour}:${minute}:${second} ${period}`;
+    }
 
     function getConnectedUsers() {
         connection.invoke("GetConnectedUsers").then(function (connections) {
@@ -176,7 +228,7 @@
         this.style.height = "auto";
         this.style.height = `${this.scrollHeight}px`;
     });
-    
+
     //Scroll to bottom of message list
     //NOT WORKING
     const delay = ms => new Promise(res => setTimeout(res, ms));
@@ -185,7 +237,7 @@
         console.log("Wait Done.");
         var objDiv = document.getElementById("chatArea");
         objDiv.scrollTop = objDiv.scrollHeight;
-        @*items = document.querySelectorAll(".chat-message");
+    @*items = document.querySelectorAll(".chat-message");
         last = items[items.length - 1];
         last.scrollIntoView();  *@      
     };
