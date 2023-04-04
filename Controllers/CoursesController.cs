@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace AdvancedProjectMVC.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Superadmin")]
     public class CoursesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -70,7 +70,10 @@ namespace AdvancedProjectMVC.Controllers
 
                 Server server = new Server();
                 server.ServerName = course.Title;
-                await new ServersController(_context, _userManager).Create(server);
+                //await new ServersController(_context, _userManager).Create(server);
+                _context.Add(server);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             return View(course);

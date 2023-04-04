@@ -5,6 +5,7 @@ namespace AdvancedProjectMVC.Models
     public class CalendarEvent
     {
         public int ID { get; set; }
+        [Required]
         public string UserID { get; set; }
         [Required]
         public string Title { get; set; }
