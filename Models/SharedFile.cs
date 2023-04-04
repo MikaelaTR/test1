@@ -11,7 +11,9 @@ namespace AdvancedProjectMVC.Models
         public int? ServerID { get; set; }
         public int? ChannelID { get; set; }
         [Required]
-        public string ApplicationUserID { get; set; }
+        public string? ApplicationUserID { get; set; }
+
+        public string? CreatorID { get; set; }
         public string? ServerName { get; set; }
         public string? ChannelName { get; set; }
         public string? TempFile { get; set; }

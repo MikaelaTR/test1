@@ -16,7 +16,7 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Id" />
                 <div class="form-group">
-                    <label asp-for="ServerName" class="control-label"></label>
+                    <label asp-for="ServerName" class="control-label">Server Name</label>
                     <input asp-for="ServerName" class="form-control" />
                     <span asp-validation-for="ServerName" class="text-danger"></span>
                 </div>
@@ -29,7 +29,7 @@
     </div>
 
     <div>
-        <a asp-action="Index">Back to List</a>
+        <a class="btn btn-sm btn-secondary" asp-action="Index">Cancel</a>
     </div>
 </div>
 

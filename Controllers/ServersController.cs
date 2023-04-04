@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using AdvancedProjectMVC.Data;
 using AdvancedProjectMVC.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace AdvancedProjectMVC.Controllers
 {
@@ -16,18 +17,34 @@ namespace AdvancedProjectMVC.Controllers
     public class ServersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ServersController(ApplicationDbContext context)
+        public ServersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Servers
         public async Task<IActionResult> Index()
         {
             // return View();
+            //Get list of servers the user belongs to by querying ServerMembers for 
+            //serverIds
+            List<Server> servers = new List<Server>();
+            List<ServerMember> memberships = new List<ServerMember>();
+
+            var user = _userManager.GetUserAsync(User).Result;
+            memberships =  await _context.ServerMembers.Where(m => m.ApplicationUser == user).ToListAsync();
+            foreach(var m in memberships)
+            {
+                var server = await _context.Servers.Where(s => s.Id == m.ServerId).FirstAsync();
+                servers.Add(server);
+            }
+            
+
             return _context.Servers != null ?
-                        View(await _context.Servers.ToListAsync()) :
+                        View(servers) :
                         Problem("Entity set 'ApplicationDbContext.Servers'  is null.");
         }
 
@@ -70,29 +87,72 @@ namespace AdvancedProjectMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Superadmin")]
         public async Task<IActionResult> Create([Bind("ServerId,ServerName")] Server server)
         {
            // if (ModelState.IsValid)
             //{
-                _context.Add(server);
-                await _context.SaveChangesAsync();
+            _context.Add(server);
+            await _context.SaveChangesAsync();
 
-                Channel channel = new Channel
-                {
-                    ChannelName = "General",
-                    Server = server,
-                };
-                _context.Channels.Add(channel);
-                await _context.SaveChangesAsync();
+            Channel channel = new Channel
+            {
+                ChannelName = "General",
+                Server = server,
+            };
+            _context.Channels.Add(channel);
 
-                return RedirectToAction(nameof(Index));
+            await _context.SaveChangesAsync();
+            var user = await _userManager.GetUserAsync(User);
+
+            //Add user as serverMember
+            ServerMember serverMember = new ServerMember();
+            serverMember.ApplicationUserId = user.Id;
+            serverMember.ServerId = server.Id;
+            await new ServerMembersController(_context).Create(serverMember);
+
+            return RedirectToAction(nameof(Index));
+            //}
+            //return View(server);
+        }
+
+        //For creation of DM's, adds both users to server
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateDM([Bind("ServerId,ServerName")] Server server, string userId)
+        {
+            // if (ModelState.IsValid)
+            //{
+            _context.Add(server);
+            await _context.SaveChangesAsync();
+
+            Channel channel = new Channel
+            {
+                ChannelName = "General",
+                Server = server,
+            };
+            _context.Channels.Add(channel);
+
+            await _context.SaveChangesAsync();
+            var user = await _userManager.GetUserAsync(User);
+
+            //Add user as serverMember
+            ServerMember serverMember = new ServerMember();
+            serverMember.ApplicationUserId = user.Id;
+            serverMember.ServerId = server.Id;
+
+            //Add user as serverMember
+            ServerMember serverMember2 = new ServerMember();
+            serverMember2.ApplicationUserId = userId;
+            serverMember2.ServerId = server.Id;
+            await new ServerMembersController(_context).Create(serverMember);
+            await new ServerMembersController(_context).Create(serverMember2);
+
+            return RedirectToAction(nameof(Index));
             //}
             //return View(server);
         }
 
         // GET: Servers/Edit/5
-        [Authorize(Roles = "Admin, Superadmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Servers == null)
@@ -113,7 +173,6 @@ namespace AdvancedProjectMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Superadmin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,ServerName")] Server server)
         {
             if (id != server.Id)
@@ -147,7 +206,6 @@ namespace AdvancedProjectMVC.Controllers
         }
 
         // GET: Servers/Delete/5
-        [Authorize(Roles = "Admin, Superadmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Servers == null)
@@ -168,7 +226,6 @@ namespace AdvancedProjectMVC.Controllers
         // POST: Servers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Superadmin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Servers == null)

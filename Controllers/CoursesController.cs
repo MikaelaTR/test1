@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using AdvancedProjectMVC.Data;
 using AdvancedProjectMVC.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace AdvancedProjectMVC.Controllers
 {
@@ -15,10 +16,12 @@ namespace AdvancedProjectMVC.Controllers
     public class CoursesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CoursesController(ApplicationDbContext context)
+        public CoursesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Courses
@@ -67,7 +70,10 @@ namespace AdvancedProjectMVC.Controllers
 
                 Server server = new Server();
                 server.ServerName = course.Title;
-                await new ServersController(_context).Create(server);
+                //await new ServersController(_context, _userManager).Create(server);
+                _context.Add(server);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             return View(course);
