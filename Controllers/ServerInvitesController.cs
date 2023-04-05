@@ -59,8 +59,8 @@ namespace AdvancedProjectMVC.Controllers
             var userMembers = _context.ServerMembers.Where(m => m.ApplicationUserId == userId).ToList();
             foreach(var m in userMembers)
             {
-                //Get servers with 
-            var server = _context.Servers.Where(s => s.ServerMembers.Contains(m) == true).FirstOrDefault();
+                //Get servers containing the userMember object
+                var server = _context.Servers.Where(s => s.ServerMembers.Contains(m) == true).FirstOrDefault();
                 if (server != null)
                 {
                     serverOptions.Add(server);
