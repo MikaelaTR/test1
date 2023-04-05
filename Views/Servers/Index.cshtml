@@ -15,12 +15,12 @@
         <div class="toolbar_header">
             <p class="toolbar_header">@User.Identity?.Name</p>
         </div>
-        @if (User.IsInRole("Admin") || User.IsInRole("Superadmin"))
-        {
-            <div class="toolbar_buttons">
-                <a asp-action="Create" class="btn btn-primary toolbar_button rounded-lg">Create Server</a>
-            </div>
-        }
+        <div class="toolbar_buttons">
+            <hr />
+            <a asp-action="Index" asp-controller="ServerInvites" class="btn btn-primary toolbar_button rounded-lg">Server Invites</a>
+            <hr />
+            <a asp-action="Create" class="btn btn-primary toolbar_button rounded-lg">Create Server</a>
+        </div>
     </div>
 
     <div class="flex-child">
