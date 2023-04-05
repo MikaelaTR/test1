@@ -42,9 +42,8 @@ namespace AdvancedProjectMVC.Controllers
                 servers.Add(server);
             }
             
-
             return _context.Servers != null ?
-                        View(servers) :
+                        View(servers.Distinct()) :
                         Problem("Entity set 'ApplicationDbContext.Servers'  is null.");
         }
 

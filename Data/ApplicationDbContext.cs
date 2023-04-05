@@ -21,6 +21,7 @@ namespace AdvancedProjectMVC.Data
         public DbSet<ServerMember> ServerMembers { get; set; }
         public DbSet<CalendarEvent> CalendarEvent { get; set; }
         public DbSet<SharedFile> SharedFiles { get; set; }
+        public DbSet<ServerInvite> ServerInvites { get; set; }
     }
 
 

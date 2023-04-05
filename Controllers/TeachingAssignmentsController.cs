@@ -1,9 +1,11 @@
 ﻿using AdvancedProjectMVC.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace AdvancedProjectMVC.Controllers
 {
+    [Authorize]
     public class TeachingAssignmentsController : Controller
     {
 
