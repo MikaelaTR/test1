@@ -52,8 +52,22 @@ namespace AdvancedProjectMVC.Controllers
         // GET: ServerInvites/Create
         public IActionResult Create()
         {
+            List<Server> serverOptions = new List<Server>();
+            var courses = _context.Courses.ToList();
+            var userId = _userManager.GetUserId(User);
+            //Get user's ServerMember objects (servers they have joined)
+            var userMembers = _context.ServerMembers.Where(m => m.ApplicationUserId == userId).ToList();
+            foreach(var m in userMembers)
+            {
+                //Get servers with 
+            var server = _context.Servers.Where(s => s.ServerMembers.Contains(m) == true).FirstOrDefault();
+                if (server != null)
+                {
+                    serverOptions.Add(server);
+                }
+            }
             ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "UserName");
-            ViewData["serverId"] = new SelectList(_context.Servers, "Id", "ServerName");
+            ViewData["serverId"] = new SelectList(serverOptions, "Id", "ServerName");
             return View();
         }
 
