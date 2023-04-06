@@ -89,6 +89,29 @@ namespace AdvancedProjectMVC.Data
                     await userManager.AddToRoleAsync(defaultUser, Roles.Student.ToString());
                 }
             }
+
+            //Seed SuperAdmin User.
+            var superAdmin = new ApplicationUser
+            {
+                UserName = "admin",
+                Email = "lakechatadmin@lakeheadu.ca",
+                FirstName = "FirstName",
+                LastName = "LastName",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true
+            };
+            if (userManager.Users.All(u => u.Id != superAdmin.Id))
+            {
+                var user = await userManager.FindByEmailAsync(superAdmin.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(superAdmin, "Test123$");
+                    await userManager.AddToRoleAsync(superAdmin, Roles.SuperAdmin.ToString());
+                    await userManager.AddToRoleAsync(superAdmin, Roles.Admin.ToString());
+                    await userManager.AddToRoleAsync(superAdmin, Roles.Instructor.ToString());
+                    await userManager.AddToRoleAsync(superAdmin, Roles.Student.ToString());
+                }
+            }
         }
 
         public static async Task SeedStudentsAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
