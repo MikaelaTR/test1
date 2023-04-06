@@ -42,7 +42,13 @@
                 <span asp-validation-for="Input.ProfileImage" class="text-danger"></span>
             </div>
             <div class="form-floating">
-                <img src=@Model.Input.ProfileImage width="300" height="300" />
+                @if (Model.Input.ProfileImage == null)
+                {
+                    <img src="https://advancedprojectfileshare.blob.core.windows.net/profileimage/default.png" width="300" height="300" />
+                } else
+                {
+                    <img src=Model.Input.ProfileImage width="300" height="300" />
+                }               
             </div>
             <button id="update-profile-button" type="submit" class="w-100 mt-3 btn btn-lg btn-primary">Save</button>
         </form>

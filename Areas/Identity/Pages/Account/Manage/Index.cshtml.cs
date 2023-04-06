@@ -160,14 +160,15 @@ namespace AdvancedProjectMVC.Areas.Identity.Pages.Account.Manage
             if(Input.ProfileImageFile!= null)
             {
                 Input.ProfileImage = Input.ProfileImageFile.FileName;
+
+                //set up url for user profile image
+                user.ProfileImage = "https://advancedprojectfileshare.blob.core.windows.net/profileimage/" + user.UserName;
             }
             //Change this to upload image in azure blob. Maybe need to change InputModel class higher to add 2 things:
             //1. Profile image name to display the name
             //2. link to Azure blob image, for it to go in view under <image href = @LINK>
             if (Input.ProfileImageFile != null && Input.ProfileImage!= user.ProfileImage)
             {
-                user.ProfileImage = "https://advancedprojectfileshare.blob.core.windows.net/profileimage/"+ user.UserName;
-
                 var filePath = Path.GetTempFileName();
                 using (var stream = System.IO.File.Create(filePath))
                 {
