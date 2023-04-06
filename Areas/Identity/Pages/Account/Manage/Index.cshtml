@@ -9,7 +9,7 @@
 <partial name="_StatusMessage" for="StatusMessage" />
 <div class="row">
     <div class="col-md-6">
-        <form id="profile-form" method="post">
+        <form id="profile-form" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="form-floating mb-3">
                 <input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
@@ -47,7 +47,7 @@
                     <img src="https://advancedprojectfileshare.blob.core.windows.net/profileimage/default.png" width="300" height="300" />
                 } else
                 {
-                    <img src=Model.Input.ProfileImage width="300" height="300" />
+                    <img src=@Model.Input.ProfileImage width="300" height="300" />
                 }               
             </div>
             <button id="update-profile-button" type="submit" class="w-100 mt-3 btn btn-lg btn-primary">Save</button>
