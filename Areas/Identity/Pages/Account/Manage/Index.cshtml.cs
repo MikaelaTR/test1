@@ -69,11 +69,6 @@ namespace AdvancedProjectMVC.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Last name")]
             public string LastName { get; set; }
 
-            [Required]
-            [Display(Name = "Birth Date")]
-            [DataType(DataType.Date)]
-            public DateTime DOB { get; set; }
-
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
@@ -97,7 +92,6 @@ namespace AdvancedProjectMVC.Areas.Identity.Pages.Account.Manage
             {
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                DOB = user.DOB,
                 PhoneNumber = phoneNumber,
                 ProfileImage = user.ProfileImage,
             };
@@ -152,10 +146,6 @@ namespace AdvancedProjectMVC.Areas.Identity.Pages.Account.Manage
                 user.LastName = Input.LastName;
             }
 
-            if (Input.DOB != user.DOB)
-            {
-                user.DOB = Input.DOB;
-            }
 
             if(Input.ProfileImageFile!= null)
             {

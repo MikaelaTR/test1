@@ -13,9 +13,6 @@ namespace AdvancedProjectMVC.Models
         public string? LastName { get; set; }
 
         [PersonalData]
-        public DateTime DOB { get; set; }
-
-        [PersonalData]
         public String? ProfileImage { get; set; }
 
         public DateTime DateRegistered { get; set; }

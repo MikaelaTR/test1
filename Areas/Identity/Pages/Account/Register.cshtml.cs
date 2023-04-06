@@ -86,10 +86,6 @@ namespace AdvancedProjectMVC.Areas.Identity.Pages.Account
             [Display(Name = "Last name")]
             public string LastName { get; set; }
 
-            [Required]
-            [Display(Name = "Birth Date")]
-            [DataType(DataType.Date)]
-            public DateTime DOB { get; set; }
 
             [Required]
             [EmailAddress]
@@ -133,9 +129,7 @@ namespace AdvancedProjectMVC.Areas.Identity.Pages.Account
                 var user = CreateUser();
                 
                 user.FirstName = Input.FirstName;
-                user.LastName = Input.LastName;
-                user.DOB = Input.DOB;
-                
+                user.LastName = Input.LastName;                
 
                 
 

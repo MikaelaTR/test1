@@ -34,9 +34,6 @@ namespace AdvancedProjectMVC.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DOB")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("DateRegistered")
                         .HasColumnType("datetime2");
 
